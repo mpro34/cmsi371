@@ -2,8 +2,18 @@
     var canvas = document.getElementById("26c").getContext("2d");
     canvas.fillStyle = "blue";
     //Create Hexagons with translation coordinates
+    //First Row
     drawHexagon(0,0);
     drawHexagon(75,0);
+    drawHexagon(150,0);
+    //Second Row
+    drawHexagon(0,50);
+    drawHexagon(75,50);
+    drawHexagon(150,50);
+    //Third Row
+    drawHexagon(0,100);
+    drawHexagon(75,100);
+    drawHexagon(150,100);
 
     function drawHexagon(x,y) {
     canvas.beginPath();
