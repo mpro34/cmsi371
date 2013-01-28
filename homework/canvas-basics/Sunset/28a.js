@@ -1,20 +1,13 @@
 (function () {
     var canvas = document.getElementById("28a").getContext("2d");
-    //gray-blue sky
-    canvas.fillStyle = "#33334C";
+    //gray-blue sky and green horizon gradient
+    var grad = canvas.createLinearGradient(300,0,300,500);
+    grad.addColorStop(0,"#33334C");
+    grad.addColorStop(0.8,"#002900");
+    canvas.fillStyle = grad;
     canvas.fillRect(0,0,600,500);
     //Reddish sun
     canvas.fillStyle = "#FF3300";
-    canvas.arc(300,500,250,0,Math.PI,true);
-    canvas.fill();
-  /*  canvas.fillStyle = "black";
-    //Function that draws random buildings and windows
-    for (var i=0; i<10; i++) {
-        var x=Math.floor(Math.random()*500);
-        var y=Math.floor(Math.random()*450); //Smallest building is 50 pixels
-        var w=Math.floor(60+Math.random()*200);
-        canvas.fillRect(x,y,w,600); //Want all buildings to reach the bottom
-    }*/
-
-  
+    canvas.arc(300,500,200,0,Math.PI,true);
+    canvas.fill(); 
 }());
