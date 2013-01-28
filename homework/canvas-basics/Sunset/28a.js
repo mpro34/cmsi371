@@ -1,8 +1,12 @@
 (function () {
     var canvas = document.getElementById("28a").getContext("2d");
-    //dark blue sky
+    //gray-blue sky
     canvas.fillStyle = "#33334C";
     canvas.fillRect(0,0,600,500);
+    //Reddish sun
+    canvas.fillStyle = "#FF3300";
+    canvas.arc(300,500,250,0,Math.PI,true);
+    canvas.fill();
   /*  canvas.fillStyle = "black";
     //Function that draws random buildings and windows
     for (var i=0; i<10; i++) {
