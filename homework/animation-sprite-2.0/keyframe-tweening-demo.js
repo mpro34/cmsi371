@@ -27,6 +27,14 @@
             renderingContext.fill();
         },
 
+        ash = function (renderingContext) {
+            var img = new Image();
+            img.onload = function() {
+                renderingContext.drawImage(img,0,0);
+            };
+            img.src = "../animation-sprite-2.0/ash_left.png";
+        }
+
         // Then, we have "easing functions" that determine how
         // intermediate frames are computed.
 
@@ -34,25 +42,25 @@
         // has a drawing function and an array of keyframes.
         sprites = [
             {
-                draw: yellowCircle,
-                keyframes: [
+                draw: ash,   //Change** this function to an array of objects
+                keyframes: [ 
                     {
                         frame: 0,   //Speed of movement from frame to frame
-                        tx: 1000,     //Position at the particular frame
+                        tx: 100,     //Position at the particular frame
                         ty: 20,     //sx and sy scale the object
                         ease: KeyframeTweener.linear
                     },
 
                     {
                         frame: 100,
-                        tx: 0,
-                        ty: 300,
+                        tx: 500,
+                        ty: 200,
                         ease: KeyframeTweener.quadEaseInOut
                     },
 
                     // The last keyframe does not need an easing function.
                     {
-                        frame: 80,
+                        frame: 120,
                         tx: 80,
                         ty: 500,
                         rotate: 60 // Keyframe.rotate uses degrees.

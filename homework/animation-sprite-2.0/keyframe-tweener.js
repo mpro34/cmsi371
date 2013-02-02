@@ -6,7 +6,7 @@ var KeyframeTweener = {
     // The module comes with a library of common easing functions.
     linear: function (currentTime, start, distance, duration) {
         var percentComplete = currentTime / duration;
-        return distance * percentComplete + start;
+        return distance * percentComplete + start;   //Start location plus percent complete of distance.
     },
 
     quadEaseIn: function (currentTime, start, distance, duration) {
@@ -77,20 +77,20 @@ var KeyframeTweener = {
                 ease,
                 startKeyframe,
                 endKeyframe,
-                txStart,
+                txStart,             //position
                 txDistance,
                 tyStart,
                 tyDistance,
-                sxStart,
+                sxStart,            //Scaling
                 sxDistance,
                 syStart,
                 syDistance,
-                rotateStart,
+                rotateStart,       //rotate
                 rotateDistance,
                 currentTweenFrame,
                 duration;
 
-            // Clear the canvas.
+            // Clear the canvas.//ADD Background function that draws background HERE
             renderingContext.clearRect(0, 0, width, height);
 
             // For every sprite, go to the current pair of keyframes.
@@ -137,7 +137,7 @@ var KeyframeTweener = {
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
 
-                        // Draw the sprite.
+                        // Draw the sprite. //Should CHANGE** to a draw array frunction
                         sprites[i].draw(renderingContext);
 
                         // Clean up.
