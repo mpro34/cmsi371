@@ -8,26 +8,52 @@
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
-        square = function (renderingContext) {
-            renderingContext.fillStyle = "blue";
-            renderingContext.fillRect(-20, -20, 40, 40);
+        squirtle = function (renderingContext) {
+            var img = new Image();
+            img.onload = function() {
+                renderingContext.drawImage(img,0,0);
+            };
+            img.src = "../animation-sprite-2.0/squirtle.png";
+        },
+        venisaur = function (renderingContext) {
+            var img = new Image();
+            img.onload = function() {
+                renderingContext.drawImage(img,0,0);
+            };
+            img.src = "../animation-sprite-2.0/venisaur.png";
+        },
+        pikachu = function (renderingContext) {
+            var img = new Image();
+            img.onload = function() {
+                renderingContext.drawImage(img,0,0);
+            };
+            img.src = "../animation-sprite-2.0/pikachu.png";
+        },
+        charmander = function (renderingContext) {
+            var img = new Image();
+            img.onload = function() {
+                renderingContext.drawImage(img,0,0);
+            };
+            img.src = "../animation-sprite-2.0/charmander.png";
         },
 
-        circle = function (renderingContext) {
-            renderingContext.strokeStyle = "red";
-            renderingContext.beginPath();
-            renderingContext.arc(0, 0, 50, 0, Math.PI * 2);
-            renderingContext.stroke();
+        ash_standard = function (renderingContext) {
+            var img = new Image();
+            img.onload = function() {
+                renderingContext.drawImage(img,0,0);
+            };
+            img.src = "../animation-sprite-2.0/ash_standard.png";
         },
 
-        yellowCircle = function (renderingContext) {
-            renderingContext.fillStyle = "yellow";
-            renderingContext.beginPath();
-            renderingContext.arc(0, 0, 50, 0, Math.PI * 2);
-            renderingContext.fill();
+        ash_right = function (renderingContext) {
+            var img = new Image();
+            img.onload = function() {
+                renderingContext.drawImage(img,0,0);
+            };
+            img.src = "../animation-sprite-2.0/ash_right.png";
         },
 
-        ash = function (renderingContext) {
+        ash_left = function (renderingContext) {
             var img = new Image();
             img.onload = function() {
                 renderingContext.drawImage(img,0,0);
@@ -42,7 +68,7 @@
         // has a drawing function and an array of keyframes.
         sprites = [
             {
-                draw: ash,   //Change** this function to an array of objects
+                draw: ash_standard,   //Change** this function to an array of objects
                 keyframes: [ 
                     {
                         frame: 0,   //Speed of movement from frame to frame
@@ -68,7 +94,7 @@
                 ]
             },
             {
-                draw: square,
+                draw: pikachu,
                 keyframes: [
                     {
                         frame: 0,   //Speed of movement from frame to frame
@@ -95,7 +121,7 @@
             },
 
             {
-                draw: circle,
+                draw: squirtle,
                 keyframes: [
                     {
                         frame: 50,
