@@ -1,5 +1,10 @@
 (function () {
     var canvas = document.getElementById("27b").getContext("2d");
+
+    // JD: There is a small bit of missed opportunity here to separate
+    //     your "cube"'s data from the drawing code, as can be seen
+    //     from the shared or derived coordinates used.
+
     //front face
     canvas.fillStyle = "#A9A9A3";
     canvas.fillRect(100,100,100,100);
