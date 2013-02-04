@@ -11,9 +11,13 @@
         squirtle = function (renderingContext) {
             var img = new Image();
             img.onload = function() {
-                renderingContext.drawImage(img,0,0);
+                renderingContext.drawImage(img,100,100);
             };
             img.src = "../animation-sprite-2.0/squirtle.png";
+        },
+        square = function (renderingContext) {
+            renderingContext.fillStyle = "blue";
+            renderingContext.fillRect(-20, -20, 40, 40);
         },
         venisaur = function (renderingContext) {
             var img = new Image();
@@ -59,7 +63,7 @@
                 renderingContext.drawImage(img,0,0);
             };
             img.src = "../animation-sprite-2.0/ash_left.png";
-        }
+        },
 
         // Then, we have "easing functions" that determine how
         // intermediate frames are computed.
@@ -68,25 +72,25 @@
         // has a drawing function and an array of keyframes.
         sprites = [
             {
-                draw: ash_standard,   //Change** this function to an array of objects
+                draw: square,  //Change** this function to an array of objects
                 keyframes: [ 
                     {
                         frame: 0,   //Speed of movement from frame to frame
-                        tx: 100,     //Position at the particular frame
+                        tx: 20,     //Position at the particular frame
                         ty: 20,     //sx and sy scale the object
                         ease: KeyframeTweener.linear
                     },
 
                     {
-                        frame: 100,
-                        tx: 500,
-                        ty: 200,
+                        frame: 30,
+                        tx: 100,
+                        ty: 50,
                         ease: KeyframeTweener.quadEaseInOut
                     },
 
                     // The last keyframe does not need an easing function.
                     {
-                        frame: 120,
+                        frame: 80,
                         tx: 80,
                         ty: 500,
                         rotate: 60 // Keyframe.rotate uses degrees.
@@ -119,9 +123,8 @@
                     }
                 ]
             },
-
             {
-                draw: squirtle,
+                draw: ash_left,
                 keyframes: [
                     {
                         frame: 50,

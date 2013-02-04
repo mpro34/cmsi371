@@ -26,7 +26,7 @@ var KeyframeTweener = {
                 (-distance / 2) * ((percentComplete - 1) * (percentComplete - 3) - 1) + start;
     },
 
-    //Add more easing functions
+     //Add more easing functions
 
     // The big one: animation initialization.  The settings parameter
     // is expected to be a JavaScript object with the following
@@ -77,21 +77,38 @@ var KeyframeTweener = {
                 ease,
                 startKeyframe,
                 endKeyframe,
-                txStart,             //position
+                txStart,        //position
                 txDistance,
                 tyStart,
                 tyDistance,
-                sxStart,            //Scaling
+                sxStart,        //scaling
                 sxDistance,
                 syStart,
                 syDistance,
-                rotateStart,       //rotate
+                rotateStart,
                 rotateDistance,
                 currentTweenFrame,
                 duration;
 
-            // Clear the canvas.//ADD Background function that draws background HERE
-            renderingContext.clearRect(0, 0, width, height);
+            // Clear the canvas.  //ADD Background function that draws background HERE
+           // renderingContext.clearRect(0, 0, width, height);
+            background = function (renderingContext) {
+                renderingContext.fillStyle = "black";
+                renderingContext.fillRect(0, 0, 900, 600);
+                for (var i=0; i<55; i+=2) {
+                    renderingContext.fillStyle = "#C2A385";
+                    renderingContext.fillRect(100, 10*i, 800, 10);
+                    renderingContext.fillStyle = "#8A5C2E";
+                    renderingContext.fillRect(100, 10*(i+1), 800, 10);
+                }
+                renderingContext.fillStyle = "#E6E600";
+                renderingContext.fillRect(190, 140, 620, 320);
+                renderingContext.fillStyle = "#CCCC00";
+                renderingContext.fillRect(195, 145, 610, 310);
+                renderingContext.fillStyle = "#007ACC";
+                renderingContext.fillRect(200, 150, 600, 300);
+            };
+            background(renderingContext);
 
             // For every sprite, go to the current pair of keyframes.
             // Then, draw the sprite based on the current frame.
@@ -137,8 +154,9 @@ var KeyframeTweener = {
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
 
-                        // Draw the sprite. //Should CHANGE** to a draw array frunction
+                        // Draw the sprite.    //Should CHANGE** to a draw array frunction
                         sprites[i].draw(renderingContext);
+
 
                         // Clean up.
                         renderingContext.restore();
