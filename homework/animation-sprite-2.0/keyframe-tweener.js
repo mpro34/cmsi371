@@ -105,13 +105,13 @@ var KeyframeTweener = {
                     renderingContext.fillStyle = "#C4AE96";
                     renderingContext.fillRect(100, 10*(i+1), 800, 4);
                 }
-                renderingContext.fillStyle = "#5D4E40";
+                renderingContext.fillStyle = "#5D4E40";        //dark brown
                 renderingContext.fillRect(187, 137, 626, 323);
-                renderingContext.fillStyle = "#E6E600";
+                renderingContext.fillStyle = "#E6E600";        //light yellow
                 renderingContext.fillRect(190, 140, 620, 320);
-                renderingContext.fillStyle = "#CCCC00";
+                renderingContext.fillStyle = "#CCCC00";        //dark yellow
                 renderingContext.fillRect(195, 145, 610, 310);
-                renderingContext.fillStyle = "#007ACC";
+                renderingContext.fillStyle = "#007ACC";        //blue
                 renderingContext.fillRect(200, 150, 600, 300);
 
             };
@@ -162,7 +162,7 @@ var KeyframeTweener = {
                         );
 
                         // Draw the sprite.    //Should CHANGE** to a draw array frunction
-                        sprites[i].draw(renderingContext);
+                        sprites[i].draw[j](renderingContext); //Each keyframe corresponds to the next image to draw
 
 
                         // Clean up.
