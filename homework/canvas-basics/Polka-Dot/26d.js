@@ -10,8 +10,8 @@
     }
     //Function that draws a pink dot
     function drawDots(x,y) {
-    canvas.beginPath();
-    canvas.arc(x, y, 30, 0, Math.PI * 2, true);
-    canvas.fill();
+        canvas.beginPath();
+        canvas.arc(x, y, 30, 0, Math.PI * 2, true);
+        canvas.fill();
     }
 }());
