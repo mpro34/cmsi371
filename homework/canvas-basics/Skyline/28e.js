@@ -1,5 +1,11 @@
 (function () {
     var canvas = document.getElementById("28e").getContext("2d");
+
+    // JD: You have a bunch of unnecessary hardcodes here.  These impact
+    //     this program in particular because they are all over the place.
+    //     If your canvas is resized in HTML, that will trigger a cascade
+    //     of changes here.
+
     //dark blue sky
     canvas.fillStyle = "#000047";
     canvas.fillRect(0,0,600,500);

@@ -1,6 +1,8 @@
 (function () {
     var canvas = document.getElementById("27d").getContext("2d");
-    
+
+    // JD: Watch out---radialGradient is a global variable!
+    //     Plus, "radialGradient" isn't quite the best name for it.
     radialGradient = canvas.createRadialGradient(160, 160, 1, 180, 180, 320);
     radialGradient.addColorStop(0, "white");
     radialGradient.addColorStop(1, "yellow");
