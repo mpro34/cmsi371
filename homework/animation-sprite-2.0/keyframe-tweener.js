@@ -169,9 +169,9 @@ var KeyframeTweener = {
                         renderingContext.rotate(
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
-                        //ash_left(renderingContext);
+                        
                         // Draw the sprite.    //Should CHANGE** to a draw array frunction
-                        //console.log("here");
+                       
                         sprites[i].draw[j](renderingContext); //Each keyframe corresponds to the next image to draw
 
 

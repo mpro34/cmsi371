@@ -5,6 +5,10 @@
  ** Place all VARS at the beginning.
  Nanoshop.html demo when pokeball is chosen, darken everything but pokeball
  and pokemon.git 
+
+ -2/6/2013
+ 1) Ash throws a random colored ball, which moves to the middle of the carpet.
+ 2) A random pokemon is spawned from the ball.
  */
  var img = new Image();
 (function () {
@@ -19,13 +23,10 @@
                 ty: (300-(10*i)),  
                 ease: KeyframeTweener.quadEaseIn
             };
-            temp[i]=obj;
+            temp.push(obj);
         };
-        //alert(temp);
         return temp;
-
-
-    }
+    };
 
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
@@ -61,6 +62,18 @@
             renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/ash_left.png";
         },
+        red_poke = function (renderingContext) {
+            renderingContext.drawImage(img,0,0);
+            img.src = "../animation-sprite-2.0/red_ball.png";
+        },
+        blue_poke = function (renderingContext) {
+            renderingContext.drawImage(img,0,0);
+            img.src = "../animation-sprite-2.0/blue_ball.png";
+        },
+        green_poke = function (renderingContext) {
+            renderingContext.drawImage(img,0,0);
+            img.src = "../animation-sprite-2.0/green_ball.png";
+        },
 
         // Then, we have "easing functions" that determine how
         // intermediate frames are computed.
@@ -69,135 +82,169 @@
         // has a drawing function and an array of keyframes.
         sprites = [
             {
-                draw: [ash_right,ash_left,ash_right,ash_left,ash_right,ash_left,ash_right,ash_left,ash_right,ash_left],
+                draw: [
+
+                       ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
+                       ash_standard, ash_standard, 
+                       red_poke, red_poke, 
+                       pikachu, pikachu, pikachu ],
 
                 keyframes: [
 
                    {//ash_right
+                        frame: 0,
+                        tx: 300,        //coordinates for image at 50 frames
+                        ty: 300,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_right
                         frame: 10,
                         tx: 300,        //coordinates for image at 50 frames
-                        ty: 290,
+                        ty: 300,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                    {//ash_left
                         frame: 20,
                         tx: 300,
-                        ty: 280,
+                        ty: 290,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_right
                         frame: 30,
+                        tx: 300,
+                        ty: 280,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_left
+                        frame: 40,
                         tx: 300,
                         ty: 270,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_left
-                        frame: 40,
-                        tx: 300,
-                        ty: 260,
-                        ease: KeyframeTweener.quadEaseIn
-                    },
-
-                    {//ash_left
                         frame: 50,
                         tx: 300,
-                        ty: 250,
+                        ty: 260,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_right
                         frame: 60,
                         tx: 300,
-                        ty: 240,
+                        ty: 250,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_left
                         frame: 70,
                         tx: 300,
-                        ty: 230,
+                        ty: 240,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_left
                         frame: 80,
                         tx: 300,
-                        ty: 220,
+                        ty: 230,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_right
                         frame: 90,
                         tx: 300,
-                        ty: 210,
+                        ty: 220,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_left
                         frame: 100,
                         tx: 300,
+                        ty: 210,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_standard
+                        frame: 200,
+                        tx: 300,
+                        ty: 210,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//poke
+                        frame: 220,
+                        tx: 300,
+                        ty: 210,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//poke
+                        frame: 230,
+                        tx: 400,
+                        ty: 310,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+                   //Need to add code so that ash doesn't erase from screen
+
+                    {//pikachu
+                        frame: 250,
+                        tx: 400,
                         ty: 200,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//pikachu
+                        frame: 260,
+                        tx: 400,
+                        ty: 300,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//pikachu
+                        frame: 270,
+                        tx: 400,
+                        ty: 400,
+                        ease: KeyframeTweener.quadEaseIn
+                    } 
+
+                ]
+            },
+
+  /**          {
+               draw: [pikachu,pikachu,pikachu],
+
+               keyframes: [
+                
+                   {//pikachu
+                        frame: 220,
+                        tx: 400,
+                        ty: 200,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//pikachu
+                        frame: 240,
+                        tx: 400,
+                        ty: 300,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//pikachu
+                        frame: 260,
+                        tx: 400,
+                        ty: 400,
                         ease: KeyframeTweener.quadEaseIn
                     }
 
-                ]
-            }
-            /**{
-                draw: ash_standard,  //Change** this function to an array of objects
-                keyframes: [ 
-                    {
-                        frame: 0,   //Speed of movement from frame to frame
-                        tx: 20,     //Position at the particular frame
-                        ty: 20,     //sx and sy scale the object
-                        ease: KeyframeTweener.linear
-                    },
 
-                    {
-                        frame: 50,
-                        tx: 100,
-                        ty: 50,
-                        ease: KeyframeTweener.quadEaseInOut
-                    },
-
-                    // The last keyframe does not need an easing function.
-                    {
-                        frame: 100,
-                        tx: 80,
-                        ty: 500,
-                        rotate: 60 // Keyframe.rotate uses degrees.
-                    }
-                ]
-            },
-            {
-                draw: ash_right,
-                keyframes: [
-                    {
-                        frame: 20,   //Speed of movement from frame to frame
-                        tx: 20,     //Position at the particular frame
-                        ty: 20,     //sx and sy scale the object
-                        ease: KeyframeTweener.linear
-                    },
-
-                    {
-                        frame: 30,
-                        tx: 100,
-                        ty: 50,
-                        ease: KeyframeTweener.quadEaseInOut
-                    },
-
-                    // The last keyframe does not need an easing function.
-                    {
-                        frame: 40,
-                        tx: 80,
-                        ty: 500,
-                        rotate: 60 // Keyframe.rotate uses degrees.
-                    }
-                ]
-            }*/
+               ] 
+            }    */
         ];
+
     // Finally, we initialize the engine.  Mainly, it needs
     // to know the rendering context to use.  And the animations
     // to display, of course.
