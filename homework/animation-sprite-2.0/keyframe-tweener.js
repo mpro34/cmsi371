@@ -92,6 +92,13 @@ var KeyframeTweener = {
 
             // Clear the canvas.  //ADD Background function that draws background HERE
            // renderingContext.clearRect(0, 0, width, height);
+            table = function () {
+                var img = new Image();
+                img.onload = function() {
+                    renderingContext.drawImage(img,270,170);
+                };           
+                img.src = "../animation-sprite-2.0/poke_table.png";
+            };
             background = function (renderingContext) {
                 renderingContext.fillStyle = "black";
                 renderingContext.fillRect(0, 0, 900, 600);
@@ -105,6 +112,7 @@ var KeyframeTweener = {
                     renderingContext.fillStyle = "#C4AE96";
                     renderingContext.fillRect(100, 10*(i+1), 800, 4);
                 }
+                table();
                 renderingContext.fillStyle = "#5D4E40";        //dark brown
                 renderingContext.fillRect(187, 137, 626, 323);
                 renderingContext.fillStyle = "#E6E600";        //light yellow
@@ -115,6 +123,7 @@ var KeyframeTweener = {
                 renderingContext.fillRect(200, 150, 600, 300);
 
             };
+            //draw custom background.
             background(renderingContext);
 
             // For every sprite, go to the current pair of keyframes.
@@ -160,8 +169,9 @@ var KeyframeTweener = {
                         renderingContext.rotate(
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
-
+                        //ash_left(renderingContext);
                         // Draw the sprite.    //Should CHANGE** to a draw array frunction
+                        //console.log("here");
                         sprites[i].draw[j](renderingContext); //Each keyframe corresponds to the next image to draw
 
 

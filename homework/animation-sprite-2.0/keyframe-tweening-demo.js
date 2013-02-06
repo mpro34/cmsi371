@@ -4,76 +4,61 @@
 **NOTES**
  ** Place all VARS at the beginning.
  Nanoshop.html demo when pokeball is chosen, darken everything but pokeball
- and pokemon.
+ and pokemon.git 
  */
+ var img = new Image();
 (function () {
     var canvas = document.getElementById("canvas"),
- 
+
+    ash_walk = function() {
+        var temp = [];
+        for (var i=0; i<10; i++) {
+            var obj = {
+                frame: (i*10),
+                tx: 300,
+                ty: (300-(10*i)),  
+                ease: KeyframeTweener.quadEaseIn
+            };
+            temp[i]=obj;
+        };
+        //alert(temp);
+        return temp;
+
+
+    }
+
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
         squirtle = function (renderingContext) {
-            var img = new Image();
-            img.onload = function() {
-                renderingContext.drawImage(img,100,100);
-            };
+            renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/squirtle.png";
         },
-        table = function (renderingContext) {
-            var img = new Image();
-            img.onload = function() {
-                renderingContext.drawImage(img,100,100);
-            };
-            img.src = "../animation-sprite-2.0/poke_table.png";
-        },
         venisaur = function (renderingContext) {
-            var img = new Image();
-            img.onload = function() {
-                renderingContext.drawImage(img,0,0);
-            };
+            renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/venisaur.png";
         },
         pikachu = function (renderingContext) {
-            var img = new Image();
-            img.onload = function() {
-                renderingContext.drawImage(img,500,150);
-            };
+            renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/pikachu.png";
         },
         charmander = function (renderingContext) {
-            var img = new Image();
-            img.onload = function() {
-                renderingContext.drawImage(img,0,0);
-            };
+            renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/charmander.png";
         },
 
         ash_standard = function (renderingContext) {
-            var img = new Image();
-            img.onload = function() {
-                renderingContext.drawImage(img,500,150);
-            };
+            renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/ash_standard.png";
         },
 
         ash_right = function (renderingContext) {
-            var img = new Image();
-                var xValue = sprites[0].keyframes[1].tx;
-                var yValue = sprites[0].keyframes[1].ty;
-                img.onload = function() {
-                    renderingContext.drawImage(img,xValue,yValue);
-                };
+            renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/ash_right.png";
         },
+
         ash_left = function (renderingContext) {
-            var img = new Image();
-          //  console.log(sprites[0].keyframes.length);
-                var xValue = sprites[0].keyframes[0].tx;
-                var yValue = sprites[0].keyframes[0].ty;
-                img.onload = function() {
-                    renderingContext.drawImage(img,xValue,yValue);
-                };
-            
+            renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/ash_left.png";
         },
 
@@ -84,28 +69,80 @@
         // has a drawing function and an array of keyframes.
         sprites = [
             {
-                draw: [ash_left,ash_right,ash_left],
+                draw: [ash_right,ash_left,ash_right,ash_left,ash_right,ash_left,ash_right,ash_left,ash_right,ash_left],
+
                 keyframes: [
-                    {//ash_left
-                        frame: 0,
-                        tx: 500,
-                        ty: 250,
-                        ease: KeyframeTweener.quadEaseOut
+
+                   {//ash_right
+                        frame: 10,
+                        tx: 300,        //coordinates for image at 50 frames
+                        ty: 290,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                   {//ash_left
+                        frame: 20,
+                        tx: 300,
+                        ty: 280,
+                        ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_right
-                        frame: 20,
-                        tx: 500,
-                        ty: 245,
-                        ease: KeyframeTweener.quadEaseOut
+                        frame: 30,
+                        tx: 300,
+                        ty: 270,
+                        ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_left
                         frame: 40,
-                        tx: 500,
+                        tx: 300,
+                        ty: 260,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_left
+                        frame: 50,
+                        tx: 300,
+                        ty: 250,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_right
+                        frame: 60,
+                        tx: 300,
+                        ty: 240,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_left
+                        frame: 70,
+                        tx: 300,
+                        ty: 230,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_left
+                        frame: 80,
+                        tx: 300,
+                        ty: 220,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_right
+                        frame: 90,
+                        tx: 300,
                         ty: 210,
-                        ease: KeyframeTweener.quadEaseOut
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_left
+                        frame: 100,
+                        tx: 300,
+                        ty: 200,
+                        ease: KeyframeTweener.quadEaseIn
                     }
+
                 ]
             }
             /**{
@@ -161,7 +198,6 @@
                 ]
             }*/
         ];
-
     // Finally, we initialize the engine.  Mainly, it needs
     // to know the rendering context to use.  And the animations
     // to display, of course.
