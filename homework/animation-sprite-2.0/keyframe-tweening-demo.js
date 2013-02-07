@@ -28,6 +28,20 @@
         return temp;
     };
 
+    rand_ball = function() {
+        var temp = [];
+        for (var i=0; i<10; i++) {
+            var obj = {
+                frame: (i*10),
+                tx: 300,
+                ty: (300-(10*i)),  
+                ease: KeyframeTweener.quadEaseIn
+            };
+            temp.push(obj);
+        };
+        return temp;
+    };
+
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
@@ -74,6 +88,11 @@
             renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/green_ball.png";
         },
+        yellow_poke = function (renderingContext) {
+            renderingContext.drawImage(img,0,0);
+            img.src = "../animation-sprite-2.0/yellow_ball.png";
+        },
+
 
         // Then, we have "easing functions" that determine how
         // intermediate frames are computed.
@@ -85,12 +104,12 @@
                 draw: [
 
                        ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                       ash_standard, ash_standard, 
-                       red_poke, red_poke, red_poke, red_poke, red_poke ], 
+                       ash_standard, 
+                       red_poke, red_poke, red_poke ], 
                      //  pikachu, pikachu, pikachu ],
 
                 keyframes: [
-
+                //Ash Walking Animation
                    {//ash_right
                         frame: 0,
                         tx: 300,        //coordinates for image at 50 frames
@@ -168,48 +187,42 @@
                         ease: KeyframeTweener.quadEaseIn
                     },
 
+                
                     {//ash_standard
-                        frame: 200,
+                        frame: 150,
                         tx: 300,
                         ty: 210,
-                        ease: KeyframeTweener.backandforth
+                        ease: KeyframeTweener.quadEaseIn
                     },
-
-                    {//poke
-                        frame: 220,
-                        tx: 300,
-                        ty: 200,
-                        ease: KeyframeTweener.backandforth
-                    },
-
+                //Pokeball Animation
                     {//poke
                         frame: 250,
-                        tx: 200,
-                        ty: 200,
-                        ease: KeyframeTweener.backandforth
+                        tx: 500,
+                        ty: 300,
+                        ease: KeyframeTweener.bounce
                     },
+
+                    {//poke
+                        frame: 280,
+                        tx: 500,
+                        ty: 300,
+                        ease: KeyframeTweener.bounce
+                    }/**,
                    //Need to add code so that ash doesn't erase from screen
 
                     {//pikachu
-                        frame: 270,
-                        tx: 200,
-                        ty: 200,
-                        ease: KeyframeTweener.backandforth
+                        frame: 180,
+                        tx: 360,
+                        ty: 230,
+                        ease: KeyframeTweener.bounce
                     },
 
                     {//pikachu
-                        frame: 280,
-                        tx: 400,
-                        ty: 300,
-                        ease: KeyframeTweener.backandforth
-                    },
-
-                    {//pikachu
-                        frame: 290,
-                        tx: 400,
-                        ty: 400,
-                        ease: KeyframeTweener.backandforth
-                    } 
+                        frame: 190,
+                        tx: 380,
+                        ty: 240,
+                        ease: KeyframeTweener.bounce
+                    } */
 
                 ]
             },
