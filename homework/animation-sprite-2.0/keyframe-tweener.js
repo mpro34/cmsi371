@@ -26,6 +26,24 @@ var KeyframeTweener = {
                 (-distance / 2) * ((percentComplete - 1) * (percentComplete - 3) - 1) + start;
     },
 
+    bounce: function(currentTime, start, distance, duration) {
+        var percentComplete = (currentTime /= duration) * currentTime;
+        var tc= percentComplete * currentTime;
+        return start + distance *(
+                                     -7.8 * tc * percentComplete + 27.095 * percentComplete * 
+                                     percentComplete + -30.79 * tc + 11.495 * percentComplete + currentTime
+                                 );
+    },
+
+    backandforth: function(currentTime, start, distance, duration) {
+        var percentComplete = (currentTime /= duration) * currentTime;
+        var tc = percentComplete * currentTime;
+        return start + distance * (
+                                      1.55 * tc * percentComplete + 17.745 * percentComplete * 
+                                      percentComplete + -30.79 * tc + 11.495 * percentComplete + currentTime
+                                  );
+    },
+
      //Add more easing functions
 
     // The big one: animation initialization.  The settings parameter
@@ -95,7 +113,7 @@ var KeyframeTweener = {
             table = function () {
                 var img = new Image();
                 img.onload = function() {
-                    renderingContext.drawImage(img,270,170);
+                    renderingContext.drawImage(img,275,170);
                 };           
                 img.src = "../animation-sprite-2.0/poke_table.png";
             };
@@ -121,6 +139,20 @@ var KeyframeTweener = {
                 renderingContext.fillRect(195, 145, 610, 310);
                 renderingContext.fillStyle = "#007ACC";        //blue
                 renderingContext.fillRect(200, 150, 600, 300);
+//For REFERENCE:
+                   //blue
+                renderingContext.fillRect((canvas.width/2), 0, 5, (canvas.height-150));
+                renderingContext.fillStyle = "black";     
+                renderingContext.fillRect(((canvas.width/2)-100), 0, 5, (canvas.height-150));
+                renderingContext.fillRect(((canvas.width/2)+100), 0, 5, (canvas.height-150));
+                renderingContext.fillStyle = "red";
+                renderingContext.fillRect(((canvas.width/2)-200), 0, 5, (canvas.height-150));
+                renderingContext.fillRect(((canvas.width/2)+200), 0, 5, (canvas.height-150));
+                renderingContext.fillRect(((canvas.width/2)-300), 0, 5, (canvas.height-150));
+                renderingContext.fillRect(((canvas.width/2)+300), 0, 5, (canvas.height-150));
+                renderingContext.fillRect(((canvas.width/2)-400), 0, 5, (canvas.height-150));
+                renderingContext.fillRect(((canvas.width/2)+400), 0, 5, (canvas.height-150));
+                renderingContext.fillRect(0, 0, 5, (canvas.height-150));
 
             };
             //draw custom background.

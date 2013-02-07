@@ -86,8 +86,8 @@
 
                        ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
                        ash_standard, ash_standard, 
-                       red_poke, red_poke, 
-                       pikachu, pikachu, pikachu ],
+                       red_poke, red_poke, red_poke, red_poke, red_poke ], 
+                     //  pikachu, pikachu, pikachu ],
 
                 keyframes: [
 
@@ -172,43 +172,43 @@
                         frame: 200,
                         tx: 300,
                         ty: 210,
-                        ease: KeyframeTweener.quadEaseIn
+                        ease: KeyframeTweener.backandforth
                     },
 
                     {//poke
                         frame: 220,
                         tx: 300,
-                        ty: 210,
-                        ease: KeyframeTweener.quadEaseIn
+                        ty: 200,
+                        ease: KeyframeTweener.backandforth
                     },
 
                     {//poke
-                        frame: 230,
-                        tx: 400,
-                        ty: 310,
-                        ease: KeyframeTweener.quadEaseIn
+                        frame: 250,
+                        tx: 200,
+                        ty: 200,
+                        ease: KeyframeTweener.backandforth
                     },
                    //Need to add code so that ash doesn't erase from screen
 
                     {//pikachu
-                        frame: 250,
-                        tx: 400,
+                        frame: 270,
+                        tx: 200,
                         ty: 200,
-                        ease: KeyframeTweener.quadEaseIn
+                        ease: KeyframeTweener.backandforth
                     },
 
                     {//pikachu
-                        frame: 260,
+                        frame: 280,
                         tx: 400,
                         ty: 300,
-                        ease: KeyframeTweener.quadEaseIn
+                        ease: KeyframeTweener.backandforth
                     },
 
                     {//pikachu
-                        frame: 270,
+                        frame: 290,
                         tx: 400,
                         ty: 400,
-                        ease: KeyframeTweener.quadEaseIn
+                        ease: KeyframeTweener.backandforth
                     } 
 
                 ]
