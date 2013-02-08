@@ -49,17 +49,33 @@
             renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/squirtle.png";
         },
+        squirt_move = function (renderingContext) {
+            renderingContext.drawImage(img,0,0);
+            img.src = "../animation-sprite-2.0/squirt_move.png";
+        },
         venisaur = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/venisaur.png";
+        },
+        veni_move = function (renderingContext) {
+            renderingContext.drawImage(img,0,0);
+            img.src = "../animation-sprite-2.0/veni_move.png";
         },
         pikachu = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/pikachu.png";
         },
+        pika_move = function (renderingContext) {
+            renderingContext.drawImage(img,0,0);
+            img.src = "../animation-sprite-2.0/pika_move.png";
+        },
         charmander = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
             img.src = "../animation-sprite-2.0/charmander.png";
+        },
+        char_move = function (renderingContext) {
+            renderingContext.drawImage(img,0,0);
+            img.src = "../animation-sprite-2.0/char_move.png";
         },
 
         ash_standard = function (renderingContext) {
@@ -105,7 +121,9 @@
 
                        ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
                        ash_standard, 
-                       red_poke, red_poke, red_poke ], 
+                       red_poke, red_poke, red_poke,
+                       pika_move, pikachu, pika_move, pikachu, pika_move
+                       ], 
                      //  pikachu, pikachu, pikachu ],
 
                 keyframes: [
@@ -194,35 +212,81 @@
                         ty: 210,
                         ease: KeyframeTweener.quadEaseIn
                     },
-                //Pokeball Animation
-                    {//poke
+
+                //**Pokeball Animation**
+                    {
                         frame: 250,
                         tx: 500,
                         ty: 300,
-                        ease: KeyframeTweener.bounce
+                        sx: 0.75,
+                        sy: 0.75,
+                        rotate: 360,
+                        ease: KeyframeTweener.quadEaseOut
                     },
 
-                    {//poke
-                        frame: 280,
+                    {
+                        frame: 250,
                         tx: 500,
                         ty: 300,
-                        ease: KeyframeTweener.bounce
-                    }/**,
-                   //Need to add code so that ash doesn't erase from screen
+                        sx: 0.75,
+                        sy: 0.75,
+                        
+                    },
 
+                //**Charmander tail wag Animation**
                     {//pikachu
-                        frame: 180,
-                        tx: 360,
-                        ty: 230,
-                        ease: KeyframeTweener.bounce
+                        frame: 300,
+                        tx: 500,
+                        ty: 300,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut
                     },
 
                     {//pikachu
-                        frame: 190,
-                        tx: 380,
-                        ty: 240,
-                        ease: KeyframeTweener.bounce
-                    } */
+                        frame: 350,
+                        tx: 450,
+                        ty: 250,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut
+                    },
+
+                    {//pikachu
+                        frame: 370,
+                        tx: 450,
+                        ty: 250,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut
+                    },
+
+                    {//pikachu
+                        frame: 390,
+                        tx: 450,
+                        ty: 250,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut
+                    },
+
+                    {//pikachu
+                        frame: 410,
+                        tx: 450,
+                        ty: 250,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut
+                    },
+
+                    {//pikachu
+                        frame: 430,
+                        tx: 450,
+                        ty: 250,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut
+                    }       
 
                 ]
             },

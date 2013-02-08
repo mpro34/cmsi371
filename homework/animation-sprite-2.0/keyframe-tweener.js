@@ -44,6 +44,15 @@ var KeyframeTweener = {
                                   );
     },
 
+    throwOut: function(t, start, distance, duration) {
+        var percentComplete = (t /= duration) * t;
+        var tc = percentComplete * t;
+        return start + distance * (
+                                      -1.6025 * tc * percentComplete + 8.7075 * percentComplete * percentComplete
+                                      + -14.505 * tc + 8.5 * percentComplete + -0.1 * t
+                                  );
+    },
+
      //Add more easing functions
 
     // The big one: animation initialization.  The settings parameter
