@@ -14,34 +14,6 @@
 (function () {
     var canvas = document.getElementById("canvas"),
 
-    ash_walk = function() {
-        var temp = [];
-        for (var i=0; i<10; i++) {
-            var obj = {
-                frame: (i*10),
-                tx: 300,
-                ty: (300-(10*i)),  
-                ease: KeyframeTweener.quadEaseIn
-            };
-            temp.push(obj);
-        };
-        return temp;
-    };
-
-    rand_ball = function() {
-        var temp = [];
-        for (var i=0; i<10; i++) {
-            var obj = {
-                frame: (i*10),
-                tx: 300,
-                ty: (300-(10*i)),  
-                ease: KeyframeTweener.quadEaseIn
-            };
-            temp.push(obj);
-        };
-        return temp;
-    };
-
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
@@ -110,6 +82,41 @@
         },
 
 
+        rand_ball = function () {
+            var r = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
+                     ash_standard, red_poke, red_poke, red_poke,
+                     char_move, charmander, char_move, charmander, char_move
+                    ];
+
+            var b = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
+                     ash_standard, blue_poke, blue_poke, blue_poke,
+                     squirt_move, squirtle, squirt_move, squirtle, squirt_move
+                    ];
+
+            var g = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
+                     ash_standard, green_poke, green_poke, green_poke,
+                     veni_move, venisaur, veni_move, venisaur, veni_move
+                    ];
+
+            var y = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
+                     ash_standard, yellow_poke, yellow_poke, yellow_poke,
+                     pika_move, pikachu, pika_move, pikachu, pika_move
+                    ];
+
+            var red = (Math.random() * 20) + 1;
+            var green = (Math.random() * 20) + 1;
+            var blue = (Math.random() * 20) + 1;
+            var yellow = (Math.random() * 15) + 1;  //least chance to get yellow ball
+    
+            var result = Math.max(red, green, blue, yellow);
+            if (result == red) { temp = r; }
+            if (result == green) { temp = g; }
+            if (result == blue) { temp = b; }
+            if (result == yellow) { temp = y; }
+            return temp;
+        }; 
+
+
         // Then, we have "easing functions" that determine how
         // intermediate frames are computed.
 
@@ -117,27 +124,21 @@
         // has a drawing function and an array of keyframes.
         sprites = [
             {
-                draw: [
+                draw: [], 
+                     
 
-                       ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                       ash_standard, 
-                       red_poke, red_poke, red_poke,
-                       pika_move, pikachu, pika_move, pikachu, pika_move
-                       ], 
-                     //  pikachu, pikachu, pikachu ],
-
-                keyframes: [
+                keyframes: [ 
                 //Ash Walking Animation
-                   {//ash_right
+                    {//ash_right
                         frame: 0,
-                        tx: 300,        //coordinates for image at 50 frames
+                        tx: 300,        
                         ty: 300,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
                     {//ash_right
                         frame: 10,
-                        tx: 300,        //coordinates for image at 50 frames
+                        tx: 300,       
                         ty: 300,
                         ease: KeyframeTweener.quadEaseIn
                     },
@@ -233,8 +234,8 @@
                         
                     },
 
-                //**Charmander tail wag Animation**
-                    {//pikachu
+                //**Pokemon Animation**
+                    {
                         frame: 300,
                         tx: 500,
                         ty: 300,
@@ -243,7 +244,7 @@
                         ease: KeyframeTweener.throwOut
                     },
 
-                    {//pikachu
+                    {
                         frame: 350,
                         tx: 450,
                         ty: 250,
@@ -252,7 +253,7 @@
                         ease: KeyframeTweener.throwOut
                     },
 
-                    {//pikachu
+                    {
                         frame: 370,
                         tx: 450,
                         ty: 250,
@@ -261,7 +262,7 @@
                         ease: KeyframeTweener.throwOut
                     },
 
-                    {//pikachu
+                    {
                         frame: 390,
                         tx: 450,
                         ty: 250,
@@ -270,7 +271,7 @@
                         ease: KeyframeTweener.throwOut
                     },
 
-                    {//pikachu
+                    {
                         frame: 410,
                         tx: 450,
                         ty: 250,
@@ -279,48 +280,23 @@
                         ease: KeyframeTweener.throwOut
                     },
 
-                    {//pikachu
+                    {
                         frame: 430,
                         tx: 450,
                         ty: 250,
                         sx: 0.75,
                         sy: 0.75,
                         ease: KeyframeTweener.throwOut
-                    }       
+                    }      
 
-                ]
-            },
-
-  /**          {
-               draw: [pikachu,pikachu,pikachu],
-
-               keyframes: [
-                
-                   {//pikachu
-                        frame: 220,
-                        tx: 400,
-                        ty: 200,
-                        ease: KeyframeTweener.quadEaseIn
-                    },
-
-                    {//pikachu
-                        frame: 240,
-                        tx: 400,
-                        ty: 300,
-                        ease: KeyframeTweener.quadEaseIn
-                    },
-
-                    {//pikachu
-                        frame: 260,
-                        tx: 400,
-                        ty: 400,
-                        ease: KeyframeTweener.quadEaseIn
-                    }
-
-
-               ] 
-            }    */
+                ],   
+            }
         ];
+
+        //Assign a random array of draw functions so that each page reload summons a random pokemon.
+        sprites[0].draw = rand_ball();
+            
+     //   console.log("success: "+ sprites[0].draw);
 
     // Finally, we initialize the engine.  Mainly, it needs
     // to know the rendering context to use.  And the animations

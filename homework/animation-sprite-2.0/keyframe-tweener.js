@@ -126,6 +126,7 @@ var KeyframeTweener = {
                 };           
                 img.src = "../animation-sprite-2.0/poke_table.png";
             };
+
             background = function (renderingContext) {
                 renderingContext.fillStyle = "black";
                 renderingContext.fillRect(0, 0, 900, 600);
@@ -164,12 +165,13 @@ var KeyframeTweener = {
                 renderingContext.fillRect(0, 0, 5, (canvas.height-150));
 
             };
-            //draw custom background.
+            //Draw custom background.
             background(renderingContext);
 
             // For every sprite, go to the current pair of keyframes.
             // Then, draw the sprite based on the current frame.
             for (i = 0, maxI = sprites.length; i < maxI; i += 1) {
+             //   console.log("here"+i);
                 for (j = 0, maxJ = sprites[i].keyframes.length - 1; j < maxJ; j += 1) {
                     // We look for keyframe pairs such that the current
                     // frame is between their frame numbers.
@@ -211,7 +213,7 @@ var KeyframeTweener = {
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
                         
-                        // Draw the sprite.    //Should CHANGE** to a draw array frunction
+                        // Draw the sprite.   
                        
                         sprites[i].draw[j](renderingContext); //Each keyframe corresponds to the next image to draw
 
