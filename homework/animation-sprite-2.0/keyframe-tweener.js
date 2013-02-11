@@ -149,22 +149,8 @@ var KeyframeTweener = {
                 renderingContext.fillRect(195, 145, 610, 310);
                 renderingContext.fillStyle = "#007ACC";        //blue
                 renderingContext.fillRect(200, 150, 600, 300);
-//For REFERENCE:
-                   //blue
-                renderingContext.fillRect((canvas.width/2), 0, 5, (canvas.height-150));
-                renderingContext.fillStyle = "black";     
-                renderingContext.fillRect(((canvas.width/2)-100), 0, 5, (canvas.height-150));
-                renderingContext.fillRect(((canvas.width/2)+100), 0, 5, (canvas.height-150));
-                renderingContext.fillStyle = "red";
-                renderingContext.fillRect(((canvas.width/2)-200), 0, 5, (canvas.height-150));
-                renderingContext.fillRect(((canvas.width/2)+200), 0, 5, (canvas.height-150));
-                renderingContext.fillRect(((canvas.width/2)-300), 0, 5, (canvas.height-150));
-                renderingContext.fillRect(((canvas.width/2)+300), 0, 5, (canvas.height-150));
-                renderingContext.fillRect(((canvas.width/2)-400), 0, 5, (canvas.height-150));
-                renderingContext.fillRect(((canvas.width/2)+400), 0, 5, (canvas.height-150));
-                renderingContext.fillRect(0, 0, 5, (canvas.height-150));
-
             };
+            
             //Draw custom background.
             background(renderingContext);
 

@@ -81,32 +81,58 @@
             img.src = "../animation-sprite-2.0/yellow_ball.png";
         },
 
+        explosion = function (renderingContext) {
+            var ctx = document.getElementById('canvas').getContext('2d');
+            ctx.strokeStyle = "#fc0";
+            ctx.lineWidth = 1.5; 
+            ctx.translate(10,10);
+            drawSpirograph(ctx,22,6,5);
+        }
+
+        function drawSpirograph(ctx,R,r,O){
+            var x1 = R-O;
+            var y1 = 0;
+            var i  = 1;
+            ctx.beginPath();
+            ctx.moveTo(x1,y1);
+            do {
+                if (i>20000) break;
+                var x2 = (R+r)*Math.cos(i*Math.PI/72) - (r+O)*Math.cos(((R+r)/r)*(i*Math.PI/72))
+                var y2 = (R+r)*Math.sin(i*Math.PI/72) - (r+O)*Math.sin(((R+r)/r)*(i*Math.PI/72))
+                ctx.lineTo(x2,y2);
+                x1 = x2;
+                y1 = y2;
+                i++;
+            } while (x2 != R-O && y2 != 0 );
+                  ctx.stroke();
+        }
+
 
         rand_ball = function () {
             var r = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                     ash_standard, red_poke, red_poke, red_poke,
+                     ash_standard, red_poke, red_poke, red_poke, explosion, explosion,
                      char_move, charmander, char_move, charmander, char_move
                     ];
 
             var b = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                     ash_standard, blue_poke, blue_poke, blue_poke,
+                     ash_standard, blue_poke, blue_poke, blue_poke, explosion, explosion,
                      squirt_move, squirtle, squirt_move, squirtle, squirt_move
                     ];
 
             var g = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                     ash_standard, green_poke, green_poke, green_poke,
+                     ash_standard, green_poke, green_poke, green_poke, explosion, explosion,
                      veni_move, venisaur, veni_move, venisaur, veni_move
                     ];
 
             var y = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                     ash_standard, yellow_poke, yellow_poke, yellow_poke,
+                     ash_standard, yellow_poke, yellow_poke, yellow_poke, explosion, explosion,
                      pika_move, pikachu, pika_move, pikachu, pika_move
                     ];
 
             var red = (Math.random() * 20) + 1;
             var green = (Math.random() * 20) + 1;
             var blue = (Math.random() * 20) + 1;
-            var yellow = (Math.random() * 15) + 1;  //least chance to get yellow ball
+            var yellow = (Math.random() * 17) + 1;  //least chance to get yellow ball
     
             var result = Math.max(red, green, blue, yellow);
             if (result == red) { temp = r; }
@@ -230,8 +256,24 @@
                         tx: 500,
                         ty: 300,
                         sx: 0.75,
-                        sy: 0.75,
-                        
+                        sy: 0.75,                       
+                    },
+
+                    {
+                        frame: 290,
+                        tx: 500,
+                        ty: 300,
+                        sx: 0.75,
+                        sy: 0.75,                                   
+                    },
+
+                    {
+                        frame: 290,
+                        tx: 500,
+                        ty: 300,
+                        sx: 0.75,
+                        sy: 0.75, 
+                        rotate: 360,                                         
                     },
 
                 //**Pokemon Animation**
