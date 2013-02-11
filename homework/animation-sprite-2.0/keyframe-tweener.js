@@ -127,6 +127,14 @@ var KeyframeTweener = {
                 img.src = "../animation-sprite-2.0/poke_table.png";
             };
 
+            drawText = function () {
+                renderingContext.fillStyle = "Black";
+                renderingContext.font = "24pt Helvetica";
+                renderingContext.textAlign = "center";
+                renderingContext.textBaseline = "middle";
+                renderingContext.fillText("I Choose You! Random Pokemon Spawns...", canvas.width / 2 , canvas.height / 2);
+            };
+
             background = function (renderingContext) {
                 renderingContext.fillStyle = "black";
                 renderingContext.fillRect(0, 0, 900, 600);
@@ -141,6 +149,7 @@ var KeyframeTweener = {
                     renderingContext.fillRect(100, 10*(i+1), 800, 4);
                 }
                 table();
+                
                 renderingContext.fillStyle = "#5D4E40";        //dark brown
                 renderingContext.fillRect(187, 137, 626, 323);
                 renderingContext.fillStyle = "#E6E600";        //light yellow
@@ -149,6 +158,7 @@ var KeyframeTweener = {
                 renderingContext.fillRect(195, 145, 610, 310);
                 renderingContext.fillStyle = "#007ACC";        //blue
                 renderingContext.fillRect(200, 150, 600, 300);
+                drawText();
             };
             
             //Draw custom background.
@@ -157,7 +167,6 @@ var KeyframeTweener = {
             // For every sprite, go to the current pair of keyframes.
             // Then, draw the sprite based on the current frame.
             for (i = 0, maxI = sprites.length; i < maxI; i += 1) {
-             //   console.log("here"+i);
                 for (j = 0, maxJ = sprites[i].keyframes.length - 1; j < maxJ; j += 1) {
                     // We look for keyframe pairs such that the current
                     // frame is between their frame numbers.
@@ -202,6 +211,7 @@ var KeyframeTweener = {
                         // Draw the sprite.   
                        
                         sprites[i].draw[j](renderingContext); //Each keyframe corresponds to the next image to draw
+
 
 
                         // Clean up.
