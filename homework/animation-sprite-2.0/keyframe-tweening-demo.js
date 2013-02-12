@@ -1,19 +1,10 @@
 /*
  * This file demonstrates how our homebrew keyframe-tweening
  * engine is used. 
-**NOTES**
- ** Place all VARS at the beginning.
- Nanoshop.html demo when pokeball is chosen, darken everything but pokeball
- and pokemon.git 
-
- -2/6/2013
- 1) Ash throws a random colored ball, which moves to the middle of the carpet.
- 2) A random pokemon is spawned from the ball.
  */
  var img = new Image();
 (function () {
     var canvas = document.getElementById("canvas"),
-
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
@@ -147,7 +138,7 @@
         // intermediate frames are computed.
 
         // Now, to actually define the animated sprites.  Each sprite
-        // has a drawing function and an array of keyframes.
+        // has an array of drawing functions and an array of keyframes.
         sprites = [
             {
                 draw: [], 
@@ -337,8 +328,6 @@
 
         //Assign a random array of draw functions so that each page reload summons a random pokemon.
         sprites[0].draw = rand_ball();
-            
-     //   console.log("success: "+ sprites[0].draw);
 
     // Finally, we initialize the engine.  Mainly, it needs
     // to know the rendering context to use.  And the animations

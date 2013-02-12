@@ -52,9 +52,7 @@ var KeyframeTweener = {
                                       + -14.505 * tc + 8.5 * percentComplete + -0.1 * t
                                   );
     },
-
-     //Add more easing functions
-
+    
     // The big one: animation initialization.  The settings parameter
     // is expected to be a JavaScript object with the following
     // properties:
@@ -87,7 +85,6 @@ var KeyframeTweener = {
     initialize: function (settings) {
         // We need to keep track of the current frame.
         var currentFrame = 0,
-
             // Avoid having to go through settings to get to the
             // rendering context and sprites.
             renderingContext = settings.renderingContext,
@@ -117,8 +114,7 @@ var KeyframeTweener = {
                 currentTweenFrame,
                 duration;
 
-            // Clear the canvas.  //ADD Background function that draws background HERE
-           // renderingContext.clearRect(0, 0, width, height);
+             //Draw custom background.
             table = function () {
                 var img = new Image();
                 img.onload = function() {
@@ -159,10 +155,7 @@ var KeyframeTweener = {
                 renderingContext.fillStyle = "#007ACC";        //blue
                 renderingContext.fillRect(200, 150, 600, 300);
                 drawText();
-            };
-            
-            //Draw custom background.
-            background(renderingContext);
+            };  background(renderingContext);
 
             // For every sprite, go to the current pair of keyframes.
             // Then, draw the sprite based on the current frame.
@@ -209,10 +202,7 @@ var KeyframeTweener = {
                         );
                         
                         // Draw the sprite.   
-                       
                         sprites[i].draw[j](renderingContext); //Each keyframe corresponds to the next image to draw
-
-
 
                         // Clean up.
                         renderingContext.restore();
