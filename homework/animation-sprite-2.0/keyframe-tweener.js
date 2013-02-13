@@ -125,7 +125,7 @@ var KeyframeTweener = {
 
             drawText = function () {
                 renderingContext.fillStyle = "Black";
-                renderingContext.font = "24pt Helvetica";
+                renderingContext.font = "22pt Helvetica";
                 renderingContext.textAlign = "center";
                 renderingContext.textBaseline = "middle";
                 renderingContext.fillText("I Choose You! Random Pokemon Spawns...", canvas.width / 2 , canvas.height / 2);
@@ -145,7 +145,7 @@ var KeyframeTweener = {
                     renderingContext.fillRect(100, 10*(i+1), 800, 4);
                 }
                 table();
-                
+
                 renderingContext.fillStyle = "#5D4E40";        //dark brown
                 renderingContext.fillRect(187, 137, 626, 323);
                 renderingContext.fillStyle = "#E6E600";        //light yellow
@@ -154,8 +154,10 @@ var KeyframeTweener = {
                 renderingContext.fillRect(195, 145, 610, 310);
                 renderingContext.fillStyle = "#007ACC";        //blue
                 renderingContext.fillRect(200, 150, 600, 300);
+                
                 drawText();
             };  background(renderingContext);
+
 
             // For every sprite, go to the current pair of keyframes.
             // Then, draw the sprite based on the current frame.

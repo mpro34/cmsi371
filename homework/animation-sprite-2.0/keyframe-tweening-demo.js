@@ -10,113 +10,86 @@
         // renderingContext argument.
         squirtle = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/squirtle.png";
+            img.src = "../animation-sprite-2.0/images/squirtle.png";
         },
         squirt_move = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/squirt_move.png";
+            img.src = "../animation-sprite-2.0/images/squirt_move.png";
         },
         venisaur = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/venisaur.png";
+            img.src = "../animation-sprite-2.0/images/venisaur.png";
         },
         veni_move = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/veni_move.png";
+            img.src = "../animation-sprite-2.0/images/veni_move.png";
         },
         pikachu = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/pikachu.png";
+            img.src = "../animation-sprite-2.0/images/pikachu.png";
         },
         pika_move = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/pika_move.png";
+            img.src = "../animation-sprite-2.0/images/pika_move.png";
         },
         charmander = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/charmander.png";
+            img.src = "../animation-sprite-2.0/images/charmander.png";
         },
         char_move = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/char_move.png";
+            img.src = "../animation-sprite-2.0/images/char_move.png";
         },
 
         ash_standard = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/ash_standard.png";
+            img.src = "../animation-sprite-2.0/images/ash_standard.png";
         },
 
         ash_right = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/ash_right.png";
+            img.src = "../animation-sprite-2.0/images/ash_right.png";
         },
 
         ash_left = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/ash_left.png";
+            img.src = "../animation-sprite-2.0/images/ash_left.png";
         },
         red_poke = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/red_ball.png";
+            img.src = "../animation-sprite-2.0/images/red_ball.png";
         },
         blue_poke = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/blue_ball.png";
+            img.src = "../animation-sprite-2.0/images/blue_ball.png";
         },
         green_poke = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/green_ball.png";
+            img.src = "../animation-sprite-2.0/images/green_ball.png";
         },
         yellow_poke = function (renderingContext) {
             renderingContext.drawImage(img,0,0);
-            img.src = "../animation-sprite-2.0/yellow_ball.png";
+            img.src = "../animation-sprite-2.0/images/yellow_ball.png";
         },
-
-        explosion = function (renderingContext) {
-            var ctx = document.getElementById('canvas').getContext('2d');
-            ctx.strokeStyle = "#fc0";
-            ctx.lineWidth = 1.5; 
-            ctx.translate(10,10);
-            drawSpirograph(ctx,22,6,5);
-        }
-
-        function drawSpirograph(ctx,R,r,O){
-            var x1 = R-O;
-            var y1 = 0;
-            var i  = 1;
-            ctx.beginPath();
-            ctx.moveTo(x1,y1);
-            do {
-                if (i>20000) break;
-                var x2 = (R+r)*Math.cos(i*Math.PI/72) - (r+O)*Math.cos(((R+r)/r)*(i*Math.PI/72))
-                var y2 = (R+r)*Math.sin(i*Math.PI/72) - (r+O)*Math.sin(((R+r)/r)*(i*Math.PI/72))
-                ctx.lineTo(x2,y2);
-                x1 = x2;
-                y1 = y2;
-                i++;
-            } while (x2 != R-O && y2 != 0 );
-                  ctx.stroke();
-        }
-
 
         rand_ball = function () {
             var r = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                     ash_standard, red_poke, red_poke, red_poke, explosion, explosion,
+                     ash_standard, red_poke, red_poke, red_poke,
                      char_move, charmander, char_move, charmander, char_move
                     ];
 
             var b = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                     ash_standard, blue_poke, blue_poke, blue_poke, explosion, explosion,
+                     ash_standard, blue_poke, blue_poke, blue_poke,
                      squirt_move, squirtle, squirt_move, squirtle, squirt_move
                     ];
 
             var g = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                     ash_standard, green_poke, green_poke, green_poke, explosion, explosion,
+                     ash_standard, green_poke, green_poke, green_poke,
                      veni_move, venisaur, veni_move, venisaur, veni_move
                     ];
 
             var y = [ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, 
-                     ash_standard, yellow_poke, yellow_poke, yellow_poke, explosion, explosion,
+                     ash_standard, yellow_poke, yellow_poke, yellow_poke,
                      pika_move, pikachu, pika_move, pikachu, pika_move
                     ];
 
@@ -248,23 +221,6 @@
                         ty: 300,
                         sx: 0.75,
                         sy: 0.75,                       
-                    },
-
-                    {
-                        frame: 290,
-                        tx: 500,
-                        ty: 300,
-                        sx: 0.75,
-                        sy: 0.75,                                   
-                    },
-
-                    {
-                        frame: 290,
-                        tx: 500,
-                        ty: 300,
-                        sx: 0.75,
-                        sy: 0.75, 
-                        rotate: 360,                                         
                     },
 
                 //**Pokemon Animation**
