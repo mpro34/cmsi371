@@ -113,14 +113,13 @@ var KeyframeTweener = {
                 rotateDistance,
                 currentTweenFrame,
                 duration;
-
              //Draw custom background.
             table = function () {
                 var img = new Image();
                 img.onload = function() {
                     renderingContext.drawImage(img,275,170);
                 };           
-                img.src = "../animation-sprite-2.0/poke_table.png";
+                img.src = "../animation-sprite-2.0/images/poke_table.png";
             };
 
             drawText = function () {
@@ -131,32 +130,33 @@ var KeyframeTweener = {
                 renderingContext.fillText("I Choose You! Random Pokemon Spawns...", canvas.width / 2 , canvas.height / 2);
             };
 
-            background = function (renderingContext) {
-                renderingContext.fillStyle = "black";
-                renderingContext.fillRect(0, 0, 900, 600);
-                for (var i=0; i<55; i+=2) {
-                    renderingContext.fillStyle = "#C2A385";
-                    renderingContext.fillRect(100, 10*i, 800, 10);
-                    renderingContext.fillStyle = "#746250";
-                    renderingContext.fillRect(100, 10*i, 800, 4);
-                    renderingContext.fillStyle = "#8A5C2E";
-                    renderingContext.fillRect(100, 10*(i+1), 800, 10);
-                    renderingContext.fillStyle = "#C4AE96";
-                    renderingContext.fillRect(100, 10*(i+1), 800, 4);
-                }
-                table();
-
-                renderingContext.fillStyle = "#5D4E40";        //dark brown
-                renderingContext.fillRect(187, 137, 626, 323);
-                renderingContext.fillStyle = "#E6E600";        //light yellow
-                renderingContext.fillRect(190, 140, 620, 320);
-                renderingContext.fillStyle = "#CCCC00";        //dark yellow
-                renderingContext.fillRect(195, 145, 610, 310);
-                renderingContext.fillStyle = "#007ACC";        //blue
-                renderingContext.fillRect(200, 150, 600, 300);
+            //Wooden Floor    
+            renderingContext.fillStyle = "black";
+            renderingContext.fillRect(0, 0, 900, 600);
+            for (var i=0; i<55; i+=2) {
+                renderingContext.fillStyle = "#C2A385";
+                renderingContext.fillRect(100, 10*i, 800, 10);
+                renderingContext.fillStyle = "#746250";
+                renderingContext.fillRect(100, 10*i, 800, 4);
+                renderingContext.fillStyle = "#8A5C2E";
+                renderingContext.fillRect(100, 10*(i+1), 800, 10);
+                renderingContext.fillStyle = "#C4AE96";
+                renderingContext.fillRect(100, 10*(i+1), 800, 4);
+            }
                 
-                drawText();
-            };  background(renderingContext);
+            //Carpet
+            renderingContext.fillStyle = "#5D4E40";        //dark brown
+            renderingContext.fillRect(187, 137, 626, 323);
+            renderingContext.fillStyle = "#E6E600";        //light yellow
+            renderingContext.fillRect(190, 140, 620, 320);
+            renderingContext.fillStyle = "#CCCC00";        //dark yellow
+            renderingContext.fillRect(195, 145, 610, 310);
+            renderingContext.fillStyle = "#007ACC";        //blue
+            renderingContext.fillRect(200, 150, 600, 300);
+
+            table();
+            drawText();
+            
 
 
             // For every sprite, go to the current pair of keyframes.
