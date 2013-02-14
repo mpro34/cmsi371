@@ -115,11 +115,9 @@ var KeyframeTweener = {
                 duration;
              //Draw custom background.
             table = function () {
-                var img = new Image();
-                img.onload = function() {
-                    renderingContext.drawImage(img,275,170);
-                };           
+                var img = new Image();                           
                 img.src = "../animation-sprite-2.0/images/poke_table.png";
+                renderingContext.drawImage(img,275,170);
             };
 
             drawText = function () {
