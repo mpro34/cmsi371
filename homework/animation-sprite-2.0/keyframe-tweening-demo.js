@@ -10,39 +10,44 @@
         // renderingContext argument.
         squirtle = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/squirtle.png";
-            renderingContext.drawImage(img,0,0);
+            renderingContext.drawImage(img,0,0,50,50);
         },
         squirt_move = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/squirt_move.png";
-            renderingContext.drawImage(img,0,0);
+            renderingContext.drawImage(img,0,0,50,50);
         },
         venisaur = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/venisaur.png";
-            renderingContext.drawImage(img,0,0);
+            renderingContext.drawImage(img,0,0,50,50);
         },
         veni_move = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/veni_move.png";
-            renderingContext.drawImage(img,0,0);
+            renderingContext.drawImage(img,0,0,50,50);
         },
         pikachu = function (renderingContext) {         
             img.src = "../animation-sprite-2.0/images/pikachu.png";
-            renderingContext.drawImage(img,0,0);
+            renderingContext.drawImage(img,0,0,50,50);
         },
         pika_move = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/pika_move.png";
-            renderingContext.drawImage(img,0,0);
+            renderingContext.drawImage(img,0,0,50,50);
         },
         charmander = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/charmander.png";
-            renderingContext.drawImage(img,0,0);
+            renderingContext.drawImage(img,0,0,50,50);
         },
         char_move = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/char_move.png";
-            renderingContext.drawImage(img,0,0);
+            renderingContext.drawImage(img,0,0,50,50);
         },
 
         ash_standard = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/ash_standard.png";
+            renderingContext.drawImage(img,0,0);
+        },
+
+        ash_throw = function (renderingContext) {           
+            img.src = "../animation-sprite-2.0/images/ash_throw.png";
             renderingContext.drawImage(img,0,0);
         },
 
@@ -112,7 +117,7 @@
         sprites = [
             {
                 draw: [ ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_standard, 
-                        ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_standard, ash_standard  
+                        ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_standard, ash_throw, ash_standard, ash_standard 
                       ], 
                      
 
@@ -210,36 +215,50 @@
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_left
+                    {
                         frame: 150,
                         tx: 300,
                         ty: 230,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_right
+                    {
                         frame: 160,
                         tx: 300,
                         ty: 240,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_left
+                    {
                         frame: 170,
                         tx: 300,
                         ty: 250,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_right
+                    {
                         frame: 180,
                         tx: 300,
                         ty: 260,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_right
-                        frame: 430,
+                    {
+                        frame: 200,
+                        tx: 300,
+                        ty: 260,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {
+                        frame: 215,
+                        tx: 300,
+                        ty: 260,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {
+                        frame: 700,
                         tx: 300,
                         ty: 260,
                         ease: KeyframeTweener.quadEaseIn
@@ -255,7 +274,7 @@
                 //**Pokeball Animation**
                     {
                         frame: 200,
-                        tx: 300,
+                        tx: 320,
                         ty: 260,
                         sx: 0.75,
                         sy: 0.75,
@@ -305,52 +324,40 @@
                     },
 
                 //**Pokemon Animation**
-
-
                     {
                         frame: 350,
                         tx: 450,
                         ty: 250,
-                        sx: 0.50,
-                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     },
 
                     {
-                        frame: 370,
+                        frame: 365,
                         tx: 450,
                         ty: 250,
-                        sx: 0.50,
-                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     },
 
                     {
-                        frame: 390,
+                        frame: 385,
                         tx: 450,
                         ty: 250,
-                        sx: 0.50,
-                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     },
 
                     {
-                        frame: 410,
+                        frame: 405,
                         tx: 450,
                         ty: 250,
-                        sx: 0.50,
-                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     },
 
                     {
-                        frame: 430,
+                        frame: 700,
                         tx: 450,
                         ty: 250,
-                        sx: 0.50,
-                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
-                    }      
+                    }     
 
                 ]   
             }  
