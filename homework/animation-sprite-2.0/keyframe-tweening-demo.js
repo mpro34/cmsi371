@@ -123,77 +123,77 @@
 
                 keyframes: [ 
                 //Ash Walking Animation
-                    {//ash_right
+                    {
                         frame: 0,
                         tx: 300,        
                         ty: 290,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_right
+                    {
                         frame: 10,
                         tx: 300,       
                         ty: 290,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                   {//ash_left
+                    {
                         frame: 20,
                         tx: 300,
                         ty: 280,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_right
+                    {
                         frame: 30,
                         tx: 300,
                         ty: 270,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_left
+                    {
                         frame: 40,
                         tx: 300,
                         ty: 260,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_left
+                    {
                         frame: 50,
                         tx: 300,
                         ty: 250,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_right
+                    {
                         frame: 60,
                         tx: 300,
                         ty: 240,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_left
+                    {
                         frame: 70,
                         tx: 300,
                         ty: 230,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_left
+                    {
                         frame: 80,
                         tx: 300,
                         ty: 220,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_right
+                    {
                         frame: 90,
                         tx: 300,
                         ty: 210,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_left
+                    {
                         frame: 100,
                         tx: 300,
                         ty: 210,
@@ -201,14 +201,14 @@
                     },
 
                 //Pokeball Chosen!
-                    {//ash_right
+                    {
                         frame: 130,
                         tx: 300,
                         ty: 210,
                         ease: KeyframeTweener.quadEaseIn
                     },
 
-                    {//ash_left
+                    {
                         frame: 140,
                         tx: 300,
                         ty: 220,
