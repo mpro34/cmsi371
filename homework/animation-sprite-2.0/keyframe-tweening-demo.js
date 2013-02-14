@@ -74,19 +74,19 @@
 
 
         rand_ball = function () {
-            var r = [red_poke, red_poke, red_poke,
+            var r = [red_poke, red_poke, red_poke, red_poke, red_poke, charmander,
                      char_move, charmander, char_move, charmander, char_move
                     ];
 
-            var b = [blue_poke, blue_poke, blue_poke,
+            var b = [blue_poke, blue_poke, blue_poke, blue_poke, blue_poke, squirtle,
                      squirt_move, squirtle, squirt_move, squirtle, squirt_move
                     ];
 
-            var g = [green_poke, green_poke, green_poke,
+            var g = [green_poke, green_poke, green_poke, green_poke, green_poke, venisaur,
                      veni_move, venisaur, veni_move, venisaur, veni_move
                     ];
 
-            var y = [yellow_poke, yellow_poke, yellow_poke,
+            var y = [yellow_poke, yellow_poke, yellow_poke, yellow_poke, yellow_poke, pikachu,
                      pika_move, pikachu, pika_move, pikachu, pika_move
                     ];
 
@@ -112,7 +112,7 @@
         sprites = [
             {
                 draw: [ ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_left, ash_right, ash_standard, 
-                        ash_standard 
+                        ash_standard, ash_left, ash_right, ash_left, ash_right, ash_left, ash_standard, ash_standard  
                       ], 
                      
 
@@ -189,11 +189,62 @@
                     },
 
                     {//ash_left
+                        frame: 100,
+                        tx: 300,
+                        ty: 210,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                //Pokeball Chosen!
+                    {//ash_right
+                        frame: 130,
+                        tx: 300,
+                        ty: 210,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_left
+                        frame: 140,
+                        tx: 300,
+                        ty: 220,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_left
+                        frame: 150,
+                        tx: 300,
+                        ty: 230,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_right
+                        frame: 160,
+                        tx: 300,
+                        ty: 240,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_left
+                        frame: 170,
+                        tx: 300,
+                        ty: 250,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_right
+                        frame: 180,
+                        tx: 300,
+                        ty: 260,
+                        ease: KeyframeTweener.quadEaseIn
+                    },
+
+                    {//ash_right
                         frame: 430,
                         tx: 300,
-                        ty: 205,
+                        ty: 260,
                         ease: KeyframeTweener.quadEaseIn
                     }
+
                 ]
             },
 
@@ -203,39 +254,65 @@
                 keyframes: [ 
                 //**Pokeball Animation**
                     {
-                        frame: 150,
-                        tx: 500,
-                        ty: 300,
+                        frame: 200,
+                        tx: 300,
+                        ty: 260,
                         sx: 0.75,
                         sy: 0.75,
-                        rotate: 360,
-                        ease: KeyframeTweener.quadEaseOut
+                        ease: KeyframeTweener.quadEaseIn
                     },
 
                     {
                         frame: 250,
-                        tx: 500,
-                        ty: 300,
+                        tx: 400,
+                        ty: 270,
                         sx: 0.75,
-                        sy: 0.75,                       
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut                       
+                    },
+                    {
+                        frame: 260,
+                        tx: 420,
+                        ty: 280,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut                       
+                    },
+                    {
+                        frame: 270,
+                        tx: 430,
+                        ty: 270,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut                       
+                    },
+                    {
+                        frame: 280,
+                        tx: 440,
+                        ty: 280,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut                       
+                    },
+
+                    {
+                        frame: 320,
+                        tx: 450,
+                        ty: 270,
+                        sx: 0.75,
+                        sy: 0.75,
+                        ease: KeyframeTweener.throwOut                       
                     },
 
                 //**Pokemon Animation**
-                    {
-                        frame: 300,
-                        tx: 500,
-                        ty: 300,
-                        sx: 0.75,
-                        sy: 0.75,
-                        ease: KeyframeTweener.throwOut
-                    },
+
 
                     {
                         frame: 350,
                         tx: 450,
                         ty: 250,
-                        sx: 0.75,
-                        sy: 0.75,
+                        sx: 0.50,
+                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     },
 
@@ -243,8 +320,8 @@
                         frame: 370,
                         tx: 450,
                         ty: 250,
-                        sx: 0.75,
-                        sy: 0.75,
+                        sx: 0.50,
+                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     },
 
@@ -252,8 +329,8 @@
                         frame: 390,
                         tx: 450,
                         ty: 250,
-                        sx: 0.75,
-                        sy: 0.75,
+                        sx: 0.50,
+                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     },
 
@@ -261,8 +338,8 @@
                         frame: 410,
                         tx: 450,
                         ty: 250,
-                        sx: 0.75,
-                        sy: 0.75,
+                        sx: 0.50,
+                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     },
 
@@ -270,8 +347,8 @@
                         frame: 430,
                         tx: 450,
                         ty: 250,
-                        sx: 0.75,
-                        sy: 0.75,
+                        sx: 0.50,
+                        sy: 0.50,
                         ease: KeyframeTweener.throwOut
                     }      
 
