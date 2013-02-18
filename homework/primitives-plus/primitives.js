@@ -240,7 +240,7 @@ var Primitives = {
 
     // The final, optimized Bresenham algorithm: here, we presave
     // most values, and adjust them to compare only to zero.
-    lineBresenham: function (context, x1, y1, x2, y2, color) {
+    lineBresenham: function (context, x1, y1, x2, y2, dash, color) {
         var x = x1,
             y = y1,
             dx = x2 - x1,
@@ -260,7 +260,7 @@ var Primitives = {
             if (err < 0) {
                 err += k1;
             } else {
-                y -= 1;
+                y -= dash;    //Decrement y value by dash instead of 1.
                 err += k2;
             }
         }

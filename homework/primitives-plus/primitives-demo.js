@@ -21,7 +21,7 @@
     Primitives.lineBres1(renderingContext, 210, 210, 409, 110);
     Primitives.lineBres2(renderingContext, 415, 210, 614, 110);
     Primitives.lineBres3(renderingContext, 620, 210, 819, 110);
-    Primitives.lineBresenham(renderingContext, 825, 210, 1024, 110);
+    Primitives.lineBresenham(renderingContext, 825, 210, 1024, 110, 5);
 
     // A few circles.
     Primitives.circleTrig(renderingContext, 105, 315, 100);
