@@ -86,7 +86,7 @@
             renderingContext.getImageData(0, 0, canvas.width, canvas.height),
             //This is a filter that makes the green lighter".
             function (r, g, b, a) {
-                return [r, g * 2, b, a];
+                return [r, g * 4, b, a];
             }
         ),
         0,
