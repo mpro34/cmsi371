@@ -241,7 +241,8 @@ var Primitives = {
     // The final, optimized Bresenham algorithm: here, we presave
     // most values, and adjust them to compare only to zero.
     lineBresenham: function (context, x1, y1, x2, y2, dash, color) {
-        var x = x1,
+        var count = 0,
+            x = x1,
             y = y1,
             dx = x2 - x1,
             dy = y1 - y2,
@@ -251,7 +252,15 @@ var Primitives = {
 
         color = color || [0, 0, 0];
         while (true) {
-            this.setPixel(context, x, y, color[0], color[1], color[2]);
+            //Draws a pixel until the value of count is greater than dash.
+            //Dash is then reset after 1 pixel is skipped.
+            if (count <= dash) { 
+                this.setPixel(context, x, y, color[0], color[1], color[2]);  
+                count++;
+            }
+            else if (count > dash) {
+                count = 0;
+            }
             if (x === x2) {
                 return;
             }
@@ -260,7 +269,7 @@ var Primitives = {
             if (err < 0) {
                 err += k1;
             } else {
-                y -= dash;    //Decrement y value by dash instead of 1.
+                y -= 0;    //Decrement y value by dash instead of 1.
                 err += k2;
             }
         }
