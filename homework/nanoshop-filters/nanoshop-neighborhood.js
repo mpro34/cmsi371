@@ -16,6 +16,32 @@ var NanoshopNeighborhood = {
         ];
     },
 
+    colorblur: function (rgbaNeighborhood) {
+        var rTotal = 0,
+            gTotal = 0,
+            bTotal = 0,
+            aTotal = 0,
+            i;
+        
+        for (i=0; i<9; i++) {
+            rTotal += rgbaNeighborhood[i].b;
+            gTotal += rgbaNeighborhood[i].r;
+            bTotal += rgbaNeighborhood[i].g;
+            aTotal += rgbaNeighborhood[i].a;
+        }
+
+        return [ rTotal / 9, gTotal / 9, bTotal / 9, aTotal / 9 ];
+    },
+
+    lightener: function (rgbaNeighborhood) {
+        return [
+            rgbaNeighborhood[4].r * 2,
+            rgbaNeighborhood[4].g * 2,
+            rgbaNeighborhood[4].b * 2,
+            rgbaNeighborhood[4].a
+        ];
+    },
+
     /*
      * A basic "averager"---this one returns the average of all the pixels in the
      * given neighborhood.
