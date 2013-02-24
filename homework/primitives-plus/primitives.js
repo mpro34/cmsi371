@@ -281,22 +281,35 @@ var Primitives = {
      * permutations of that eighth's coordinates.  So we define a helper
      * function that all of the circle implementations will use...
      */
-    plotCirclePoints: function (context, xc, yc, x, y, color) {
-        color = color || [0, 0, 0];
-        this.setPixel(context, xc + x, yc + y, color[0], color[1], color[2]);
-        this.setPixel(context, xc + x, yc - y, color[0], color[1], color[2]);
-        this.setPixel(context, xc + y, yc + x, color[0], color[1], color[2]);
-        this.setPixel(context, xc + y, yc - x, color[0], color[1], color[2]);
-        this.setPixel(context, xc - x, yc + y, color[0], color[1], color[2]);
-        this.setPixel(context, xc - x, yc - y, color[0], color[1], color[2]);
-        this.setPixel(context, xc - y, yc + x, color[0], color[1], color[2]);
-        this.setPixel(context, xc - y, yc - x, color[0], color[1], color[2]);
+    plotCirclePoints: function (context, xc, yc, x, y, r, color) {
+        color = color || [1, 0, 1];
+        var i = 0;
+        var xstep = x/r;
+        var ystep = y/r;
+        var xdif = xstep;
+        var ydif = ystep;
+        while (i < r) {
+            this.setPixel(context, xc + x - xdif, yc + y - ydif, color[0], color[1], color[2]);
+            this.setPixel(context, xc + x - xdif, yc - y + ydif, color[0], color[1], color[2]);
+            this.setPixel(context, xc + y - ydif, yc + x - xdif, color[0], color[1], color[2]);
+            this.setPixel(context, xc + x - xdif, yc - y + ydif, color[0], color[1], color[2]);
+            this.setPixel(context, xc + y - ydif, yc + x - xdif, color[0], color[1], color[2]);
+            this.setPixel(context, xc + y - ydif, yc - x + xdif, color[0], color[1], color[2]);
+            this.setPixel(context, xc - x + xdif, yc + y - ydif, color[0], color[1], color[2]);
+            this.setPixel(context, xc - x + xdif, yc - y + ydif, color[0], color[1], color[2]);
+            this.setPixel(context, xc - y + ydif, yc + x - xdif, color[0], color[1], color[2]);
+            this.setPixel(context, xc - y + ydif, yc - x + xdif, color[0], color[1], color[2]);
+            i++
+            xdif = xdif + xstep;
+            ydif = ydif + ystep;
+        }
+
     },
 
     // First, the most naive possible implementation: circle by trigonometry.
     circleTrig: function (context, xc, yc, r, color) {
         var theta = 1 / r,
-
+      
             // At the very least, we compute our sine and cosine just once.
             s = Math.sin(theta),
             c = Math.cos(theta),
@@ -304,11 +317,13 @@ var Primitives = {
             // We compute the first octant, from zero to pi/4.
             x = r,
             y = 0;
-
         while (x >= y) {
-            this.plotCirclePoints(context, xc, yc, x, y, color);
+           // xstep = x/r;
+          //  ystep = y/r;
+            this.plotCirclePoints(context, xc, yc, x, y, r, color);
             x = x * c - y * s;
             y = x * s + y * c;
+
         }
     },
 
@@ -319,7 +334,7 @@ var Primitives = {
             y = 0;
 
         while (x >= y) {
-            this.plotCirclePoints(context, xc, yc, x, y, color);
+            this.plotCirclePoints(context, xc, yc, x, y, r, color);
             x = x - (epsilon * y);
             y = y + (epsilon * x);
         }
@@ -332,7 +347,7 @@ var Primitives = {
             y = r;
 
         while (x < y) {
-            this.plotCirclePoints(context, xc, yc, x, y, color);
+            this.plotCirclePoints(context, xc, yc, x, y, r, color);
             if (p < 0) {
                 p = p + 4 * x + 6;
             } else {
@@ -342,7 +357,7 @@ var Primitives = {
             x += 1;
         }
         if (x === y) {
-            this.plotCirclePoints(context, xc, yc, x, y, color);
+            this.plotCirclePoints(context, xc, yc, x, y, r, color);
         }
     },
 
@@ -355,7 +370,7 @@ var Primitives = {
             v = e - r;
 
         while (x <= y) {
-            this.plotCirclePoints(context, xc, yc, x, y, color);
+            this.plotCirclePoints(context, xc, yc, x, y, r, color);
             if (e < 0) {
                 x += 1;
                 u += 2;
@@ -378,7 +393,7 @@ var Primitives = {
             e = 0;
 
         while (y <= x) {
-            this.plotCirclePoints(context, xc, yc, x, y, color);
+            this.plotCirclePoints(context, xc, yc, x, y, r, color);
             y += 1;
             e += (2 * y - 1);
             if (e > x) {
