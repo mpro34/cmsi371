@@ -26,9 +26,14 @@ var KeyframeTweener = {
                 (-distance / 2) * ((percentComplete - 1) * (percentComplete - 3) - 1) + start;
     },
 
+    // JD: Out of your new easing functions, you only use throwOut.
+    //     Something wrong with the other two?  O_o  (I know that they
+    //     work OK---and in fact they have some nice movement to them;
+    //     that's why I'm wondering why you didn't use these.)
     bounce: function(currentTime, start, distance, duration) {
         var percentComplete = (currentTime /= duration) * currentTime;
-        var tc= percentComplete * currentTime;
+        var tc = percentComplete * currentTime;
+        // JD: Whoa...the indentation here is a little...extreme.
         return start + distance *(
                                      -7.8 * tc * percentComplete + 27.095 * percentComplete * 
                                      percentComplete + -30.79 * tc + 11.495 * percentComplete + currentTime
@@ -113,7 +118,14 @@ var KeyframeTweener = {
                 rotateDistance,
                 currentTweenFrame,
                 duration;
+
              //Draw custom background.
+             // JD: Doh!!!  This totally breaks separation of concerns.  This should
+             //     be defined *outside* KeyframeTweener then *passed in* as a parameter.
+             //     Because now, your reusable library is NOT a reusable library anymore...
+             //
+             //     (not to mention that these definitions pollute the top level namespace
+             //      because you already ended your var statement)
             table = function () {
                 var img = new Image();                           
                 img.src = "../animation-sprite-2.0/images/poke_table.png";
@@ -201,7 +213,12 @@ var KeyframeTweener = {
                             ease(currentTweenFrame, rotateStart, rotateDistance, duration)
                         );
                         
-                        // Draw the sprite.   
+                        // Draw the sprite.
+                        // JD: Nope, this is not what was meant by internal animation.
+                        //     Review the Pacman cut scene---they're not the same.  Doing
+                        //     it this way, you may as well have each new frame be a different
+                        //     sprite.  What was requested is a separate, independent animation
+                        //     that is autonomous from the sprite's overall movement.
                         sprites[i].draw[j](renderingContext); //Each keyframe corresponds to the next image to draw
 
                         // Clean up.

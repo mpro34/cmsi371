@@ -2,13 +2,19 @@
  * This file demonstrates how our homebrew keyframe-tweening
  * engine is used. 
  */
+ // JD: Why is this outside the anonymous function???
  var img = new Image();
 (function () {
     var canvas = document.getElementById("canvas"),
         // First, a selection of "drawing functions" from which we
         // can choose.  Their common trait: they all accept a single
         // renderingContext argument.
-        squirtle = function (renderingContext) {           
+
+        // JD: Fortunately, you most likely avoid multiple downloads thanks
+        //     to the web browser's cache.  Still, better not to risk that
+        //     and restructure your code so that all of these images are
+        //     loaded once only for sure.
+        squirtle = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/squirtle.png";
             renderingContext.drawImage(img,0,0,50,50);
         },
@@ -95,12 +101,20 @@
                      pika_move, pikachu, pika_move, pikachu, pika_move
                     ];
 
+            // JD: Hmmmm...not the way I would have coded this but I guess
+            //     it does the job---but probably not exactly the way you
+            //     think.  You do realize that, this way, red is the most
+            //     likely?  Followed by green then blue?  Agreed that yellow
+            //     is the least likely---and not just because it has a smaller
+            //     random number range!
             var red = (Math.random() * 20) + 1;
             var green = (Math.random() * 20) + 1;
             var blue = (Math.random() * 20) + 1;
             var yellow = (Math.random() * 17) + 1;  //least chance to get yellow ball
     
             var result = Math.max(red, green, blue, yellow);
+            // JD: Why even have a temp variable?  Why not just return the
+            //     result once you've made the decision?
             if (result == red) { temp = r; }
             if (result == green) { temp = g; }
             if (result == blue) { temp = b; }
@@ -268,9 +282,11 @@
             },
 
             {
-                draw: [],
+                draw: [], // JD: Why not just call rand_ball right here?
+                          //     This avoids throwing off a first-time reader
+                          //     who might say...WTF?  An empty draw array?
 
-                keyframes: [ 
+                keyframes: [
                 //**Pokeball Animation**
                     {
                         frame: 200,
@@ -365,6 +381,7 @@
         ];
 
         //Assign a random array of draw functions so that each page reload summons a random pokemon.
+        // JD: See note above.
         sprites[1].draw = rand_ball();
 
     // Finally, we initialize the engine.  Mainly, it needs
@@ -375,5 +392,6 @@
         width: canvas.width,
         height: canvas.height,
         sprites: sprites
+        // JD: Custom background should be a setting here.
     });
 }());
