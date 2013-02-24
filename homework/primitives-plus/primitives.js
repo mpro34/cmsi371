@@ -282,26 +282,22 @@ var Primitives = {
      * function that all of the circle implementations will use...
      */
     plotCirclePoints: function (context, xc, yc, x, y, r, color) {
-        color = color || [1, 0, 1];
-        var i = 0;
-        var xstep = x/r;
-        var ystep = y/r;
-        var xdif = xstep;
-        var ydif = ystep;
-        while (i < r) {
-            this.setPixel(context, xc + x - xdif, yc + y - ydif, color[0], color[1], color[2]);
-            this.setPixel(context, xc + x - xdif, yc - y + ydif, color[0], color[1], color[2]);
-            this.setPixel(context, xc + y - ydif, yc + x - xdif, color[0], color[1], color[2]);
-            this.setPixel(context, xc + x - xdif, yc - y + ydif, color[0], color[1], color[2]);
-            this.setPixel(context, xc + y - ydif, yc + x - xdif, color[0], color[1], color[2]);
-            this.setPixel(context, xc + y - ydif, yc - x + xdif, color[0], color[1], color[2]);
-            this.setPixel(context, xc - x + xdif, yc + y - ydif, color[0], color[1], color[2]);
-            this.setPixel(context, xc - x + xdif, yc - y + ydif, color[0], color[1], color[2]);
-            this.setPixel(context, xc - y + ydif, yc + x - xdif, color[0], color[1], color[2]);
-            this.setPixel(context, xc - y + ydif, yc - x + xdif, color[0], color[1], color[2]);
-            i++
-            xdif = xdif + xstep;
-            ydif = ydif + ystep;
+        color = color || [ 0, 0, 0];
+        var xi = 0,
+            yi = 0,
+            ydist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(y,2))),
+            xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2)));
+            
+        while (yi < ydist) {
+            this.setPixel(context, xc + x - yi, yc - y, color[0], color[1], color[2]);
+            this.setPixel(context, xc + x - yi, yc + y, color[0], color[1], color[2]);
+            yi++
+        }     
+          
+        while (xi < xdist) {    
+            this.setPixel(context, xc + y - xi, yc + x, color[0], color[1], color[2]);
+            this.setPixel(context, xc + y - xi, yc - x, color[0], color[1], color[2]);
+            xi++
         }
 
     },
@@ -317,13 +313,11 @@ var Primitives = {
             // We compute the first octant, from zero to pi/4.
             x = r,
             y = 0;
+
         while (x >= y) {
-           // xstep = x/r;
-          //  ystep = y/r;
             this.plotCirclePoints(context, xc, yc, x, y, r, color);
             x = x * c - y * s;
             y = x * s + y * c;
-
         }
     },
 
