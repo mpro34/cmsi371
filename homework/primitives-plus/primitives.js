@@ -269,40 +269,41 @@ var Primitives = {
             if (err < 0) {
                 err += k1;
             } else {
-                y -= 0;    //Decrement y value by dash instead of 1.
+                y -= 1;    //Decrement y value by dash instead of 1.
                 err += k2;
             }
         }
     },
 
     /*
-     * Time for the circles.  First, we observe that it is sufficient
-     * to compute one-eighth of a circle: the other seven portions are
-     * permutations of that eighth's coordinates.  So we define a helper
+     * Time for the circles. So we define a helper
      * function that all of the circle implementations will use...
+     * New inputs include radius r, and two colors for the linear 
+     * gradient c1 and c2.
      */
     plotCirclePoints: function (context, xc, yc, x, y, r, c1, c2) {
-        //color = color || [ 0, 0, 0];
-        VDelta = [(c2[0] - c1[0]) / (2*r),
-                    (c2[1] - c1[1]) / (2*r),
-                    (c2[2] - c1[2]) / (2*r)];
-        //c1 red, c2 green
+    
         var xi = 0,
             yi = 0,
             ydist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(y,2))),
-            xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2)));
-        //Draw one horizontal line    
+            xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2))),
+            VDelta = [(c2[0] - c1[0]) / (r),
+                      (c2[1] - c1[1]) / (r),
+                      (c2[2] - c1[2]) / (r)];
+
+        //Top and Bottom pieces  
+        while (xi < xdist) {   
+            this.setPixel(context, xc + y - xi, yc - x, c1[0], c1[1], c1[2]); 
+            this.setPixel(context, xc + y - xi, yc + x, c1[0], c1[1], c1[2]);
+            xi++
+        }
+
+        //Draw one horizontal line (middle halves)    
         while (yi < ydist) {
             this.setPixel(context, xc + x - yi, yc - y, c1[0], c1[1], c1[2]);
             this.setPixel(context, xc + x - yi, yc + y, c1[0], c1[1], c1[2]);
             yi++
-        }     
-          
-        while (xi < xdist) {    
-            this.setPixel(context, xc + y - xi, yc + x, c1[0], c1[1], c1[2]);
-            this.setPixel(context, xc + y - xi, yc - x, c1[0], c1[1], c1[2]);
-            xi++
-        }
+        } 
 
         c1[0] += VDelta[0];
         c1[1] += VDelta[1];
@@ -394,7 +395,7 @@ var Primitives = {
             e = 0;
 
         while (y <= x) {
-            this.plotCirclePoints(context, xc, yc, x, y, r, color);
+            this.plotCirclePoints(context, xc, yc, x, y, r, c1, c2);
             y += 1;
             e += (2 * y - 1);
             if (e > x) {
