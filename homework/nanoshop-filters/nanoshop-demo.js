@@ -25,7 +25,7 @@
 
     // Draw the top of the cube.
     renderingContext.beginPath();
-    renderingContext.fillStyle = "rgb(140, 140, 140)";
+    renderingContext.fillStyle = "rgb(140, 140, 200)";
     renderingContext.moveTo(300, 300);
     renderingContext.lineTo(335, 265);
     renderingContext.lineTo(435, 265);
@@ -35,12 +35,12 @@
     renderingContext.closePath();
 
     // Draw the face of the cube.
-    renderingContext.fillStyle = "rgb(110, 110, 110)";
+    renderingContext.fillStyle = "rgb(110, 110, 170)";
     renderingContext.fillRect(300, 300, 100, 100);
 
     // Draw the right side of the cube.
     renderingContext.beginPath();
-    renderingContext.fillStyle = "rgb(79, 79, 79)";
+    renderingContext.fillStyle = "rgb(79, 79, 100)";
     renderingContext.moveTo(435, 265);
     renderingContext.lineTo(435, 355);
     renderingContext.lineTo(400, 400);
@@ -78,13 +78,16 @@
         );
     });
 
-    $("#greenify").click(function () {
+    $("#grayscale").click(function () {
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
                 //This is a filter that makes the green lighter".
                 function (r, g, b, a) {
-                    return [r, g * 4, b, a];
+                    var average = 0;
+                    average = (r+g+b)/3;
+
+                    return [average, average, average, a];
                 }
             ),
             0, 0
