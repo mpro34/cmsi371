@@ -16,13 +16,13 @@ var NanoshopNeighborhood = {
         ];
     },
 
-    colorblur: function (rgbaNeighborhood) {
-        return [
-            rgbaNeighborhood[4].r / 4,
-            rgbaNeighborhood[4].g,
-            rgbaNeighborhood[4].b / 4,
-            rgbaNeighborhood[4].a
-        ];
+    grayscale: function (rgbaNeighborhood) {
+        var average = 0;
+        //Gray is achieved by averaging the red, green, and blue.
+        average = ((rgbaNeighborhood[4].r + rgbaNeighborhood[4].g +
+                    rgbaNeighborhood[4].b) / 3);
+
+        return [average, average, average, rgbaNeighborhood[4].a];
     },
 
     lightener: function (rgbaNeighborhood) {
