@@ -16,9 +16,13 @@ var NanoshopNeighborhood = {
         ];
     },
 
+    // JD: Sure, these filters work, but neither of them actually uses
+    //     the pixel's neighbors.  That was not the idea behind doing
+    //     a "neighborhood" version of this filter.
     grayscale: function (rgbaNeighborhood) {
         var average = 0;
         //Gray is achieved by averaging the red, green, and blue.
+        // JD: The outermost parentheses are unnecessary here.
         average = ((rgbaNeighborhood[4].r + rgbaNeighborhood[4].g +
                     rgbaNeighborhood[4].b) / 3);
 

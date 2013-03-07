@@ -257,7 +257,7 @@ var Primitives = {
             if (count <= dash) { 
                 this.setPixel(context, x, y, color[0], color[1], color[2]);  
                 count++;
-            }
+            } // JD: Keep your else if on the same line as the prior closing }.
             else if (count > dash) {
                 count = 0;
             }
@@ -281,12 +281,32 @@ var Primitives = {
      * New inputs include radius r, and two colors for the linear 
      * gradient c1 and c2.
      */
+    // JD: Note that the instructions for the gradient were that it go
+    //     *all the way across* the circle, either left to right or top
+    //     to bottom.  You have the basics of gradient calculations, but
+    //     not adhering to this detail detracts from demonstrating that
+    //     you are fully in control of what the algorithm is doing.
+    //     (see below)
     plotCirclePoints: function (context, xc, yc, x, y, r, c1, c2) {
     
         var xi = 0,
             yi = 0,
             ydist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(y,2))),
             xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2))),
+            // JD: Glitch #1---Your color delta is based on the radius.
+            //
+            //     Style notes: why is r in parentheses?  Plus, with an array,
+            //     the members are at another level of structure, so this
+            //     justifies a new indent level.  This represents the
+            //     structure more faithfully:
+            /*
+                VDelta = [
+                    (c2[0] - c1[0]) / r,
+                    (c2[1] - c1[1]) / r,
+                    (c2[2] - c1[2]) / r
+                ];
+            */
+            //     Finally, "VDelta" should not begin with a capital letter.
             VDelta = [(c2[0] - c1[0]) / (r),
                       (c2[1] - c1[1]) / (r),
                       (c2[2] - c1[2]) / (r)];
@@ -295,16 +315,32 @@ var Primitives = {
         while (xi < xdist) {   
             this.setPixel(context, xc + y - xi, yc - x, c1[0], c1[1], c1[2]); 
             this.setPixel(context, xc + y - xi, yc + x, c1[0], c1[1], c1[2]);
-            xi++
+            xi++ // JD: Missing semicolon!
         }
 
         //Draw one horizontal line (middle halves)    
         while (yi < ydist) {
             this.setPixel(context, xc + x - yi, yc - y, c1[0], c1[1], c1[2]);
             this.setPixel(context, xc + x - yi, yc + y, c1[0], c1[1], c1[2]);
-            yi++
+            yi++ // JD: Missing semicolon!
         } 
 
+        // JD: Glitch #2---You are changing the gradient colors *in place*.
+        //     This means that future calls to plotCirclePoints will send
+        //     in the *modified* color from previous calls.  This carries
+        //     with it some unsafe assumptions, such as the order in which
+        //     plotCirclePoints will be called, or what the caller does
+        //     with the color values themselves.
+        //
+        //     And finally, it messes up your gradient---the colors change
+        //     at a different rate because you are calculating a new delta
+        //     *based on a color that was already changed by a previous
+        //     delta*.  The rate of change is different from a straight-up
+        //     linear gradient (and explains why you have that red-to-green-
+        //     to-red effect.  If you had done this right, even with the
+        //     calculation based on the radius, you should still have seen
+        //     a single red-to-green (or vice versa) change, one for each
+        //     half of the circle.
         c1[0] += VDelta[0];
         c1[1] += VDelta[1];
         c1[2] += VDelta[2];
