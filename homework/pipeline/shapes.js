@@ -32,37 +32,6 @@ var Shapes = {
                 [ 1, 4, 0 ],
                 [ 4, 9, 0 ],
                 [ 4, 5, 9 ],
-                [ 8, 5, 4 ]
-            ]
-        };
-    },
-
-    //Cube shape with 8 vertices, 12 edges, and 6 faces
-    hexahedron: function () {
-        // These variables are actually "constants" for icosahedron coordinates.
-        var X = 1.525731112119133606,
-            Z = 1.850650808352039932;
-
-        return {
-            vertices: [
-                [ -X, 0.0, Z ],
-                [ X, 0.0, Z ],
-                [ -X, 0.0, -Z ],
-                [ X, 0.0, -Z ],
-                [ 0.0, Z, X ],
-                [ 0.0, Z, -X ],
-                [ 0.0, -Z, X ],
-                [ 0.0, -Z, -X ],
-                [ Z, X, 0.0 ],
-                [ -Z, X, 0.0 ],
-                [ Z, -X, 0.0 ],
-                [ -Z, -X, 0.0 ]
-            ],
-
-            indices: [
-                [ 1, 4, 0 ],
-                [ 4, 9, 0 ],
-                [ 4, 5, 9 ],
                 [ 8, 5, 4 ],
                 [ 1, 8, 4 ],
                 [ 1, 10, 8 ],
@@ -83,10 +52,37 @@ var Shapes = {
             ]
         };
     },
+    //Cube shape with 8 vertices, 12 edges, and 6 faces
+    hexahedron: function () {
+        var X = 0.5,
+            Z = 0.25;
+
+        return {
+            vertices: [
+                [ -Z, 0.0, 0.0 ], //0
+                [ Z, 0.0, 0.0 ],  //1
+                [ -Z, X, 0.0 ], //2
+                [ Z, X, 0.0 ],  //3
+                [ Z, X, X ],      //4
+                [ -Z, X, X ],      //5
+                [ Z, 0.0, X ],   //6
+                [ -Z, 0.0, X ]     //7
+
+            ],
+
+            indices: [
+                [ 0, 2, 3, 1],   //Front Face
+                [ 4, 5, 2, 3 ],  //Top Face
+                [ 1, 3, 4, 6 ],  //Right Face
+                [ 0, 2, 5, 7 ],  //Left Face
+                [ 0, 1, 6, 7 ],  //Bottom Face
+                [ 4, 6, 7, 5 ]   //Back Face
+            ]
+        };
+    },
 
     //Pyramid shape with 4 vertices, 6 edges, and 4 faces
     tetrahedron: function () {
-        // These variables are actually "constants" for icosahedron coordinates.
         var X = 0.525731112119133606,
             Z = 0.850650808352039932;
 
