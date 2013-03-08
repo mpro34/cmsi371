@@ -124,7 +124,7 @@
 
     // Build the objects to display.
     objectsToDraw = [
-        {
+      /*  {
             vertices: [].concat(
                 [ 0.0, 0.0, 0.0 ],
                 [ 0.5, 0.0, -0.75 ],
@@ -167,7 +167,7 @@
                 [ -0.1, -1.0, 0.75 ]
             ),
             mode: gl.LINE_LOOP
-        },
+        },*/
 
         {
             color: { r: 0.0, g: 0.5, b: 0.0 },

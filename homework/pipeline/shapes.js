@@ -32,6 +32,84 @@ var Shapes = {
                 [ 1, 4, 0 ],
                 [ 4, 9, 0 ],
                 [ 4, 5, 9 ],
+                [ 8, 5, 4 ]
+            ]
+        };
+    },
+
+    //Cube shape with 8 vertices, 12 edges, and 6 faces
+    hexahedron: function () {
+        // These variables are actually "constants" for icosahedron coordinates.
+        var X = 1.525731112119133606,
+            Z = 1.850650808352039932;
+
+        return {
+            vertices: [
+                [ -X, 0.0, Z ],
+                [ X, 0.0, Z ],
+                [ -X, 0.0, -Z ],
+                [ X, 0.0, -Z ],
+                [ 0.0, Z, X ],
+                [ 0.0, Z, -X ],
+                [ 0.0, -Z, X ],
+                [ 0.0, -Z, -X ],
+                [ Z, X, 0.0 ],
+                [ -Z, X, 0.0 ],
+                [ Z, -X, 0.0 ],
+                [ -Z, -X, 0.0 ]
+            ],
+
+            indices: [
+                [ 1, 4, 0 ],
+                [ 4, 9, 0 ],
+                [ 4, 5, 9 ],
+                [ 8, 5, 4 ],
+                [ 1, 8, 4 ],
+                [ 1, 10, 8 ],
+                [ 10, 3, 8 ],
+                [ 8, 3, 5 ],
+                [ 3, 2, 5 ],
+                [ 3, 7, 2 ],
+                [ 3, 10, 7 ],
+                [ 10, 6, 7 ],
+                [ 6, 11, 7 ],
+                [ 6, 0, 11 ],
+                [ 6, 1, 0 ],
+                [ 10, 1, 6 ],
+                [ 11, 0, 9 ],
+                [ 2, 11, 9 ],
+                [ 5, 2, 9 ],
+                [ 11, 2, 7 ]
+            ]
+        };
+    },
+
+    //Pyramid shape with 4 vertices, 6 edges, and 4 faces
+    tetrahedron: function () {
+        // These variables are actually "constants" for icosahedron coordinates.
+        var X = 0.525731112119133606,
+            Z = 0.850650808352039932;
+
+        return {
+            vertices: [
+                [ -X, 0.0, Z ],
+                [ X, 0.0, Z ],
+                [ -X, 0.0, -Z ],
+                [ X, 0.0, -Z ],
+                [ 0.0, Z, X ],
+                [ 0.0, Z, -X ],
+                [ 0.0, -Z, X ],
+                [ 0.0, -Z, -X ],
+                [ Z, X, 0.0 ],
+                [ -Z, X, 0.0 ],
+                [ Z, -X, 0.0 ],
+                [ -Z, -X, 0.0 ]
+            ],
+
+            indices: [
+                [ 1, 4, 0 ],
+                [ 4, 9, 0 ],
+                [ 4, 5, 9 ],
                 [ 8, 5, 4 ],
                 [ 1, 8, 4 ],
                 [ 1, 10, 8 ],
