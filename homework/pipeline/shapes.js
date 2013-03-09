@@ -103,6 +103,28 @@ var Shapes = {
         };
     },
 
+
+    sphere: function () {
+        var X = 0.5,
+            Z = 0.25;
+
+        return {
+            vertices: [
+                [ -Z, 0.0, Z ], //0
+                [ Z, 0.0, Z ],  //1
+                [ 0.0, X, 0.0 ], //2
+                [ 0.0, 0.0, -Z ],  //3
+            ],
+
+            indices: [
+                [ 0, 1, 2 ],   
+                [ 1, 3, 2 ],
+                [ 0, 3, 2 ],
+                [ 0, 1, 3 ]
+            ]
+        };
+    },
+
     /*
      * Utility function for turning indexed vertices into a "raw" coordinate array
      * arranged as triangles.

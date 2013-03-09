@@ -36,6 +36,8 @@
         maxi,
         j,
         maxj,
+        k,
+        maxk,
 
         /*
          * This code does not really belong here: it should live
@@ -167,17 +169,102 @@
                 [ -0.1, -1.0, 0.75 ]
             ),
             mode: gl.LINE_LOOP
-        },*/
+        },
 
         {
             color: { r: 0.0, g: 0.5, b: 0.0 },
-            vertices: Shapes.toRawLineArray(Shapes.tetrahedron()),
+            vertices: Shapes.toRawLineArray(Shapes.icosahedron()),
+            mode: gl.LINES
+        } 
+
+        {
+            color: { r: 0.0, g: 1.0, b: 0.0 },
+            vertices: [].concat(
+                [ -0.25, 0.0, 0.5 ],
+                [ 0.5, 0.0, 0.5 ],
+                [ -0.25, 0.5, 0.5 ]
+            ),
+            mode: gl.TRIANGLE
+        },*/
+        {
+            color: { r: 1.0, g: 0.0, b: 0.0 },
+            vertices: Shapes.toRawLineArray(Shapes.icosahedron()),
+            mode: gl.LINES,
+            subshapes: [
+                {
+                    color: { r: 0.0, g: 0.0, b: 1.0 },
+                    vertices: Shapes.toRawLineArray(Shapes.tetrahedron()),
+                    mode: gl.LINES
+                }
+            ]
+        },
+
+        {
+            color: { r: 1.0, g: 0.0, b: 0.0 },
+            vertices: [].concat(
+                [ -0.25, 0.5, 0.5 ],
+                [ -0.25, 0.0, 0.5 ],
+                [ 0.5, 0.0, 0.5 ]
+            ),
+            mode: gl.TRIANGLES,
+            subshapes: [
+                {
+                    color: { r: 0.0, g: 1.0, b: 0.0 },
+                    vertices: [].concat(
+                        [ -0.25, 0.5, 0.5 ],
+                        [ -0.25, 0.0, 0.5 ],
+                        [ 0.5, 0.0, 0.5 ]
+                        
+                    ),
+                    mode: gl.TRIANGLES
+                },
+                {
+                    color: { r: 0.0, g: 1.0, b: 1.0 },
+                    vertices: [].concat(
+                        [ 0.5, 0.25, 0.5 ],
+                        [ -0.5, 0.0, 0.5 ],                    
+                        [ -0.25, 0.25, 0.25 ]
+                    ),
+                    mode: gl.TRIANGLES
+                }
+            ]
+        },
+
+        {
+            color: { r: 0.0, g: 1.0, b: 0.0 },
+            vertices: Shapes.toRawLineArray(Shapes.hexahedron()),
             mode: gl.LINES
         }
     ];
 
     // Pass the vertices to WebGL.
     for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+
+        //Cycle through each Subshape if present...
+        if (objectsToDraw[i].subshapes) {
+                for (k = 0, maxk = objectsToDraw[i].subshapes.length; k < maxk; k++) {
+                    objectsToDraw[i].subshapes[k].buffer = GLSLUtilities.initVertexBuffer(gl,
+                        objectsToDraw[i].subshapes[k].vertices); 
+
+                    if (!objectsToDraw[i].subshapes[k].colors) {
+                        // If we have a single color, we expand that into an array
+                        // of the same color over and over.
+                        objectsToDraw[i].subshapes[k].colors = [];
+                        for (j = 0, maxj = objectsToDraw[i].subshapes[k].vertices.length / 3;
+                                j < maxj; j += 1) {
+                            objectsToDraw[i].subshapes[k].colors = objectsToDraw[i].subshapes[k].colors.concat(
+                                objectsToDraw[i].subshapes[k].color.r,
+                                objectsToDraw[i].subshapes[k].color.g,
+                                objectsToDraw[i].subshapes[k].color.b
+                            );
+                        }
+                    }
+                    objectsToDraw[i].subshapes[k].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                            objectsToDraw[i].subshapes[k].colors); 
+                }
+        }
+
+        //Else just pass WebGL the current shapes' vertices
         objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].vertices);
 
@@ -240,11 +327,11 @@
     drawObject = function (object) {
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
-        gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);//
 
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
-        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);//
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
     };
 
@@ -259,8 +346,13 @@
         gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 1, 1, 0)));
 
         // Display the objects.
-        for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-            drawObject(objectsToDraw[i]);
+        for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {  
+            if (objectsToDraw[i].subshapes) {
+                for (k = 0, maxk = objectsToDraw[i].subshapes.length; k < maxk; k++) {
+                    drawObject(objectsToDraw[i].subshapes[k]);    
+                }
+            }    
+            drawObject(objectsToDraw[i]);               
         }
 
         // All done.
