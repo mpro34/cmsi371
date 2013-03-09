@@ -377,5 +377,11 @@
             }, 30);
         }
     });
+//Add another feature here later
+    $(canvas).click(function (e) {
+        if (e.shiftKey) {
+            //drawScene();
+        }
+    });
 
 }(document.getElementById("hello-webgl")));
