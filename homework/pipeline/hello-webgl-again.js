@@ -188,7 +188,7 @@
         },*/
         {
             color: { r: 1.0, g: 0.0, b: 0.0 },
-            vertices: Shapes.toRawLineArray(Shapes.icosahedron()),
+            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             mode: gl.LINES,
             subshapes: [
                 {
@@ -228,12 +228,6 @@
                     mode: gl.TRIANGLES
                 }
             ]
-        },
-
-        {
-            color: { r: 0.0, g: 1.0, b: 0.0 },
-            vertices: Shapes.toRawLineArray(Shapes.hexahedron()),
-            mode: gl.LINES
         }
     ];
 
