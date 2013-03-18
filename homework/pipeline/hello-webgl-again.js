@@ -189,11 +189,11 @@
         {
             color: { r: 1.0, g: 0.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            mode: gl.LINES,
+            mode: gl.LINE_LOOP,
             subshapes: [
                 {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
-                    vertices: Shapes.toRawLineArray(Shapes.tetrahedron()),
+                    vertices: Shapes.toRawLineArray(Shapes.hexahedron()),
                     mode: gl.LINES
                 }
             ]
@@ -228,7 +228,7 @@
                     mode: gl.TRIANGLES
                 }
             ]
-        }
+        } 
     ];
 
     // Pass the vertices to WebGL.
@@ -337,7 +337,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Set up the rotation matrix.
-        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 1, 1, 0)));
+        gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0.2, 1, 0)));
 
         // Display the objects.
         for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {  

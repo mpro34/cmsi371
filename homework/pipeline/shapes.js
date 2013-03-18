@@ -95,33 +95,25 @@ var Shapes = {
             ],
 
             indices: [
-                [ 0, 1, 2 ],   
-                [ 1, 3, 2 ],
-                [ 0, 3, 2 ],
-                [ 0, 1, 3 ]
+                [ 0, 1, 2 ],   //front
+                [ 1, 3, 2 ],   //right
+                [ 0, 3, 2 ],   //left
+                [ 0, 1, 3 ]    //bot
             ]
         };
     },
 
 
     sphere: function () {
-        var latitudeBands = 30;
-        var longitudeBands = 30;
-        var radius = 2;
- 
-        var vertexPositionBuffer;
-        var vertexNormalBuffer;
-        var vertexTextureCoordBuffer;
-        var vertexIndexBuffer;
- 
-        var vertexPositionData = [];
-        var normalData = [];
-        var textureCoordData = [];
+        var latitudeBands = 40;
+            longitudeBands = 40;
+            normalData = [];
+
         for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
             var theta = latNumber * Math.PI / latitudeBands;
             var sinTheta = Math.sin(theta);
             var cosTheta = Math.cos(theta);
- 
+
             for (var longNumber = 0; longNumber <= longitudeBands; longNumber++) {
                 var phi = longNumber * 2 * Math.PI / longitudeBands;
                 var sinPhi = Math.sin(phi);
@@ -130,45 +122,21 @@ var Shapes = {
                 var x = cosPhi * sinTheta;
                 var y = cosTheta;
                 var z = sinPhi * sinTheta;
-                var u = 1- (longNumber / longitudeBands);
-                var v = latNumber / latitudeBands;
  
                 normalData.push(x);
                 normalData.push(y);
                 normalData.push(z);
-                textureCoordData.push(u);
-                textureCoordData.push(v);
-                vertexPositionData.push(radius * x);
-                vertexPositionData.push(radius * y);
-                vertexPositionData.push(radius * z);
             }
         }
 
-        var indexData = [];
-        for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
-            for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
-                var first = (latNumber * (longitudeBands + 1)) + longNumber;
-                var second = first + longitudeBands + 1;
-                indexData.push(first);
-                indexData.push(second);
-                indexData.push(first + 1);
- 
-                indexData.push(second);
-                indexData.push(second + 1);
-                indexData.push(first + 1);
-            }
-        }
 
         return {
             vertices: [
-                vertexPositionData, //0
-                normalData,  //1
-                textureCoordData, //2
-                indexData,  //3
+                normalData  //1
             ],
 
             indices: [
-                [1]
+                [0]
             ]
         };
     },
