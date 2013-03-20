@@ -11,14 +11,25 @@ var Matrix4x4 = (function () {
     };
 
    // Scalar multiplication and division.
-    matrix4x4.multiply = function (s) {
-        var result = new Vector(),
+    multiply = function (m1, m2) {
+        var result = new Matrix4x4(),
             i,
-            max;
+            j,
+            k,
+            total,
+            h = 0,
+            max = 16;
 
-        for (i = 0, max = this.dimensions(); i < max; i += 1) {
-            result.elements[i] = this.elements[i] * s;
-        }
+            for (k = 0; k < max; k += 4) {
+                for (j = 0,m = 0; j < max; j += 4,h += 1,m += 1) {
+
+                    for (i = 0,total = 0; i < 4; i += 1) {                              //Calculate each of the 16 elements 
+                        total += m1.elements[k+i] * m2.elements[m+i*4];                                         
+                    }
+                    
+                    result.elements[h] = total;
+                }
+            }
 
         return result;
     };

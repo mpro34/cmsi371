@@ -13,6 +13,20 @@ $(function () {
                   0, 0, 0, 1 ],
                   "Default 4x4 Matrix Constructed");
     }); 
+
+    test("4x4 Matrix Multiplication", function () {
+        var m1 = new Matrix4x4();
+        var m2 = new Matrix4x4();
+
+        deepEqual(multiply(m1, m2).elements,
+
+                [ 1, 0, 0, 0, 
+                  0, 1, 0, 0, 
+                  0, 0, 1, 0,
+                  0, 0, 0, 1 ],
+
+                  "Default 4x4 Matrix Multiplied");
+    }); 
      /**   var v = new Vector(5, 6, 3);
 
         equal(v.dimensions(), 3, "Vector size");
