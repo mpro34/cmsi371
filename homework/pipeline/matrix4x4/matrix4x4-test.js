@@ -18,7 +18,7 @@ $(function () {
         var m1 = new Matrix4x4();
         var m2 = new Matrix4x4();
 
-        deepEqual(multiply(m1, m2).elements,
+        deepEqual(m1.multiply(m2).elements,
 
                 [ 1, 0, 0, 0, 
                   0, 1, 0, 0, 
@@ -26,7 +26,56 @@ $(function () {
                   0, 0, 0, 1 ],
 
                   "Default 4x4 Matrix Multiplied");
-    }); 
+
+        m1 = new Matrix4x4(
+            0.866, -0.5,   0, 0,
+            0.5,    0.866, 0, 0,
+            0,      0,     1, 0,
+            0,      0,     0, 1
+        );
+
+        m2 = new Matrix4x4(
+            1, 0, 0, 0,
+            0, 2, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        );
+
+        deepEqual(m1.multiply(m2).elements,
+            [0.866, -1,     0, 0,
+             0.5,    1.732, 0, 0,
+             0,      0,     1, 0,
+             0,      0,     0, 1],
+            "Typical 4x4 matrix multiplication"
+        );
+    });
+
+    test("Pure Transformation Matrices", function () {
+        var m = Matrix4x4.getTranslationMatrix(5, 9, -1);
+        deepEqual(m.elements,
+            [1, 0, 0, 5,
+             0, 1, 0, 9,
+             0, 0, 1, -1,
+             0, 0, 0, 1],
+            "Pure translation matrix");
+
+        m = Matrix4x4.getScaleMatrix(2, 5, 21);
+        deepEqual(m.elements,
+            [2, 0,  0, 0,
+             0, 5,  0, 0,
+             0, 0, 21, 0,
+             0, 0,  0, 1],
+            "Pure scale matrix");
+
+        m = Matrix4x4.getRotationMatrix(30, 0, 0, 1);
+        deepEqual(m.elements,
+            [Math.cos(Math.PI / 6), -Math.sin(Math.PI / 6), 0, 0,
+             Math.sin(Math.PI / 6),  Math.cos(Math.PI / 6), 0, 0,
+                                 0,                     0, 1, 0,
+                                 0,                     0, 0, 1],
+            "Rotation by 30 degrees about the z-axis");
+    });
+
      /**   var v = new Vector(5, 6, 3);
 
         equal(v.dimensions(), 3, "Vector size");
