@@ -73,6 +73,23 @@ $(function () {
             "Rotation by 30 degrees about the z-axis");
     });
 
+
+    test("Pure Transformation Matrices", function () {
+        var m = new Matrix4x4(
+                 5, 0, 2, 3,
+                 4, 1, 8, 9,
+                10, 0, 0, 1,
+                 0, 0, 0, 1
+            );
+        deepEqual(m.toWebGLArray(),
+            [ 5, 4, 10, 0,
+              0, 1,  0, 0,
+              2, 8,  0, 0,
+              3, 9,  1, 1 ],
+            "WebGL Converted 4x4 Matrix");
+
+    });
+
      /**   var v = new Vector(5, 6, 3);
 
         equal(v.dimensions(), 3, "Vector size");

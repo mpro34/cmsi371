@@ -97,6 +97,16 @@ var Matrix4x4 = (function () {
             0.0, 0.0, 0.0, 1.0
         );
     };
+
+
+     // Scalar multiplication and division.
+    matrix4x4.prototype.toWebGLArray = function () {
+        return [ this.elements[0], this.elements[4],  this.elements[8], this.elements[12], 
+                 this.elements[1], this.elements[5],  this.elements[9], this.elements[13], 
+                 this.elements[2], this.elements[6], this.elements[10], this.elements[14], 
+                 this.elements[3], this.elements[7], this.elements[11], this.elements[15] 
+               ]
+    };
 /**,
     
         // A private method for checking dimensions,
