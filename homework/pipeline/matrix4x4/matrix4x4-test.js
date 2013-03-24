@@ -19,12 +19,10 @@ $(function () {
         var m2 = new Matrix4x4();
 
         deepEqual(multiply(m1, m2).elements,
-
                 [ 1, 0, 0, 0, 
                   0, 1, 0, 0, 
                   0, 0, 1, 0,
                   0, 0, 0, 1 ],
-
                   "Default 4x4 Matrix Multiplied");
     }); 
      /**   var v = new Vector(5, 6, 3);
