@@ -10,7 +10,7 @@ var Matrix4x4 = (function () {
           0, 0, 0, 1 ];
     };
 
-    // Scalar multiplication and division.
+    // matrix4x4 multiplication that takes in one matrix4x4 object.
     matrix4x4.prototype.multiply = function (m2) {
         var result = new Matrix4x4(),
             i,
@@ -35,6 +35,7 @@ var Matrix4x4 = (function () {
         return result;
     };
 
+    //Creates a translated matrix4x4 array 
     matrix4x4.getTranslationMatrix = function (tx, ty, tz) {
         return new Matrix4x4(
             1, 0, 0, tx,
@@ -44,6 +45,7 @@ var Matrix4x4 = (function () {
         );
     };
 
+    //Creates a scaled matrix4x4 array 
     matrix4x4.getScaleMatrix = function (sx, sy, sz) {
         return new Matrix4x4(
             sx,  0,  0, 0,
@@ -53,6 +55,7 @@ var Matrix4x4 = (function () {
         );
     };
 
+    //Creates a rotated matrix4x4 array 
     matrix4x4.getRotationMatrix = function (angle, x, y, z) {
         // In production code, this function should be associated
         // with a matrix object with associated functions.
@@ -99,7 +102,7 @@ var Matrix4x4 = (function () {
     };
 
 
-     // Scalar multiplication and division.
+    //Creates a columnized matrix4x4 array so that it can be used in WebGL.
     matrix4x4.prototype.toWebGLArray = function () {
         return [ this.elements[0], this.elements[4],  this.elements[8], this.elements[12], 
                  this.elements[1], this.elements[5],  this.elements[9], this.elements[13], 
@@ -107,6 +110,20 @@ var Matrix4x4 = (function () {
                  this.elements[3], this.elements[7], this.elements[11], this.elements[15] 
                ]
     };
+
+    //Returns the orthogonal projection of a 4x4 matrix
+    matrix4x4.orthoProjection = function (w, h, f, n) {
+    //w and h are the width and height of the viewport, respectively.
+    //f and n are the far and near clipping planes, respectively.
+        return new Matrix4x4(
+            (2/w),   0.0,     0.0,      0.0,
+              0.0, (2/h),     0.0,      0.0,
+              0.0,   0.0, 1/(f-n), -n/(f-n),
+              0.0,   0.0,     0.0,      1.0
+        );
+    };
+
+
 /**,
     
         // A private method for checking dimensions,

@@ -90,6 +90,17 @@ $(function () {
 
     });
 
+
+    test("Orthogonal Projection Matrices", function () {
+        m = Matrix4x4.orthoProjection(1, 1, 2, 1);
+        deepEqual(m.elements,
+            [  2.0,   0.0,     0.0,      0.0,
+               0.0,   2.0,     0.0,      0.0,
+               0.0,   0.0,     1.0,     -1.0,
+               0.0,   0.0,     0.0,      1.0],
+            "Orthogonal Projection with viewport width and height 1, and far and near planes 2 and 1, respectively");
+    });
+
      /**   var v = new Vector(5, 6, 3);
 
         equal(v.dimensions(), 3, "Vector size");
