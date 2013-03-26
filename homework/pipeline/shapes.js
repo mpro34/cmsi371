@@ -135,6 +135,7 @@ var Shapes = {
                 normalData  //1
             ],
 
+            // JD: OK, so this part needs work.
             indices: [
                 [0]
             ]

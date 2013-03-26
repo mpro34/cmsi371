@@ -130,7 +130,9 @@
         {
             color: { r: 1.0, g: 0.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            mode: gl.LINE_LOOP,
+            mode: gl.LINE_LOOP, // JD: You probably know this already, but
+                                //     what this should eventually be is
+                                //     gl.TRIANGLES.
             subshapes: [
                 {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
@@ -177,6 +179,9 @@
     for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
 
         //Cycle through each Subshape if present...
+        // JD: Nice but---this only supports one level of subshapes!
+        //     The subshapes themselves can have subshapes too, and then *those*
+        //     subshapes can have subshapes, and then those too...
         if (objectsToDraw[i].subshapes) {
                 for (k = 0, maxk = objectsToDraw[i].subshapes.length; k < maxk; k++) {
                     objectsToDraw[i].subshapes[k].buffer = GLSLUtilities.initVertexBuffer(gl,
@@ -282,7 +287,8 @@
         gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0.2, 1, 0)));
 
         // Display the objects.
-        for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {  
+        for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+            // JD: See comment above about multiple levels of subshapes.
             if (objectsToDraw[i].subshapes) {
                 for (k = 0, maxk = objectsToDraw[i].subshapes.length; k < maxk; k++) {
                     drawObject(objectsToDraw[i].subshapes[k]);    
