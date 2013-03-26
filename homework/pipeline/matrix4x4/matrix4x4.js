@@ -101,7 +101,6 @@ var Matrix4x4 = (function () {
         );
     };
 
-
     //Creates a columnized matrix4x4 array so that it can be used in WebGL.
     matrix4x4.prototype.toWebGLArray = function () {
         return [ this.elements[0], this.elements[4],  this.elements[8], this.elements[12], 
@@ -112,14 +111,26 @@ var Matrix4x4 = (function () {
     };
 
     //Returns the orthogonal projection of a 4x4 matrix
-    matrix4x4.orthoProjection = function (w, h, f, n) {
-    //w and h are the width and height of the viewport, respectively.
+    matrix4x4.ortho = function (t, b, l, r, n, f) {
+    //t, b, l, and r are the top, bottom, left, and right distances of the viewport, respectively.
     //f and n are the far and near clipping planes, respectively.
         return new Matrix4x4(
-            (2/w),   0.0,     0.0,      0.0,
-              0.0, (2/h),     0.0,      0.0,
-              0.0,   0.0, 1/(f-n), -n/(f-n),
-              0.0,   0.0,     0.0,      1.0
+            2/(r-l),     0.0,      0.0, -(r+l)/(r-l),
+                0.0, 2/(t-b),      0.0, -(t+b)/(t-b),
+                0.0,     0.0, -2/(f-n), -(f+n)/(f-n),
+                0.0,     0.0,      0.0,          1.0
+        );
+    };
+
+    //Returns the frustum projection of a 4x4 matrix
+    matrix4x4.frustum = function (t, b, l, r, n, f) {
+    //t, b, l, and r are the top, bottom, left, and right distances of the viewport, respectively.
+    //f and n are the far and near clipping planes, respectively.
+        return new Matrix4x4(
+            (2*n)/(r-l),         0.0,  (r+l)/(r-l),            0.0,
+                    0.0, (2*n)/(t-b),  (t+b)/(t-b),            0.0,
+                    0.0,         0.0, -(f+n)/(f-n), -(2*n*f)/(f-n),
+                    0.0,         0.0,         -1.0,            0.0
         );
     };
 

@@ -92,13 +92,24 @@ $(function () {
 
 
     test("Orthogonal Projection Matrices", function () {
-        m = Matrix4x4.orthoProjection(1, 1, 2, 1);
+        m = Matrix4x4.ortho(3, 1, 2, 1, 1, 2);
         deepEqual(m.elements,
-            [  2.0,   0.0,     0.0,      0.0,
-               0.0,   2.0,     0.0,      0.0,
-               0.0,   0.0,     1.0,     -1.0,
-               0.0,   0.0,     0.0,      1.0],
-            "Orthogonal Projection with viewport width and height 1, and far and near planes 2 and 1, respectively");
+            [ -2.0, 0.0,  0.0,  3.0,
+               0.0, 1.0,  0.0, -2.0,
+               0.0, 0.0, -2.0, -3.0,
+               0.0, 0.0,  0.0,  1.0 ],
+            "Orthogonal Projection Matrix");
+    });
+
+
+    test("Frustum Projection Matrices", function () {
+        m = Matrix4x4.frustum(3, 1, 2, 1, 1, 2);
+        deepEqual(m.elements,
+            [ -2.0, 0.0, -3.0,  0.0,
+               0.0, 1.0,  2.0,  0.0,
+               0.0, 0.0, -3.0, -4.0,
+               0.0, 0.0, -1.0,  0.0 ],
+            "Frustum Projection Matrix");
     });
 
      /**   var v = new Vector(5, 6, 3);
