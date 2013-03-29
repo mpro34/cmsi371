@@ -23,19 +23,32 @@ var NanoshopNeighborhood = {
         var average = 0;
         //Gray is achieved by averaging the red, green, and blue.
         // JD: The outermost parentheses are unnecessary here.
-        average = ((rgbaNeighborhood[4].r + rgbaNeighborhood[4].g +
-                    rgbaNeighborhood[4].b) / 3);
+        average = (rgbaNeighborhood[4].r + rgbaNeighborhood[4].g +
+                   rgbaNeighborhood[4].b) / 3;
 
         return [average, average, average, rgbaNeighborhood[4].a];
     },
-
-    lightener: function (rgbaNeighborhood) {
-        return [
-            rgbaNeighborhood[4].r * 2,
-            rgbaNeighborhood[4].g * 2,
-            rgbaNeighborhood[4].b * 2,
-            rgbaNeighborhood[4].a
-        ];
+    //Amplifies the "lightness" or "darkness" of the alpha channel in each pixel.
+    negative: function (rgbaNeighborhood) {
+	    var rTotal = 0,
+            gTotal = 0,
+            bTotal = 0,
+            aTotal = 0,
+            i;
+            for (i = 0; i < 9; i += 1) {
+                rTotal += rgbaNeighborhood[i].r;
+                gTotal += rgbaNeighborhood[i].g;
+                bTotal += rgbaNeighborhood[i].b;
+                aTotal += rgbaNeighborhood[i].a;
+            };
+			if (aTotal / 9 > 128) {
+			    bTotal = 255 * 9;  
+            }
+			else {
+			    bTotal = 0;
+			}
+			
+        return [ rTotal / 9, gTotal / 9, bTotal / 9, aTotal];
     },
 
     /*

@@ -106,13 +106,13 @@
         );
     });
 
-    $("#lightener").click(function () {
+    $("#negative").click(function () {
         // Filter time.
         renderingContext.putImageData(
             NanoshopNeighborhood.applyFilter(
                 renderingContext,
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                NanoshopNeighborhood.lightener
+                NanoshopNeighborhood.negative
             ),
             0, 0
         );

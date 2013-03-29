@@ -50,31 +50,21 @@
     renderingContext.closePath();
     // (end of adapted code by Tyler Nichols)
 
-    // Set a little event handler to apply the filter.
     $("#darkener").click(function () {
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                // This is a basic "darkener."
-                function (r, g, b, a) {
-                    return [r / 2, g / 2, b / 2, a];
-                }
+                Nanoshop.darkener
             ),
             0, 0
         );
     });
 
-    // JD: You missed the part of the instructions where these filters
-    //     should have been added to the Nanoshop object (the way they
-    //     are done with NanoshopNeighborhood).
     $("#lightener").click(function () {
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                //This is a basic "lightener".
-                function (r, g, b, a) {
-                    return [r * 2, g * 2, b * 2, a];
-                }
+                Nanoshop.lightener
             ),
             0, 0
         );
@@ -84,14 +74,7 @@
         renderingContext.putImageData(
             Nanoshop.applyFilter(
                 renderingContext.getImageData(0, 0, canvas.width, canvas.height),
-                //This is a filter that makes the green lighter".
-                // JD: Eh?  This looks like a grayscaler to me...
-                function (r, g, b, a) {
-                    var average = 0;
-                    average = (r+g+b)/3;
-
-                    return [average, average, average, a];
-                }
+                Nanoshop.grayscale
             ),
             0, 0
         );
