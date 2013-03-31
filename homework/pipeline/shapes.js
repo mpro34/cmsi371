@@ -71,7 +71,7 @@ var Shapes = {
             ],
 
             indices: [
-                [ 0, 2, 3, 1],   //Front Face
+                [ 0, 1, 3, 2],   //Front Face
                 [ 4, 5, 2, 3 ],  //Top Face
                 [ 1, 3, 4, 6 ],  //Right Face
                 [ 0, 2, 5, 7 ],  //Left Face

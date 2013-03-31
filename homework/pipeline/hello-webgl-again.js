@@ -128,22 +128,29 @@
     objectsToDraw = [
 
         {
-            color: { r: 1.0, g: 0.0, b: 0.0 },
+            color: { r: 0.0, g: 1.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            mode: gl.LINE_LOOP, // JD: You probably know this already, but
+            mode: gl.TRIANGLES, // JD: You probably know this already, but
                                 //     what this should eventually be is
                                 //     gl.TRIANGLES.
             subshapes: [
                 {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
                     vertices: Shapes.toRawLineArray(Shapes.hexahedron()),
-                    mode: gl.LINES
+                    mode: gl.LINES,
+                    subshapes: [
+                        {
+                            color: { r: 0.0, g: 1.0, b: 1.0 },
+                            vertices: Shapes.toRawLineArray(Shapes.tetrahedron()),
+                            mode: gl.LINES
+                        }
+                    ]
                 }
             ]
         },
 
         {
-            color: { r: 1.0, g: 0.0, b: 0.0 },
+            color: { r: 1.0, g: 0.0, b: 1.0 },
             vertices: [].concat(
                 [ -0.25, 0.5, 0.5 ],
                 [ -0.25, 0.0, 0.5 ],
@@ -152,9 +159,9 @@
             mode: gl.TRIANGLES,
             subshapes: [
                 {
-                    color: { r: 0.0, g: 1.0, b: 0.0 },
+                    color: { r: 1.0, g: 1.0, b: 0.0 },
                     vertices: [].concat(
-                        [ -0.25, 0.5, 0.5 ],
+                        [ 0.25, 0.5, 0.5 ],
                         [ -0.25, 0.0, 0.5 ],
                         [ 0.5, 0.0, 0.5 ]
                         
@@ -162,7 +169,7 @@
                     mode: gl.TRIANGLES
                 },
                 {
-                    color: { r: 0.0, g: 1.0, b: 1.0 },
+                    color: { r: 1.0, g: 1.0, b: 0.0 },
                     vertices: [].concat(
                         [ 0.5, 0.25, 0.5 ],
                         [ -0.5, 0.0, 0.5 ],                    
@@ -178,6 +185,83 @@
     // Pass the vertices to WebGL.
     for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
 
+        (checker2 = function (subs) {
+            for (var num in subs) {
+                if (num === "subshapes") {
+                    for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
+                        subs[num][j].buffer = GLSLUtilities.initVertexBuffer(gl,
+                            subs[num][j].vertices);
+         /*               if (!subs.colors) {
+                        // If we have a single color, we expand that into an array
+                        // of the same color over and over.
+                            subs.colors = [];
+                            for (j = 0, maxj = subs.vertices.length / 3;
+                                    j < maxj; j += 1) {
+                                subs.colors = subs.colors.concat(
+                                    subs.color.r,
+                                    subs.color.g,
+                                    subs.color.b
+                                );
+                            }
+                        }
+                        subs.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                            subs.colors);  */
+
+                        checker2(subs[num][j]);                           
+                    } 
+                    subs.buffer = GLSLUtilities.initVertexBuffer(gl,
+                        subs.vertices);
+                    if (!subs.colors) {
+                    // If we have a single color, we expand that into an array
+                    // of the same color over and over.
+                        subs.colors = [];
+                        for (j = 0, maxj = subs.vertices.length / 3;
+                                j < maxj; j += 1) {
+                            subs.colors = subs.colors.concat(
+                                subs.color.r,
+                                subs.color.g,
+                                subs.color.b
+                            );
+                        }
+                    }
+                    subs.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                        subs.colors);
+                }
+            }
+               
+            }); checker2(objectsToDraw[i]);
+
+
+
+   /*     if (!objectsToDraw[i].colors) {
+            // If we have a single color, we expand that into an array
+            // of the same color over and over.
+            objectsToDraw[i].colors = [];
+            for (j = 0, maxj = objectsToDraw[i].vertices.length / 3;
+                    j < maxj; j += 1) {
+                objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
+                    objectsToDraw[i].color.r,
+                    objectsToDraw[i].color.g,
+                    objectsToDraw[i].color.b
+                );
+            }
+        }
+        objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                objectsToDraw[i].colors);*/
+    }/*
+    for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+            (checker1 = function (i) {
+                if (this.subshapes) {
+                    for (k = 0, maxk = this.subshapes.length; k < maxk; k += 1) {
+                        this.subshapes[k].buffer = GLSLUtilities.initVertexBuffer(gl,
+                            this.subshapes[k].vertices);
+                 //       console.log("2"+this.subshapes[k].vertices);
+                    //    checker1(this.subshapes[k]); 
+                   //     console.log("3"+this.subshapes[k].vertices);
+                    }
+                    checker1(this.subshapes[k]);
+                } 
+            }).call(objectsToDraw[i], i);  
         //Cycle through each Subshape if present...
         // JD: Nice but---this only supports one level of subshapes!
         //     The subshapes themselves can have subshapes too, and then *those*
@@ -186,7 +270,7 @@
                 for (k = 0, maxk = objectsToDraw[i].subshapes.length; k < maxk; k++) {
                     objectsToDraw[i].subshapes[k].buffer = GLSLUtilities.initVertexBuffer(gl,
                         objectsToDraw[i].subshapes[k].vertices); 
-
+//COLORS w/ subshapes:
                     if (!objectsToDraw[i].subshapes[k].colors) {
                         // If we have a single color, we expand that into an array
                         // of the same color over and over.
@@ -208,7 +292,7 @@
         //Else just pass WebGL the current shapes' vertices
         objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].vertices);
-
+//COLORS w/o subshapes:
         if (!objectsToDraw[i].colors) {
             // If we have a single color, we expand that into an array
             // of the same color over and over.
@@ -224,7 +308,7 @@
         }
         objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].colors);
-    }
+    }*/
 
     // Initialize the shaders.
     shaderProgram = GLSLUtilities.initSimpleShaderProgram(
@@ -287,14 +371,24 @@
         gl.uniformMatrix4fv(rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0.2, 1, 0)));
 
         // Display the objects.
+
+        var subfound,
+            subLength,
+            i,
+            j;
+
+        //Recursively draw objects, check for subshapes, and respectively draw each subshape.
         for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-            // JD: See comment above about multiple levels of subshapes.
-            if (objectsToDraw[i].subshapes) {
-                for (k = 0, maxk = objectsToDraw[i].subshapes.length; k < maxk; k++) {
-                    drawObject(objectsToDraw[i].subshapes[k]);    
+            (checker2 = function (subs) {
+                for (var num in subs) {
+                    if (num === "subshapes") {
+                        for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
+                            drawObject(subs[num][j]);
+                            checker2(subs[num][j]);                           
+                        }
+                    }  drawObject(subs);
                 }
-            }    
-            drawObject(objectsToDraw[i]);               
+            }); checker2(objectsToDraw[i]);
         }
 
         // All done.
