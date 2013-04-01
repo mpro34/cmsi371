@@ -52,6 +52,39 @@ var Shapes = {
             ]
         };
     },
+
+    icosahedron3: function () {
+        // These variables are actually "constants" for icosahedron coordinates.
+        var X = 0.1,
+            Z = 0.1;
+
+            
+
+        return {
+            vertices: [
+                [ -X, 0.0, Z ], //0
+                [ X, 0.0, Z ],  //1   //XZ
+                [ -X, 0.0, -Z ],//2 
+                [ X, 0.0, -Z ], //3
+
+                [ 0.0, Z, X ],  //4
+                [ 0.0, Z, -X ], //5
+                [ 0.0, -Z, X ], //6  //YZ
+                [ 0.0, -Z, -X ],//7
+
+                [ Z, X, 0.0 ],  //8
+                [ -Z, X, 0.0 ], //9
+                [ Z, -X, 0.0 ], //10  //XY
+                [ -Z, -X, 0.0 ] //11
+            ],
+
+            indices: [
+                [ 8, 9, 10 ],
+                [ 10, 11, 9 ],
+                [ 7, 10, 8 ]
+            ]
+        };
+    },
     //Cube shape with 8 vertices, 12 edges, and 6 faces
     hexahedron: function () {
         var X = 0.5,
@@ -71,12 +104,18 @@ var Shapes = {
             ],
 
             indices: [
-                [ 0, 1, 3, 2],   //Front Face
-                [ 4, 5, 2, 3 ],  //Top Face
-                [ 1, 3, 4, 6 ],  //Right Face
-                [ 0, 2, 5, 7 ],  //Left Face
-                [ 0, 1, 6, 7 ],  //Bottom Face
-                [ 4, 6, 7, 5 ]   //Back Face
+                [ 0, 1, 3 ],   //Front Face
+                [ 3, 2, 0 ],  
+                [ 1, 3, 4 ],  //Right Face
+                [ 4, 6, 1 ],  
+                [ 0, 2, 7 ],  //Left Face
+                [ 5, 2, 7 ],
+                [ 4, 6, 7 ],  //Back Face
+                [ 7, 5, 4 ],
+                [ 2, 5, 4 ],  //Top Face
+                [ 2, 3, 4 ],   
+                [ 0, 1, 6 ],  //Bottom Face
+                [ 0, 7, 6 ]  
             ]
         };
     },
@@ -105,9 +144,12 @@ var Shapes = {
 
 
     sphere: function () {
-        var latitudeBands = 40;
-            longitudeBands = 40;
-            normalData = [];
+        var latitudeBands = 30,
+            longitudeBands = 30,
+            radius = 2
+            var vertexPositionData = [];
+            var normalData = [];
+            var textureCoordData = [];
 
         for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
             var theta = latNumber * Math.PI / latitudeBands;
@@ -140,6 +182,69 @@ var Shapes = {
                 [0]
             ]
         };
+    },
+        icosahedron2: function () {
+        // These variables are actually "constants" for icosahedron coordinates.
+        var latitudeBands = 30,
+            longitudeBands = 30,
+            radius = 1,
+            vertexPositionData = [],
+            normalData = [],
+          //  textureCoordData = [],
+            indexData = [];
+            //Set up vertices
+            for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
+                var theta = latNumber * Math.PI / latitudeBands;
+                var sinTheta = Math.sin(theta);
+                var cosTheta = Math.cos(theta);
+
+                for (var longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+                    var phi = longNumber * 2 * Math.PI / longitudeBands;
+                    var sinPhi = Math.sin(phi);
+                    var cosPhi = Math.cos(phi);
+
+                    var x = radius * cosPhi * sinTheta;
+                    var y = radius * cosTheta;
+                    var z = radius * sinPhi * sinTheta;
+                 //   var u = 1 - (longNumber / longitudeBands);
+                //    var v = 1 - (latNumber / latitudeBands);
+
+                    normalData.push(x);
+                    normalData.push(y);
+                    normalData.push(z);
+                  //  textureCoordData.push(u);
+                 //   textureCoordData.push(v);
+                    vertexPositionData.push(radius * x);
+                    vertexPositionData.push(radius * y);
+                    vertexPositionData.push(radius * z);
+                }
+            }
+            //Set up indices
+            for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
+                for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
+                    var first = (latNumber * (longitudeBands + 1)) + longNumber;
+                    var second = first + longitudeBands + 1;
+                    indexData.push(first);
+                    indexData.push(second);
+                    indexData.push(first + 1);
+
+                    indexData.push(second);
+                    indexData.push(second + 1);
+                    indexData.push(first + 1);
+                }
+            }
+
+        return {
+            vertices: [
+                normalData, vertexPositionData   //1
+            ],
+
+            // JD: OK, so this part needs work.
+            indices: [
+                indexData, indexData
+            ]
+        };
+        
     },
 
     /*
