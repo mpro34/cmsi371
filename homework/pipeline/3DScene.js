@@ -22,7 +22,9 @@
         currentRotation = 0.0,
         currentInterval,
         rotationMatrix,
-        projectionMatrix,
+        orthoMatrix,
+        translationMatrix,
+        scaleMatrix,
         vertexPosition,
         vertexColor,
 
@@ -63,22 +65,23 @@
         {
             color: { r: 0.0, g: 1.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-            mode: gl.TRIANGLES, 
-            subshapes: []
-           /*     {
+            mode: gl.LINES, 
+            subshapes: [
+                {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
-                    vertices: Shapes.toRawLineArray(Shapes.hexahedron()),
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
                     mode: gl.LINES,
                     subshapes: [
                         {
-                            color: { r: 0.0, g: 1.0, b: 1.0 },
-                            vertices: Shapes.toRawLineArray(Shapes.tetrahedron()),
-                            mode: gl.LINES
+                            color: { r: 1.0, g: 0.0, b: 0.0 },
+                            vertices: Shapes.toRawLineArray(Shapes.icosahedron()),
+                            mode: gl.LINES,
+                            subshapes: []
                         }
                     ]
                 }
-            ]*/
-        }/*,
+            ]
+        },
 
         {
             color: { r: 1.0, g: 0.0, b: 1.0 },
@@ -97,19 +100,11 @@
                         [ 0.5, 0.0, 0.5 ]
                         
                     ),
-                    mode: gl.TRIANGLES
-                },
-                {
-                    color: { r: 1.0, g: 1.0, b: 0.0 },
-                    vertices: [].concat(
-                        [ 0.5, 0.25, 0.5 ],
-                        [ -0.5, 0.0, 0.5 ],                    
-                        [ -0.25, 0.25, 0.25 ]
-                    ),
-                    mode: gl.TRIANGLES
+                    mode: gl.TRIANGLES,
+                    subshapes: []
                 }
             ]
-        } */
+        } 
         
     ];
 
@@ -122,12 +117,11 @@
                     for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
                         subs[num][j].buffer = GLSLUtilities.initVertexBuffer(gl,
                             subs[num][j].vertices);
-         /*               if (!subs.colors) {
+                     /*   if (!subs.colors) {
                         // If we have a single color, we expand that into an array
                         // of the same color over and over.
                             subs.colors = [];
-                            for (j = 0, maxj = subs.vertices.length / 3;
-                                    j < maxj; j += 1) {
+                            for (j = 0, maxj = subs.vertices.length / 3; j < maxj; j += 1) {
                                 subs.colors = subs.colors.concat(
                                     subs.color.r,
                                     subs.color.g,
@@ -146,8 +140,7 @@
                     // If we have a single color, we expand that into an array
                     // of the same color over and over.
                         subs.colors = [];
-                        for (j = 0, maxj = subs.vertices.length / 3;
-                                j < maxj; j += 1) {
+                        for (j = 0, maxj = subs.vertices.length / 3; j < maxj; j += 1) {
                             subs.colors = subs.colors.concat(
                                 subs.color.r,
                                 subs.color.g,
@@ -161,85 +154,7 @@
             }
                
             }); checker(objectsToDraw[i]);
-
-
-
-   /*     if (!objectsToDraw[i].colors) {
-            // If we have a single color, we expand that into an array
-            // of the same color over and over.
-            objectsToDraw[i].colors = [];
-            for (j = 0, maxj = objectsToDraw[i].vertices.length / 3;
-                    j < maxj; j += 1) {
-                objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
-                    objectsToDraw[i].color.r,
-                    objectsToDraw[i].color.g,
-                    objectsToDraw[i].color.b
-                );
-            }
-        }
-        objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                objectsToDraw[i].colors);*/
-    }/*
-    for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-            (checker1 = function (i) {
-                if (this.subshapes) {
-                    for (k = 0, maxk = this.subshapes.length; k < maxk; k += 1) {
-                        this.subshapes[k].buffer = GLSLUtilities.initVertexBuffer(gl,
-                            this.subshapes[k].vertices);
-                 //       console.log("2"+this.subshapes[k].vertices);
-                    //    checker1(this.subshapes[k]); 
-                   //     console.log("3"+this.subshapes[k].vertices);
-                    }
-                    checker1(this.subshapes[k]);
-                } 
-            }).call(objectsToDraw[i], i);  
-        //Cycle through each Subshape if present...
-        // JD: Nice but---this only supports one level of subshapes!
-        //     The subshapes themselves can have subshapes too, and then *those*
-        //     subshapes can have subshapes, and then those too...
-        if (objectsToDraw[i].subshapes) {
-                for (k = 0, maxk = objectsToDraw[i].subshapes.length; k < maxk; k++) {
-                    objectsToDraw[i].subshapes[k].buffer = GLSLUtilities.initVertexBuffer(gl,
-                        objectsToDraw[i].subshapes[k].vertices); 
-//COLORS w/ subshapes:
-                    if (!objectsToDraw[i].subshapes[k].colors) {
-                        // If we have a single color, we expand that into an array
-                        // of the same color over and over.
-                        objectsToDraw[i].subshapes[k].colors = [];
-                        for (j = 0, maxj = objectsToDraw[i].subshapes[k].vertices.length / 3;
-                                j < maxj; j += 1) {
-                            objectsToDraw[i].subshapes[k].colors = objectsToDraw[i].subshapes[k].colors.concat(
-                                objectsToDraw[i].subshapes[k].color.r,
-                                objectsToDraw[i].subshapes[k].color.g,
-                                objectsToDraw[i].subshapes[k].color.b
-                            );
-                        }
-                    }
-                    objectsToDraw[i].subshapes[k].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                            objectsToDraw[i].subshapes[k].colors); 
-                }
-        }
-
-        //Else just pass WebGL the current shapes' vertices
-        objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
-                objectsToDraw[i].vertices);
-//COLORS w/o subshapes:
-        if (!objectsToDraw[i].colors) {
-            // If we have a single color, we expand that into an array
-            // of the same color over and over.
-            objectsToDraw[i].colors = [];
-            for (j = 0, maxj = objectsToDraw[i].vertices.length / 3;
-                    j < maxj; j += 1) {
-                objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
-                    objectsToDraw[i].color.r,
-                    objectsToDraw[i].color.g,
-                    objectsToDraw[i].color.b
-                );
-            }
-        }
-        objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                objectsToDraw[i].colors);
-    }*/
+    }
 
     // Initialize the shaders.
     shaderProgram = GLSLUtilities.initSimpleShaderProgram(
@@ -276,7 +191,9 @@
     vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
-    projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix");  //New Transform
+    orthoMatrix = gl.getUniformLocation(shaderProgram, "orthoMatrix");  //New Transform
+    translationMatrix = gl.getUniformLocation(shaderProgram, "translationMatrix");  //New Transform
+    scaleMatrix = gl.getUniformLocation(shaderProgram, "scaleMatrix");  //New Transform
 
     /*
      * Displays an individual object.
@@ -284,11 +201,11 @@
     drawObject = function (object) {
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
-        gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);//
+        gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
-        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);//
+        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
     };
 
@@ -302,7 +219,7 @@
         // Set up the rotation matrix.
         gl.uniformMatrix4fv(rotationMatrix, 
             gl.FALSE, new Float32Array(
-                Matrix4x4.getRotationMatrix(currentRotation, 0, 1, 0).toWebGLArray()    //New Transform when scene is drawn
+                Matrix4x4.getRotationMatrix(currentRotation, 0, 1, 0).toWebGLArray()   
             )
         );
 
@@ -320,6 +237,7 @@
                     if (num === "subshapes") {
                         for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
                             drawObject(subs[num][j]);
+                            console.log(subs[num][j].vertices);
                             checkSub(subs[num][j]);                           
                         }
                     }  drawObject(subs);
@@ -331,12 +249,27 @@
         gl.flush();
     };
 
-    //Set up projection matrix                                    //New Transform
-    gl.uniformMatrix4fv(projectionMatrix,
+    //Set up ortho projection matrix (t, b, l, r, n, f)                                
+    gl.uniformMatrix4fv(orthoMatrix,
         gl.FALSE, new Float32Array(
-            Matrix4x4.ortho(-20, 20, -20, 20, 5, 500).toWebGLArray()
+            Matrix4x4.ortho(-10, 10, -10, 10, 5, 500).toWebGLArray()
         )
     );
+
+    //Set up translation matrix (tx, ty, tz)
+    gl.uniformMatrix4fv(translationMatrix,
+        gl.FALSE, new Float32Array(
+            Matrix4x4.getTranslationMatrix(0.5, 0.5, 0).toWebGLArray()
+        )
+    );
+
+    //Set up scale matrix (sx, sy, sz)
+    gl.uniformMatrix4fv(scaleMatrix,
+        gl.FALSE, new Float32Array(
+            Matrix4x4.getScaleMatrix(1.5, 1.5, 0).toWebGLArray()
+        )
+    );
+
 
     // Draw the initial scene.
     drawScene();

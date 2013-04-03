@@ -45,10 +45,12 @@
             attribute vec3 vertexColor;
             varying vec4 finalVertexColor;
             uniform mat4 rotationMatrix;
-            uniform mat4 projectionMatrix;  //New transform
+            uniform mat4 orthoMatrix;  
+            uniform mat4 translationMatrix;
+            uniform mat4 scaleMatrix;
 
             void main(void) {
-                gl_Position = projectionMatrix * rotationMatrix * vec4(vertexPosition.xy, vertexPosition.z - 100.0, 1.0);
+                gl_Position = rotationMatrix * vec4(vertexPosition, 1.0);
                 finalVertexColor = vec4(vertexColor, 1.0);
             }
         </script>
