@@ -64,17 +64,17 @@
 
         {
             color: { r: 0.0, g: 1.0, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-            mode: gl.LINES, 
+            vertices: Shapes.sphere(),
+            mode: gl.TRIANGLE_STRIP, 
             subshapes: [
                 {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
                     vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
-                    mode: gl.LINES,
+                    mode: gl.TRIANGLES,
                     subshapes: [
                         {
                             color: { r: 1.0, g: 0.0, b: 0.0 },
-                            vertices: Shapes.toRawLineArray(Shapes.icosahedron()),
+                            vertices: Shapes.toRawLineArray(Shapes.hexahedron()),
                             mode: gl.LINES,
                             subshapes: []
                         }
@@ -84,12 +84,8 @@
         },
 
         {
-            color: { r: 1.0, g: 0.0, b: 1.0 },
-            vertices: [].concat(
-                [ -0.25, 0.5, 0.5 ],
-                [ -0.25, 0.0, 0.5 ],
-                [ 0.5, 0.0, 0.5 ]
-            ),
+            color: { r: 0.0, g: 0.0, b: 1.0 },
+            vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
             mode: gl.TRIANGLES,
             subshapes: [
                 {
@@ -237,7 +233,6 @@
                     if (num === "subshapes") {
                         for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
                             drawObject(subs[num][j]);
-                            console.log(subs[num][j].vertices);
                             checkSub(subs[num][j]);                           
                         }
                     }  drawObject(subs);
@@ -266,7 +261,7 @@
     //Set up scale matrix (sx, sy, sz)
     gl.uniformMatrix4fv(scaleMatrix,
         gl.FALSE, new Float32Array(
-            Matrix4x4.getScaleMatrix(1.5, 1.5, 0).toWebGLArray()
+            Matrix4x4.getScaleMatrix(0.5, 0.5, 0).toWebGLArray()
         )
     );
 

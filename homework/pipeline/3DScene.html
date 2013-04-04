@@ -50,7 +50,7 @@
             uniform mat4 scaleMatrix;
 
             void main(void) {
-                gl_Position = rotationMatrix * vec4(vertexPosition, 1.0);
+                gl_Position = scaleMatrix * translationMatrix * rotationMatrix * vec4(vertexPosition, 1.0);
                 finalVertexColor = vec4(vertexColor, 1.0);
             }
         </script>
