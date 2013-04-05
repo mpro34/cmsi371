@@ -113,4 +113,17 @@ $(function () {
                0.0, 0.0, -1.0,  0.0 ],
             "Frustum Projection Matrix");
     });
+
+    test("lookAt Camera Matrices", function () {
+        var p = new Vector(0, 1, 0),
+            q = new Vector(0, 0, 0),
+            up = new Vector(1, 0, 0);
+        m = Matrix4x4.lookAt(p, q, up);
+        deepEqual(m.elements,
+            [ -2.0, 0.0, -3.0,  0.0,
+               0.0, 1.0,  2.0,  0.0,
+               0.0, 0.0, -3.0, -4.0,
+               0.0, 0.0, -1.0,  0.0 ],
+            "lookAt Camera Matrix");
+    });
 });

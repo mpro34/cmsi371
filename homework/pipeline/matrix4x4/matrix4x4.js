@@ -134,6 +134,20 @@ var Matrix4x4 = (function () {
         );
     };
 
+    //Returns the camera matrix
+    matrix4x4.lookAt = function(p, q, up) {
+        var ze = (p.subtract(q)).unit(),
+            ye = up.subtract(up.projection(ze)).unit(),
+            xe = ye.cross(ze);
+
+        return new Matrix4x4(
+            xe.x(), xe.y(), xe.z(), -(p.dot(xe)),
+            ye.x(), ye.y(), ye.z(), -(p.dot(ye)),
+            ze.x(), ze.y(), ze.z(), -(p.dot(ze)),
+                 0,      0,      0,            1
+        );
+    }
+
     return matrix4x4;
 
 })();
