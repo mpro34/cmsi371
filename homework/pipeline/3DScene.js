@@ -118,9 +118,20 @@
 
     // Pass the vertices to WebGL.
     for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-
+        // JD: Beware, checker was not declared as a var---and therefore
+        //     it is a global variable!
+        //
+        //     Also, "checker" is not a good name for this---what's does
+        //     check?  What does it do overall?  Be more descriptive.
         (checker = function (subs) {
             for (var num in subs) {
+                // JD: Yikes!!!  You are iterating through the properties of
+                //     subs but only do something if its name is "subshapes"---
+                //     why not just say:
+                //
+                //         if (subs.subshapes) {
+                //             ....
+                //         }
                 if (num === "subshapes") {
                     for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
                         subs[num][j].buffer = GLSLUtilities.initVertexBuffer(gl,
@@ -162,6 +173,7 @@
             }
                
             }); checker(objectsToDraw[i]);
+        // JD:^^^^ Bad indent, and the checker call should be on another line.
     }
 
     // Initialize the shaders.
@@ -228,6 +240,9 @@
             );
         } else {
                 //Set up translation matrix (tx, ty, tz)
+            // JD: So, if no translation is supplied, then the default
+            //     translation is <0.5, 0.5, 0.5>?  That seems pretty
+            //     arbitrary---it deserves an explanation.
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getTranslationMatrix(0.5, 0.5, 0.5).toWebGLArray()
@@ -244,6 +259,10 @@
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // Set up the rotation matrix.
+        // JD: The way you have it, rotation and scale are global;
+        //     only translation is done per object.  That is not a
+        //     complete instance transformation.  You should be able
+        //     to apply all three transforms on each individual object.
         gl.uniformMatrix4fv(rotationMatrix, 
             gl.FALSE, new Float32Array(
                 Matrix4x4.getRotationMatrix(currentRotation, 0, 1, 0).toWebGLArray()   
@@ -260,6 +279,10 @@
         gl.uniformMatrix4fv(cameraMatrix,
         gl.FALSE, new Float32Array(
             Matrix4x4.lookAt(
+                // JD: Good stab at integrating the camera, but
+                //     currentSide and currentZoom are not good
+                //     name for the camera's x-coordinate and z-
+                //     coordinate, respectively.
                 new Vector(currentSide, 0, currentZoom),   //Location of camera
                 new Vector(0, 0, 0),                       //Where camera is pointed
                 new Vector(0, 0.5, 0)                      //Tilt of camera
@@ -276,7 +299,11 @@
 
         //Recursively draw objects, check for subshapes, and respectively draw each subshape.
         for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+            // JD: Again with the global variable and not-very-descriptive
+            //     name; these have to be fixed also.
             (checkSub = function (subs) {
+                // JD: And here you have that loop-that-is-not-needed
+                //     idiom again.  Should be changed.
                 for (var num in subs) {
                     if (num === "subshapes") {
                         for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
@@ -292,7 +319,12 @@
         gl.flush();
     };
 
-    //Set up ortho projection matrix (t, b, l, r, n, f)                                
+    // JD: I can see how you might have been experimenting with a good
+    //     projection matrix here.  But in the end, you'll really only
+    //     be using one (typically) and so you should make sure to clean
+    //     this up later.
+
+    //Set up ortho projection matrix (t, b, l, r, n, f)
     gl.uniformMatrix4fv(orthoMatrix,
         gl.FALSE, new Float32Array(
             Matrix4x4.ortho(-2, 2, -2, 2, 0, 20).toWebGLArray()
@@ -334,8 +366,23 @@
         }
     });
 
+    // JD: This is a good start, but needs refinement in order
+    //     to feel more intuitive.  i.e.:
+    //
+    //     - You're only moving the camera location, but it forever
+    //       is looking at the origin.  I don't think you want or
+    //       intend this.
+    //
+    //     - Already mentioned the bad names, but they are worth
+    //       mentioning again!
+    //
+    //     - jQuery is visible to this code (see click above);
+    //       for consistency, use jQuery for the binding here also.
     canvas.onmouseover = function () {
         console.log("here");
+        // JD: You can bind onkeydown to the body element so that
+        //     it's "on" all the time.  This also eliminates the
+        //     need for the mouseover event.
         onkeydown = function (event) {
             if (event.keyCode == 83) {  //W key
                 currentZoom += 0.1;

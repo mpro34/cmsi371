@@ -103,15 +103,18 @@ var Matrix4x4 = (function () {
 
     //Creates a columnized matrix4x4 array so that it can be used in WebGL.
     matrix4x4.prototype.toWebGLArray = function () {
-        return [ this.elements[0], this.elements[4],  this.elements[8], this.elements[12], 
-                 this.elements[1], this.elements[5],  this.elements[9], this.elements[13], 
-                 this.elements[2], this.elements[6], this.elements[10], this.elements[14], 
-                 this.elements[3], this.elements[7], this.elements[11], this.elements[15] 
-               ]
+        // JD: I reformatted this to slightly better indents.
+        return [
+            this.elements[0], this.elements[4],  this.elements[8], this.elements[12],
+            this.elements[1], this.elements[5],  this.elements[9], this.elements[13],
+            this.elements[2], this.elements[6], this.elements[10], this.elements[14],
+            this.elements[3], this.elements[7], this.elements[11], this.elements[15]
+        ]; // JD: You were missing a semicolon here.
     };
 
     //Returns the orthogonal projection of a 4x4 matrix
     matrix4x4.ortho = function (t, b, l, r, n, f) {
+        // JD: These comments are misindented.
     //t, b, l, and r are the top, bottom, left, and right distances of the viewport, respectively.
     //f and n are the far and near clipping planes, respectively.
         return new Matrix4x4(
