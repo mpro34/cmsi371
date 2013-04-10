@@ -22,8 +22,12 @@
         currentRotation = 0.0,
         currentInterval,
         currentSCALER = 0.5,
+        currentZoom = 0.1,
+        currentSide = 0.0,
         rotationMatrix,
+        cameraMatrix,
         orthoMatrix,
+        frustumMatrix,
         translationMatrix,
         scaleMatrix,
         vertexPosition,
@@ -65,8 +69,8 @@
 
         {
             color: { r: 0.0, g: 1.0, b: 0.0 },
-            vertices: Shapes.sphere(),
-            mode: gl.TRIANGLE_STRIP, 
+            vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+            mode: gl.LINES, 
             subshapes: [
                 {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
@@ -196,8 +200,10 @@
     gl.enableVertexAttribArray(vertexColor);
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
     orthoMatrix = gl.getUniformLocation(shaderProgram, "orthoMatrix");  //New Transform
+    frustumMatrix = gl.getUniformLocation(shaderProgram, "frustumMatrix");  //New Transform
     translationMatrix = gl.getUniformLocation(shaderProgram, "translationMatrix");  //New Transform
     scaleMatrix = gl.getUniformLocation(shaderProgram, "scaleMatrix");  //New Transform
+    cameraMatrix = gl.getUniformLocation(shaderProgram, "cameraMatrix");
 
     /*
      * Displays an individual object.
@@ -251,6 +257,16 @@
             )
         );
 
+        gl.uniformMatrix4fv(cameraMatrix,
+        gl.FALSE, new Float32Array(
+            Matrix4x4.lookAt(
+                new Vector(currentSide, 0, currentZoom),   //Location of camera
+                new Vector(0, 0, 0),                       //Where camera is pointed
+                new Vector(0, 0.5, 0)                      //Tilt of camera
+            ).toWebGLArray()
+        )
+    );
+
         // Display the objects.
 
         var subfound,
@@ -279,7 +295,14 @@
     //Set up ortho projection matrix (t, b, l, r, n, f)                                
     gl.uniformMatrix4fv(orthoMatrix,
         gl.FALSE, new Float32Array(
-            Matrix4x4.ortho(-10, 10, -10, 10, 5, 500).toWebGLArray()
+            Matrix4x4.ortho(-2, 2, -2, 2, 0, 20).toWebGLArray()
+        )
+    );
+
+    //Set up frustum projection matrix (t, b, l, r, n, f)                                
+    gl.uniformMatrix4fv(frustumMatrix,
+        gl.FALSE, new Float32Array(
+            Matrix4x4.frustum(-2, 2, -2, 2, 0.1, 50).toWebGLArray()
         )
     );
 
@@ -290,12 +313,6 @@
         )
     );*/
 
-    //Set up scale matrix (sx, sy, sz)
-    gl.uniformMatrix4fv(scaleMatrix,
-        gl.FALSE, new Float32Array(
-            Matrix4x4.getScaleMatrix(currentSCALER, 0.5, 0).toWebGLArray()
-        )
-    );
 
 
     // Draw the initial scene.
@@ -320,33 +337,24 @@
     canvas.onmouseover = function () {
         console.log("here");
         onkeydown = function (event) {
-            if (event.keyCode == 87) {
-                currentSCALER += 0.2;
-                console.log("cool" + currentSCALER);
+            if (event.keyCode == 83) {  //W key
+                currentZoom += 0.1;
+                console.log("cool" + currentZoom);
+                drawScene();
+            } else if (event.keyCode == 87) {  //S key
+                currentZoom -= 0.1;
+                console.log("cool" + currentZoom);
+                drawScene();
+            } else if (event.keyCode == 68) {  //D key
+                currentSide += 0.01;
+                console.log("cool" + currentSide);
+                drawScene();
+            } else if (event.keyCode == 65) {  //A key
+                currentSide -= 0.01;
+                console.log("cool" + currentSide);
                 drawScene();
             }
         }
     };
-
-
-       /* if (event.charCode === ) {
-            canvas.onmousemove = cameraPan;
-        }
-        //If the shift key is pressed with the mouse, scale the triangle.
-        else if (event.shiftKey==1) {
-            canvas.onmousemove = triangleScale;
-        }
-        //Else just rotate the triangle.
-        else {
-            canvas.onmousemove = cameraRotate;
-        }*/
-
-
-//Add another feature here later
-    $(canvas).click(function (e) {
-        if (e.shiftKey) {
-            //drawScene();
-        }
-    });
 
 }(document.getElementById("space-scene")));

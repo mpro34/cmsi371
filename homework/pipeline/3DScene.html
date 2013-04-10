@@ -8,10 +8,7 @@
     <body>
         <h1>Space Scene</h1>
 
-        <p>You’ll need a WebGL-capable web browser to see anything here;
-            instructions can be found in this
-            <a href="http://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">official
-            WebGL wiki page</a>.</p>
+        <p>Move Forward - "W key", Move Backward - "S key", Move Left - "A key", Move Right - "D Key"</p>
 
         <canvas id="space-scene" width="512" height="512">
             Sorry, your web browser does not appear to support
@@ -46,11 +43,13 @@
             varying vec4 finalVertexColor;
             uniform mat4 rotationMatrix;
             uniform mat4 orthoMatrix;  
+            uniform mat4 frustumMatrix;
             uniform mat4 translationMatrix;
             uniform mat4 scaleMatrix;
+            uniform mat4 cameraMatrix;
 
             void main(void) {
-                gl_Position = scaleMatrix * translationMatrix * rotationMatrix * vec4(vertexPosition, 1.0);
+                gl_Position = frustumMatrix * cameraMatrix * scaleMatrix * rotationMatrix * vec4( 3.0 * vertexPosition, 1.0);
                 finalVertexColor = vec4(vertexColor, 1.0);
             }
         </script>
@@ -71,9 +70,9 @@
             }
         </script>
         <!-- Implement a vector library of function -->
-        <script src="matrix4x4/vector/vector.js"></script>
+        <script src="../pipeline/matrix4x4/vector/vector.js"></script>
         <!-- Set up matrix library -->
-        <script src="matrix4x4/matrix4x4.js"></script>
+        <script src="../pipeline/matrix4x4/matrix4x4.js"></script>
         <!-- This script sets up the specific scene for this page. -->
         <script src="3DScene.js"></script>
   </body>
