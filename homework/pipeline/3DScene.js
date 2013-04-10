@@ -21,6 +21,7 @@
         // Important state variables.
         currentRotation = 0.0,
         currentInterval,
+        currentSCALER = 0.5,
         rotationMatrix,
         orthoMatrix,
         translationMatrix,
@@ -100,7 +101,14 @@
                     subshapes: []
                 }
             ]
-        } 
+        },
+
+        {
+            color: { r: 1.0, g: 0.0, b: 1.0 },
+            vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+            mode: gl.TRIANGLES,
+            subshapes: []
+        }  
         
     ];
 
@@ -203,6 +211,23 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
+
+//        console.log("verts: "+object.translation);
+        if (object.translation) {
+                //Set up translation matrix (tx, ty, tz)
+            gl.uniformMatrix4fv(translationMatrix,
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getTranslationMatrix(-0.5, -0.5, 0).toWebGLArray()
+                )
+            );
+        } else {
+                //Set up translation matrix (tx, ty, tz)
+            gl.uniformMatrix4fv(translationMatrix,
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getTranslationMatrix(0.5, 0.5, 0.5).toWebGLArray()
+                )
+            );
+        }
     };
 
     /*
@@ -216,6 +241,13 @@
         gl.uniformMatrix4fv(rotationMatrix, 
             gl.FALSE, new Float32Array(
                 Matrix4x4.getRotationMatrix(currentRotation, 0, 1, 0).toWebGLArray()   
+            )
+        );
+
+        //Set up scale matrix (sx, sy, sz)
+        gl.uniformMatrix4fv(scaleMatrix,
+            gl.FALSE, new Float32Array(
+                Matrix4x4.getScaleMatrix(currentSCALER, 0.5, 0).toWebGLArray()
             )
         );
 
@@ -251,17 +283,17 @@
         )
     );
 
-    //Set up translation matrix (tx, ty, tz)
+/*    //Set up translation matrix (tx, ty, tz)
     gl.uniformMatrix4fv(translationMatrix,
         gl.FALSE, new Float32Array(
             Matrix4x4.getTranslationMatrix(0.5, 0.5, 0).toWebGLArray()
         )
-    );
+    );*/
 
     //Set up scale matrix (sx, sy, sz)
     gl.uniformMatrix4fv(scaleMatrix,
         gl.FALSE, new Float32Array(
-            Matrix4x4.getScaleMatrix(0.5, 0.5, 0).toWebGLArray()
+            Matrix4x4.getScaleMatrix(currentSCALER, 0.5, 0).toWebGLArray()
         )
     );
 
@@ -284,6 +316,32 @@
             }, 30);
         }
     });
+
+    canvas.onmouseover = function () {
+        console.log("here");
+        onkeydown = function (event) {
+            if (event.keyCode == 87) {
+                currentSCALER += 0.2;
+                console.log("cool" + currentSCALER);
+                drawScene();
+            }
+        }
+    };
+
+
+       /* if (event.charCode === ) {
+            canvas.onmousemove = cameraPan;
+        }
+        //If the shift key is pressed with the mouse, scale the triangle.
+        else if (event.shiftKey==1) {
+            canvas.onmousemove = triangleScale;
+        }
+        //Else just rotate the triangle.
+        else {
+            canvas.onmousemove = cameraRotate;
+        }*/
+
+
 //Add another feature here later
     $(canvas).click(function (e) {
         if (e.shiftKey) {
