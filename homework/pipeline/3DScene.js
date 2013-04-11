@@ -71,11 +71,27 @@
             color: { r: 1.0, g: 0.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.LINES, 
+            transforms: {
+                tx: 0.0,
+                ty: 0.0,
+                tz: 0.0,
+                sx: 0.5,
+                sy: 0.5,
+                sz: 0.5
+            },
             subshapes: [
                 {
                     color: { r: 0.0, g: 1.0, b: 0.0 },
                     vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
-                    mode: gl.TRIANGLES,
+                    mode: gl.LINES,
+                    transforms: {
+                        tx: -0.2,
+                        ty: -0.2,
+                        tz: -0.2,
+                        sx: 0.5,
+                        sy: 0.5,
+                        sz: 0.5
+                    },
                     subshapes: [
                         {
                             color: { r: 0.0, g: 0.0, b: 1.0 },
@@ -94,7 +110,15 @@
                 [ -0.25, 0.0, 0.5 ],
                 [ 0.5, 0.0, 0.5 ]              
             ),
-            mode: gl.TRIANGLES
+            mode: gl.TRIANGLES,
+            transforms: {
+                tx: 0.0,
+                ty: 0.0,
+                tz: 0.0,
+                sx: 1.5,
+                sy: 1.5,
+                sz: 1.5
+            }
         }
         
     ];
@@ -203,21 +227,37 @@
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
 
-        if (object.translation) {
-                //Set up translation matrix (tx, ty, tz)
+        //Set up translation matrix (tx, ty, tz) and scale matrix (sx, sy, sz)
+        if (object.transforms) {
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getTranslationMatrix(-0.5, -0.5, 0).toWebGLArray()
+                    Matrix4x4.getTranslationMatrix( object.transforms.tx, 
+                                                    object.transforms.ty, 
+                                                    object.transforms.tz
+                                                  ).toWebGLArray()
                 )
             );
+console.log("scale: "+object.transforms.sx+object.transforms.sy+object.transforms.sz)
+            gl.uniformMatrix4fv(scaleMatrix,
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getScaleMatrix( object.transforms.sx, 
+                                              object.transforms.sy, 
+                                              object.transforms.sz
+                                            ).toWebGLArray()
+                )
+            );
+
         } else {
-                //Set up translation matrix (tx, ty, tz)
-            // JD: So, if no translation is supplied, then the default
-            //     translation is <0.5, 0.5, 0.5>?  That seems pretty
-            //     arbitrary---it deserves an explanation.
+            //Default translation and scale is (0, 0, 0) - Default position
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getTranslationMatrix(0.5, 0.5, 0.5).toWebGLArray()
+                    Matrix4x4.getTranslationMatrix(0.0, 0.0, 0.0).toWebGLArray()
+                )
+            );
+
+            gl.uniformMatrix4fv(scaleMatrix,
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getScaleMatrix(0.0, 0.0, 0.0).toWebGLArray()
                 )
             );
         }
@@ -238,13 +278,6 @@
         gl.uniformMatrix4fv(rotationMatrix, 
             gl.FALSE, new Float32Array(
                 Matrix4x4.getRotationMatrix(currentRotation, 0, 1, 0).toWebGLArray()   
-            )
-        );
-
-        //Set up scale matrix (sx, sy, sz)
-        gl.uniformMatrix4fv(scaleMatrix,
-            gl.FALSE, new Float32Array(
-                Matrix4x4.getScaleMatrix(currentSCALER, 0.5, 0).toWebGLArray()
             )
         );
 
@@ -310,14 +343,6 @@
         )
     );
 
-/*    //Set up translation matrix (tx, ty, tz)
-    gl.uniformMatrix4fv(translationMatrix,
-        gl.FALSE, new Float32Array(
-            Matrix4x4.getTranslationMatrix(0.5, 0.5, 0).toWebGLArray()
-        )
-    );*/
-
-
 
     // Draw the initial scene.
     drawScene();
@@ -358,19 +383,15 @@
             console.log("here"+event.keyCode);
             if (event.keyCode == 119) {  //W key
                 currentZoom += 0.1;
-                console.log("cool" + currentZoom);
                 drawScene();
             } else if (event.keyCode == 115) {  //S key
                 currentZoom -= 0.1;
-                console.log("cool" + currentZoom);
                 drawScene();
             } else if (event.keyCode == 100) {  //D key
                 currentSide += 0.01;
-                console.log("cool" + currentSide);
                 drawScene();
             } else if (event.keyCode == 97) {  //A key
                 currentSide -= 0.01;
-                console.log("cool" + currentSide);
                 drawScene();
             }
         });

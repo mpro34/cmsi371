@@ -46,12 +46,12 @@
             uniform mat4 frustumMatrix; //     projectionMatrix (in reference to its
                                         //     role, not its specific choice).
 
-            uniform mat4 translationMatrix; // JD: Not used (yet?).
+            uniform mat4 translationMatrix; 
             uniform mat4 scaleMatrix;
             uniform mat4 cameraMatrix;
 
             void main(void) {
-                gl_Position = frustumMatrix * cameraMatrix * scaleMatrix * rotationMatrix * vec4( /*3.0 **/ vertexPosition, 1.0);
+                gl_Position = /*frustumMatrix * cameraMatrix * scaleMatrix **/ scaleMatrix * rotationMatrix * vec4( /*3.0 **/ vertexPosition, 1.0);
                 finalVertexColor = vec4(vertexColor, 1.0);
             }
         </script>
