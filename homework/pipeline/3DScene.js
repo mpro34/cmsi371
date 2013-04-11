@@ -68,30 +68,30 @@
     objectsToDraw = [
 
         {
-            color: { r: 0.0, g: 1.0, b: 0.0 },
+            color: { r: 1.0, g: 0.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
             mode: gl.LINES, 
             subshapes: [
                 {
-                    color: { r: 0.0, g: 0.0, b: 1.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    color: { r: 0.0, g: 1.0, b: 0.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                     mode: gl.TRIANGLES,
                     subshapes: [
                         {
-                            color: { r: 1.0, g: 0.0, b: 0.0 },
-                            vertices: Shapes.toRawLineArray(Shapes.hexahedron()),
+                            color: { r: 0.0, g: 0.0, b: 1.0 },
+                            vertices: Shapes.sphere(),
                             mode: gl.LINES,
                             subshapes: []
                         }
                     ]
                 }
             ]
-        },
+        }/*,
 
         {
-            color: { r: 0.0, g: 0.0, b: 1.0 },
+            color: { r: 0.0, g: 1.0, b: 1.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
-            mode: gl.TRIANGLES,
+            mode: gl.LINES,
             subshapes: [
                 {
                     color: { r: 1.0, g: 1.0, b: 0.0 },
@@ -105,76 +105,62 @@
                     subshapes: []
                 }
             ]
-        },
-
-        {
-            color: { r: 1.0, g: 0.0, b: 1.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
-            mode: gl.TRIANGLES,
-            subshapes: []
-        }  
+        }*/
         
     ];
 
-    // Pass the vertices to WebGL.
-    for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-        // JD: Beware, checker was not declared as a var---and therefore
-        //     it is a global variable!
-        //
-        //     Also, "checker" is not a good name for this---what's does
-        //     check?  What does it do overall?  Be more descriptive.
-        (checker = function (subs) {
-            for (var num in subs) {
-                // JD: Yikes!!!  You are iterating through the properties of
-                //     subs but only do something if its name is "subshapes"---
-                //     why not just say:
-                //
-                //         if (subs.subshapes) {
-                //             ....
-                //         }
-                if (num === "subshapes") {
-                    for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
-                        subs[num][j].buffer = GLSLUtilities.initVertexBuffer(gl,
-                            subs[num][j].vertices);
-                     /*   if (!subs.colors) {
-                        // If we have a single color, we expand that into an array
-                        // of the same color over and over.
-                            subs.colors = [];
-                            for (j = 0, maxj = subs.vertices.length / 3; j < maxj; j += 1) {
-                                subs.colors = subs.colors.concat(
-                                    subs.color.r,
-                                    subs.color.g,
-                                    subs.color.b
-                                );
-                            }
-                        }
-                        subs.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                            subs.colors);  */
-
-                        checker(subs[num][j]);                           
-                    } 
-                    subs.buffer = GLSLUtilities.initVertexBuffer(gl,
-                        subs.vertices);
-                    if (!subs.colors) {
-                    // If we have a single color, we expand that into an array
-                    // of the same color over and over.
-                        subs.colors = [];
-                        for (j = 0, maxj = subs.vertices.length / 3; j < maxj; j += 1) {
-                            subs.colors = subs.colors.concat(
-                                subs.color.r,
-                                subs.color.g,
-                                subs.color.b
+    // Pass the vertices and colors to WebGL.
+    var passSubVerts = function (composites) {
+        if (composites.subshapes) {
+            for (j = 0, subLength = composites.subshapes.length; j < subLength; j += 1) {
+                composites.subshapes[j].buffer = GLSLUtilities.initVertexBuffer(gl,
+                    composites.subshapes[j].vertices);
+                    
+                    // If we have a single color, we expand that into an array of the same color over and over.
+/*                    if (!composites.subshapes[j].colors) {
+                        composites.subshapes[j].colors = [];
+                        console.log("h"+composites.subshapes[j].colors);
+                        for (j = 0, maxj = composites.subshapes[j].vertices.length / 3; j < maxj; j += 1) {
+                            console.log("color: "+composites.subshapes[j].vertices.length / 3)
+                            composites.subshapes[j].colors = composites.subshapes[j].colors.concat(
+                                composites.subshapes[j].color.r,
+                                composites.subshapes[j].color.g,
+                                composites.subshapes[j].color.b
                             );
                         }
                     }
-                    subs.colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                        subs.colors);
-                }
+                    composites.subshapes[j].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                        composites.subshapes[j].colors);*/
             }
-               
-            }); checker(objectsToDraw[i]);
-        // JD:^^^^ Bad indent, and the checker call should be on another line.
+            
+            //Check for more subshapes...
+            if (composites.subshapes[j]) {
+                passSubVerts(composites.subshapes[j]);
+            }
+        }
     }
+
+    //Iterate through each object in the objectsToDraw array
+    for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+        passSubVerts(objectsToDraw[i]);   //Pass the vertices and colors of all the subshapes to webgl
+
+        objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
+            objectsToDraw[i].vertices);
+        // If we have a single color, we expand that into an array of the same color over and over.
+        if (!objectsToDraw[i].colors) {
+            objectsToDraw[i].colors = [];
+                for (j = 0, maxj = objectsToDraw[i].vertices.length / 3; j < maxj; j += 1) {
+                    objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
+                        objectsToDraw[i].color.r,
+                        objectsToDraw[i].color.g,
+                        objectsToDraw[i].color.b
+                    );
+                }
+        }
+        objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+            objectsToDraw[i].colors);
+    }
+    
 
     // Initialize the shaders.
     shaderProgram = GLSLUtilities.initSimpleShaderProgram(
@@ -230,7 +216,6 @@
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
 
-//        console.log("verts: "+object.translation);
         if (object.translation) {
                 //Set up translation matrix (tx, ty, tz)
             gl.uniformMatrix4fv(translationMatrix,
@@ -297,23 +282,23 @@
             i,
             j;
 
+        var drawSubshapes = function (composites) {
+            if (composites.subshapes) {
+                for (j = 0, subLength = composites.subshapes.length; j < subLength; j += 1) { 
+                    drawObject(composites.subshapes[j]);    //Draw each subshape
+                    if (composites.subshapes[j].subshapes) {
+                        drawSubshapes(composites.subshapes[j]);     
+                    }
+                }
+            }  
+        };
+
         //Recursively draw objects, check for subshapes, and respectively draw each subshape.
         for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-            // JD: Again with the global variable and not-very-descriptive
-            //     name; these have to be fixed also.
-            (checkSub = function (subs) {
-                // JD: And here you have that loop-that-is-not-needed
-                //     idiom again.  Should be changed.
-                for (var num in subs) {
-                    if (num === "subshapes") {
-                        for (j = 0; subLength = subs[num].length, j < subLength; j += 1) { 
-                            drawObject(subs[num][j]);
-                            checkSub(subs[num][j]);                           
-                        }
-                    }  drawObject(subs);
-                }
-            }); checkSub(objectsToDraw[i]);
+            drawSubshapes(objectsToDraw[i]);     //Pass object to drawsubshapes function to draw each subshape
+            drawObject(objectsToDraw[i]);         //Draw parent object
         }
+
 
         // All done.
         gl.flush();
@@ -378,30 +363,30 @@
     //
     //     - jQuery is visible to this code (see click above);
     //       for consistency, use jQuery for the binding here also.
-    canvas.onmouseover = function () {
-        console.log("here");
+  //  canvas.onmouseover = function () {
         // JD: You can bind onkeydown to the body element so that
         //     it's "on" all the time.  This also eliminates the
         //     need for the mouseover event.
-        onkeydown = function (event) {
-            if (event.keyCode == 83) {  //W key
+        $("body").keypress(function(event) {
+            console.log("here"+event.keyCode);
+            if (event.keyCode == 119) {  //W key
                 currentZoom += 0.1;
                 console.log("cool" + currentZoom);
                 drawScene();
-            } else if (event.keyCode == 87) {  //S key
+            } else if (event.keyCode == 115) {  //S key
                 currentZoom -= 0.1;
                 console.log("cool" + currentZoom);
                 drawScene();
-            } else if (event.keyCode == 68) {  //D key
+            } else if (event.keyCode == 100) {  //D key
                 currentSide += 0.01;
                 console.log("cool" + currentSide);
                 drawScene();
-            } else if (event.keyCode == 65) {  //A key
+            } else if (event.keyCode == 97) {  //A key
                 currentSide -= 0.01;
                 console.log("cool" + currentSide);
                 drawScene();
             }
-        }
-    };
+        });
+  //  };
 
 }(document.getElementById("space-scene")));
