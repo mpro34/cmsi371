@@ -69,43 +69,33 @@
 
         {
             color: { r: 1.0, g: 0.0, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.LINES, 
             subshapes: [
                 {
                     color: { r: 0.0, g: 1.0, b: 0.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
                     mode: gl.TRIANGLES,
                     subshapes: [
                         {
                             color: { r: 0.0, g: 0.0, b: 1.0 },
                             vertices: Shapes.sphere(),
-                            mode: gl.LINES,
-                            subshapes: []
+                            mode: gl.LINES
                         }
                     ]
                 }
             ]
-        }/*,
+        },
 
         {
-            color: { r: 0.0, g: 1.0, b: 1.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
-            mode: gl.LINES,
-            subshapes: [
-                {
-                    color: { r: 1.0, g: 1.0, b: 0.0 },
-                    vertices: [].concat(
-                        [ 0.25, 0.5, 0.5 ],
-                        [ -0.25, 0.0, 0.5 ],
-                        [ 0.5, 0.0, 0.5 ]
-                        
-                    ),
-                    mode: gl.TRIANGLES,
-                    subshapes: []
-                }
-            ]
-        }*/
+            color: { r: 1.0, g: 1.0, b: 0.0 },
+            vertices: [].concat(
+                [ 0.25, 0.5, 0.5 ],
+                [ -0.25, 0.0, 0.5 ],
+                [ 0.5, 0.0, 0.5 ]              
+            ),
+            mode: gl.TRIANGLES
+        }
         
     ];
 
@@ -117,25 +107,23 @@
                     composites.subshapes[j].vertices);
                     
                     // If we have a single color, we expand that into an array of the same color over and over.
-/*                    if (!composites.subshapes[j].colors) {
+                    if (!composites.subshapes[j].colors) {
                         composites.subshapes[j].colors = [];
-                        console.log("h"+composites.subshapes[j].colors);
-                        for (j = 0, maxj = composites.subshapes[j].vertices.length / 3; j < maxj; j += 1) {
-                            console.log("color: "+composites.subshapes[j].vertices.length / 3)
-                            composites.subshapes[j].colors = composites.subshapes[j].colors.concat(
-                                composites.subshapes[j].color.r,
-                                composites.subshapes[j].color.g,
-                                composites.subshapes[j].color.b
-                            );
+                        
+                        for (k = 0, maxk = composites.subshapes[j].vertices.length / 3; k < maxk; k += 1) {
+                                composites.subshapes[j].colors = composites.subshapes[j].colors.concat(
+                                    composites.subshapes[j].color.r,
+                                    composites.subshapes[j].color.g,
+                                    composites.subshapes[j].color.b
+                                );
                         }
                     }
                     composites.subshapes[j].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-                        composites.subshapes[j].colors);*/
-            }
-            
-            //Check for more subshapes...
-            if (composites.subshapes[j]) {
-                passSubVerts(composites.subshapes[j]);
+                        composites.subshapes[j].colors);
+                    //Check for more subshapes...
+                    if (composites.subshapes[j]) {
+                        passSubVerts(composites.subshapes[j]);
+                    }
             }
         }
     }
@@ -143,7 +131,6 @@
     //Iterate through each object in the objectsToDraw array
     for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
         passSubVerts(objectsToDraw[i]);   //Pass the vertices and colors of all the subshapes to webgl
-
         objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
             objectsToDraw[i].vertices);
         // If we have a single color, we expand that into an array of the same color over and over.
