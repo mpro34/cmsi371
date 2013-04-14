@@ -26,8 +26,7 @@
         currentSide = 0.0,
         rotationMatrix,
         cameraMatrix,
-        orthoMatrix,
-        frustumMatrix,
+        projectionMatrix,
         translationMatrix,
         scaleMatrix,
         vertexPosition,
@@ -68,20 +67,30 @@
     objectsToDraw = [
         {
             color: { r: 1.0, g: 0.0, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            mode: gl.LINES, 
+            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+            mode: gl.TRIANGLES, 
             transforms: {
-                trans: [0.0, 0.0, 0.0],         //put instance transforms into three separate arrays
-                scale: [0.2, 0.2, 0.2],
+                trans: [0.0, 0.5, 0.0],         //put instance transforms into three separate arrays
+                scale: [0.5, 0.5, 0.5],
                 rotate: [0.0, 0.0, 0.0, 0.0]
             },
             subshapes: [
                 {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: [-0.5, 0.0, 0.0],         //put instance transforms into three separate arrays
+                        trans: [-1, 0.0, 0.0],         //put instance transforms into three separate arrays
+                        scale: [1.0, 1.0, 1.0],
+                        rotate: [0.0, 0.0, 0.0, 0.0]
+                    }
+                },
+                {
+                    color: { r: 0.0, g: 1.0, b: 0.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+                    mode: gl.LINES,
+                    transforms: {
+                        trans: [0.0, 0.0, 0.5],         //put instance transforms into three separate arrays
                         scale: [1.0, 1.0, 1.0],
                         rotate: [0.0, 0.0, 0.0, 0.0]
                     }
@@ -193,10 +202,9 @@
     vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
     gl.enableVertexAttribArray(vertexColor);
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
-    orthoMatrix = gl.getUniformLocation(shaderProgram, "orthoMatrix");  //New Transform
-    frustumMatrix = gl.getUniformLocation(shaderProgram, "frustumMatrix");  //New Transform
-    translationMatrix = gl.getUniformLocation(shaderProgram, "translationMatrix");  //New Transform
-    scaleMatrix = gl.getUniformLocation(shaderProgram, "scaleMatrix");  //New Transform
+    projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix"); 
+    translationMatrix = gl.getUniformLocation(shaderProgram, "translationMatrix");
+    scaleMatrix = gl.getUniformLocation(shaderProgram, "scaleMatrix");  
     cameraMatrix = gl.getUniformLocation(shaderProgram, "cameraMatrix");
 
     /*
@@ -212,9 +220,8 @@
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
 
-        //Set up instance transforms: translation, scale, rotate
+        //Set up instance transforms: translation, scale, rotate **!!NOT assigning the right transforms to the right objects...
         if (object.transforms) {
-            console.log("here");
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getTranslationMatrix( object.transforms.trans[0], 
@@ -222,7 +229,7 @@
                                                     object.transforms.trans[2]
                                                   ).toWebGLArray()
                 )
-            );
+            ),
 
             gl.uniformMatrix4fv(scaleMatrix,
                 gl.FALSE, new Float32Array(
@@ -231,19 +238,36 @@
                                               object.transforms.scale[2]
                                             ).toWebGLArray()
                 )
+            ),
+
+            gl.uniformMatrix4fv(rotationMatrix,
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getRotationMatrix( object.transforms.rotate[0], 
+                                                 object.transforms.rotate[1], 
+                                                 object.transforms.rotate[2],
+                                                 object.transforms.rotate[3]
+                                               ).toWebGLArray()
+                )
             );
 
         } else {
+console.log("not here);")
             //Default instance transform with original position, scale, and no rotation
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getTranslationMatrix(0.0, 0.0, 0.0).toWebGLArray()
                 )
-            );
+            ),
 
             gl.uniformMatrix4fv(scaleMatrix,
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getScaleMatrix(1.0, 1.0, 1.0).toWebGLArray()
+                )
+            ),
+
+            gl.uniformMatrix4fv(rotationMatrix,
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getRotationMatrix(0.0, 0.0, 0.0, 0.0).toWebGLArray()
                 )
             );
         }
@@ -262,11 +286,11 @@
         //     complete instance transformation.  You should be able
         //     to apply all three transforms on each individual object.
 
-            gl.uniformMatrix4fv(rotationMatrix, 
+/*            gl.uniformMatrix4fv(rotationMatrix, 
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getRotationMatrix(currentRotation, 0.0, 0.0, 0.0).toWebGLArray()   
                 )
-            );
+            );*/
 
 
         gl.uniformMatrix4fv(cameraMatrix,
@@ -277,7 +301,7 @@
                 //     name for the camera's x-coordinate and z-
                 //     coordinate, respectively.
                 new Vector(currentSide, 0, currentZoom),   //Location of camera
-                new Vector(0, 0, 0),                       //Where camera is pointed
+                new Vector(0, 0, currentZoom),                       //Where camera is pointed
                 new Vector(0, 0.5, 0)                      //Tilt of camera
             ).toWebGLArray()
         )
@@ -317,17 +341,10 @@
     //     be using one (typically) and so you should make sure to clean
     //     this up later.
 
-    //Set up ortho projection matrix (t, b, l, r, n, f)
-    gl.uniformMatrix4fv(orthoMatrix,
-        gl.FALSE, new Float32Array(
-            Matrix4x4.ortho(-2, 2, -2, 2, 0, 20).toWebGLArray()
-        )
-    );
-
     //Set up frustum projection matrix (t, b, l, r, n, f)                                
-    gl.uniformMatrix4fv(frustumMatrix,
+    gl.uniformMatrix4fv(projectionMatrix,
         gl.FALSE, new Float32Array(
-            Matrix4x4.frustum(-2, 2, -2, 2, 0.1, 50).toWebGLArray()
+            Matrix4x4.frustum(-5, 5, -5, 5, -10, 50).toWebGLArray()
         )
     );
 
@@ -336,7 +353,7 @@
     drawScene();
 
     // Set up the rotation toggle: clicking on the canvas does it.
-    $(canvas).click(function () {
+/*    $(canvas).click(function () {
         if (currentInterval) {
             clearInterval(currentInterval);
             currentInterval = null;
@@ -349,7 +366,7 @@
                 }
             }, 30);
         }
-    });
+    });*/
 
     // JD: This is a good start, but needs refinement in order
     //     to feel more intuitive.  i.e.:
