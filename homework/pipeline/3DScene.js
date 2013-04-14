@@ -70,9 +70,9 @@
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES, 
             transforms: {
-                trans: [0.0, 0.5, 0.0],         //put instance transforms into three separate arrays
-                scale: [0.5, 0.5, 0.5],
-                rotate: [0.0, 0.0, 0.0, 0.0]
+                trans: { x: 0.0, y: 0.5, z: 0.0 },         //put instance transforms into three separate arrays
+                scale: { x: 0.5, y: 0.5, z: 0.5 },
+                rotate: { x: 0.0, y: 0.0, z: 0.0 }
             },
             subshapes: [
                 {
@@ -80,9 +80,9 @@
                     vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: [-1, 0.0, 0.0],         //put instance transforms into three separate arrays
-                        scale: [1.0, 1.0, 1.0],
-                        rotate: [0.0, 0.0, 0.0, 0.0]
+                        trans: { x: -0.5, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 1.0, y: 1.0, z: 1.0 },
+                        rotate: { x: 0.0, y: 0.0, z: 0.0 }
                     }
                 },
                 {
@@ -90,9 +90,9 @@
                     vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
                     mode: gl.LINES,
                     transforms: {
-                        trans: [0.0, 0.0, 0.5],         //put instance transforms into three separate arrays
-                        scale: [1.0, 1.0, 1.0],
-                        rotate: [0.0, 0.0, 0.0, 0.0]
+                        trans: { x: 0.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 1.0, y: 1.0, z: 1.0 },
+                        rotate: { x: 0.0, y: 0.0, z: 0.0 }
                     }
                 }
             ]
@@ -215,37 +215,32 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
-        // Set the varying vertex coordinates.
-        gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
-        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
-        gl.drawArrays(object.mode, 0, object.vertices.length / 3);
-
         //Set up instance transforms: translation, scale, rotate **!!NOT assigning the right transforms to the right objects...
         if (object.transforms) {
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getTranslationMatrix( object.transforms.trans[0], 
-                                                    object.transforms.trans[1], 
-                                                    object.transforms.trans[2]
+                    Matrix4x4.getTranslationMatrix( object.transforms.trans.x, 
+                                                    object.transforms.trans.y, 
+                                                    object.transforms.trans.z
                                                   ).toWebGLArray()
                 )
             ),
 
             gl.uniformMatrix4fv(scaleMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getScaleMatrix( object.transforms.scale[0], 
-                                              object.transforms.scale[1], 
-                                              object.transforms.scale[2]
+                    Matrix4x4.getScaleMatrix( object.transforms.scale.x, 
+                                              object.transforms.scale.y, 
+                                              object.transforms.scale.z
                                             ).toWebGLArray()
                 )
             ),
 
             gl.uniformMatrix4fv(rotationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getRotationMatrix( object.transforms.rotate[0], 
-                                                 object.transforms.rotate[1], 
-                                                 object.transforms.rotate[2],
-                                                 object.transforms.rotate[3]
+                    Matrix4x4.getRotationMatrix( currentRotation, 
+                                                 object.transforms.rotate.x, 
+                                                 object.transforms.rotate.y,
+                                                 object.transforms.rotate.z
                                                ).toWebGLArray()
                 )
             );
@@ -266,11 +261,17 @@
 
             gl.uniformMatrix4fv(rotationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getRotationMatrix(0.0, 0.0, 0.0, 0.0).toWebGLArray()
+                    Matrix4x4.getRotationMatrix(currentRotation, 0.0, 0.0, 0.0).toWebGLArray()
                 )
             );
         }
+
+        // Set the varying vertex coordinates.
+        gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
+        gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
+        gl.drawArrays(object.mode, 0, object.vertices.length / 3);
     };
+
 
     /*
      * Displays the scene.
@@ -297,7 +298,7 @@
                 Matrix4x4.lookAt(
                     new Vector(cameraX, 0.0, cameraZ),         //Location of camera
                     new Vector(cameraX, 0.0, 0.0),                       //Where camera is pointed
-                    new Vector(0.0, 0.5, 0.0)                      //Tilt of camera
+                    new Vector(0.0, 1.0, 0.0)                      //Tilt of camera
                 ).toWebGLArray()
             )
         );
@@ -346,6 +347,7 @@
 
     // Set up the rotation toggle: clicking on the canvas does it.
 /*    $(canvas).click(function () {
+        console.log("here")
         if (currentInterval) {
             clearInterval(currentInterval);
             currentInterval = null;
@@ -373,27 +375,23 @@
 
         $("body").keypress(function(event) {
             if (event.keyCode == 119) {  //W key
-
                 cameraZ += 0.1;
                 drawScene();
 
             } else if (event.keyCode == 115) {  //S key
-
                 cameraZ -= 0.1;
                 drawScene();
 
             } else if (event.keyCode == 100) {  //D key
-
-                cameraX += 0.01;
+                cameraX += 0.1;
                 drawScene();
 
             } else if (event.keyCode == 97) {  //A key
-
-                cameraX -= 0.01;
+                cameraX -= 0.1;
                 drawScene();
 
             }
-            console.log(cameraZ)
+            console.log("z: "+cameraZ+" X: "+cameraX);
         });
 
 

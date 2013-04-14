@@ -48,7 +48,7 @@
             uniform mat4 cameraMatrix;
 
             void main(void) {                  //Fix instance transforms
-                gl_Position = projectionMatrix * cameraMatrix * /* rotationMatrix * scaleMatrix * translationMatrix **/ vec4(vertexPosition.xy, vertexPosition.z, 1.0);
+                gl_Position = /*projectionMatrix * cameraMatrix * /* rotationMatrix * scaleMatrix * translationMatrix **/ scaleMatrix * translationMatrix * vec4(vertexPosition,/*vertexPosition.xy, vertexPosition.z,*/ 1.0);
                 finalVertexColor = vec4(vertexColor, 1.0);
             }
         </script>
