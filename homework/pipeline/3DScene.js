@@ -66,42 +66,30 @@
 
     // Build the objects to display.
     objectsToDraw = [
-
         {
             color: { r: 1.0, g: 0.0, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             mode: gl.LINES, 
             transforms: {
-                tx: 0.0,
-                ty: 0.0,
-                tz: 0.0,
-                sx: 0.5,
-                sy: 0.5,
-                sz: 0.5
+                trans: [0.0, 0.0, 0.0],         //put instance transforms into three separate arrays
+                scale: [0.2, 0.2, 0.2],
+                rotate: [0.0, 0.0, 0.0, 0.0]
             },
             subshapes: [
                 {
-                    color: { r: 0.0, g: 1.0, b: 0.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
-                    mode: gl.LINES,
+                    color: { r: 0.0, g: 0.0, b: 1.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
                     transforms: {
-                        tx: -0.2,
-                        ty: -0.2,
-                        tz: -0.2,
-                        sx: 0.5,
-                        sy: 0.5,
-                        sz: 0.5
-                    },
-                    subshapes: [
-                        {
-                            color: { r: 0.0, g: 0.0, b: 1.0 },
-                            vertices: Shapes.sphere(),
-                            mode: gl.LINES
-                        }
-                    ]
+                        trans: [-0.5, 0.0, 0.0],         //put instance transforms into three separate arrays
+                        scale: [1.0, 1.0, 1.0],
+                        rotate: [0.0, 0.0, 0.0, 0.0]
+                    }
                 }
             ]
-        },
+        }
+    ];
+        /*},
 
         {
             color: { r: 1.0, g: 1.0, b: 0.0 },
@@ -112,16 +100,13 @@
             ),
             mode: gl.TRIANGLES,
             transforms: {
-                tx: 0.0,
-                ty: 0.0,
-                tz: 0.0,
-                sx: 1.5,
-                sy: 1.5,
-                sz: 1.5
+                trans: [0.0, 0.0, 0.0],         //put instance transforms into three separate arrays
+                scale: [1.5, 1.5, 1.5],
+                rotate: [0.0, 0.0, 0.0, 0.0]
             }
         }
         
-    ];
+    ];*/
 
     // Pass the vertices and colors to WebGL.
     var passSubVerts = function (composites) {
@@ -227,28 +212,29 @@
         gl.vertexAttribPointer(vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
 
-        //Set up translation matrix (tx, ty, tz) and scale matrix (sx, sy, sz)
+        //Set up instance transforms: translation, scale, rotate
         if (object.transforms) {
+            console.log("here");
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getTranslationMatrix( object.transforms.tx, 
-                                                    object.transforms.ty, 
-                                                    object.transforms.tz
+                    Matrix4x4.getTranslationMatrix( object.transforms.trans[0], 
+                                                    object.transforms.trans[1], 
+                                                    object.transforms.trans[2]
                                                   ).toWebGLArray()
                 )
             );
-console.log("scale: "+object.transforms.sx+object.transforms.sy+object.transforms.sz)
+
             gl.uniformMatrix4fv(scaleMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getScaleMatrix( object.transforms.sx, 
-                                              object.transforms.sy, 
-                                              object.transforms.sz
+                    Matrix4x4.getScaleMatrix( object.transforms.scale[0], 
+                                              object.transforms.scale[1], 
+                                              object.transforms.scale[2]
                                             ).toWebGLArray()
                 )
             );
 
         } else {
-            //Default translation and scale is (0, 0, 0) - Default position
+            //Default instance transform with original position, scale, and no rotation
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getTranslationMatrix(0.0, 0.0, 0.0).toWebGLArray()
@@ -257,7 +243,7 @@ console.log("scale: "+object.transforms.sx+object.transforms.sy+object.transform
 
             gl.uniformMatrix4fv(scaleMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getScaleMatrix(0.0, 0.0, 0.0).toWebGLArray()
+                    Matrix4x4.getScaleMatrix(1.0, 1.0, 1.0).toWebGLArray()
                 )
             );
         }
@@ -275,11 +261,13 @@ console.log("scale: "+object.transforms.sx+object.transforms.sy+object.transform
         //     only translation is done per object.  That is not a
         //     complete instance transformation.  You should be able
         //     to apply all three transforms on each individual object.
-        gl.uniformMatrix4fv(rotationMatrix, 
-            gl.FALSE, new Float32Array(
-                Matrix4x4.getRotationMatrix(currentRotation, 0, 1, 0).toWebGLArray()   
-            )
-        );
+
+            gl.uniformMatrix4fv(rotationMatrix, 
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getRotationMatrix(currentRotation, 0.0, 0.0, 0.0).toWebGLArray()   
+                )
+            );
+
 
         gl.uniformMatrix4fv(cameraMatrix,
         gl.FALSE, new Float32Array(
@@ -375,26 +363,30 @@ console.log("scale: "+object.transforms.sx+object.transforms.sy+object.transform
     //
     //     - jQuery is visible to this code (see click above);
     //       for consistency, use jQuery for the binding here also.
-  //  canvas.onmouseover = function () {
-        // JD: You can bind onkeydown to the body element so that
-        //     it's "on" all the time.  This also eliminates the
-        //     need for the mouseover event.
+
         $("body").keypress(function(event) {
-            console.log("here"+event.keyCode);
             if (event.keyCode == 119) {  //W key
+
                 currentZoom += 0.1;
                 drawScene();
+
             } else if (event.keyCode == 115) {  //S key
+
                 currentZoom -= 0.1;
                 drawScene();
+
             } else if (event.keyCode == 100) {  //D key
+
                 currentSide += 0.01;
                 drawScene();
+
             } else if (event.keyCode == 97) {  //A key
+
                 currentSide -= 0.01;
                 drawScene();
+
             }
         });
-  //  };
+
 
 }(document.getElementById("space-scene")));

@@ -115,13 +115,14 @@ var Shapes = {
 
 
     sphere: function () {
-        var latitudeBands =30,
+        var latitudeBands = 30,
             longitudeBands = 30,
-            radius = 0.8,
-            i = 0,
+            i,
             vertexPositionData = [],
-            vertices = [];
-
+            indicePositionData = [];
+        /*
+         Generate vertex data
+        */
         for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
             var theta = latNumber * Math.PI / latitudeBands;
             var sinTheta = Math.sin(theta);
@@ -138,17 +139,23 @@ var Shapes = {
                 var u = 1- (longNumber / longitudeBands);
                 var v = latNumber / latitudeBands;
  
-                vertexPositionData.push(radius * x);
-                vertexPositionData.push(radius * y);
-                vertexPositionData.push(radius * z);
+                vertexPositionData.push([x, y, z]);
             }
         }
-
-        for (var i = 0; i < vertexPositionData.length; i += 2) {
-            vertices.push( radius * vertexPositionData[i] );    
+        /*
+         Connect vertices with generated indices that create traingles around the sphere
+        */
+        for (i = 0; i < vertexPositionData.length; i += 1) {
+            indicePositionData.push( 
+                                    [i, i + 1, i + latitudeBands + 1],
+                                    [i + 1, i + latitudeBands + 1, i + latitudeBands + 2]
+                                   );    
         }
 
-        return vertices;
+        return {
+            vertices: vertexPositionData,
+            indices: indicePositionData
+        }
     },
 
     /*
