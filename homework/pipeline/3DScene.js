@@ -22,8 +22,8 @@
         currentRotation = 0.0,
         currentInterval,
         currentSCALER = 0.5,
-        currentZoom = 0.1,
-        currentSide = 0.0,
+        cameraZ = 1.0,
+        cameraX = 0.0,
         rotationMatrix,
         cameraMatrix,
         projectionMatrix,
@@ -251,7 +251,6 @@
             );
 
         } else {
-console.log("not here);")
             //Default instance transform with original position, scale, and no rotation
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
@@ -294,18 +293,16 @@ console.log("not here);")
 
 
         gl.uniformMatrix4fv(cameraMatrix,
-        gl.FALSE, new Float32Array(
-            Matrix4x4.lookAt(
-                // JD: Good stab at integrating the camera, but
-                //     currentSide and currentZoom are not good
-                //     name for the camera's x-coordinate and z-
-                //     coordinate, respectively.
-                new Vector(currentSide, 0, currentZoom),   //Location of camera
-                new Vector(0, 0, currentZoom),                       //Where camera is pointed
-                new Vector(0, 0.5, 0)                      //Tilt of camera
-            ).toWebGLArray()
-        )
-    );
+            gl.FALSE, new Float32Array(
+                Matrix4x4.lookAt(
+                    new Vector(cameraX, 0.0, cameraZ),         //Location of camera
+                    new Vector(cameraX, 0.0, 0.0),                       //Where camera is pointed
+                    new Vector(0.0, 0.5, 0.0)                      //Tilt of camera
+                ).toWebGLArray()
+            )
+        );
+
+
 
         // Display the objects.
 
@@ -336,15 +333,10 @@ console.log("not here);")
         gl.flush();
     };
 
-    // JD: I can see how you might have been experimenting with a good
-    //     projection matrix here.  But in the end, you'll really only
-    //     be using one (typically) and so you should make sure to clean
-    //     this up later.
-
     //Set up frustum projection matrix (t, b, l, r, n, f)                                
     gl.uniformMatrix4fv(projectionMatrix,
         gl.FALSE, new Float32Array(
-            Matrix4x4.frustum(-5, 5, -5, 5, -10, 50).toWebGLArray()
+            Matrix4x4.frustum(3, -3, -3, 3, 1, 20).toWebGLArray()
         )
     );
 
@@ -377,32 +369,31 @@ console.log("not here);")
     //
     //     - Already mentioned the bad names, but they are worth
     //       mentioning again!
-    //
-    //     - jQuery is visible to this code (see click above);
-    //       for consistency, use jQuery for the binding here also.
+
 
         $("body").keypress(function(event) {
             if (event.keyCode == 119) {  //W key
 
-                currentZoom += 0.1;
+                cameraZ += 0.1;
                 drawScene();
 
             } else if (event.keyCode == 115) {  //S key
 
-                currentZoom -= 0.1;
+                cameraZ -= 0.1;
                 drawScene();
 
             } else if (event.keyCode == 100) {  //D key
 
-                currentSide += 0.01;
+                cameraX += 0.01;
                 drawScene();
 
             } else if (event.keyCode == 97) {  //A key
 
-                currentSide -= 0.01;
+                cameraX -= 0.01;
                 drawScene();
 
             }
+            console.log(cameraZ)
         });
 
 
