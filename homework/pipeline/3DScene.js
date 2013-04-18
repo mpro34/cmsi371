@@ -21,10 +21,10 @@
         // Important state variables.
         currentRotation = 0.0,
         currentInterval,
-        cameraZ = 1.0,
+        cameraZ = 20.0, // JD: Change #1---move camera further back, because ***
         cameraX = 0.0,
         cxPointer = 0.0,
-        czPointer = -1.0,
+        czPointer = 0.0, // JD: Change #1a---adjustment due to new cameraZ.
         alpha = 0.0,
         alphaRads = 0.0,
         viewRadius = Math.abs(cameraZ),
@@ -337,7 +337,10 @@
         //Set up frustum projection matrix (t, b, l, r, n, f)                                
         gl.uniformMatrix4fv(projectionMatrix,
             gl.FALSE, new Float32Array(
-                Matrix4x4.frustum(5, -5, -5, 5, 1, 70).toWebGLArray()
+                // JD: *** Change #2, we move the near plane further away from the camera
+                //         to prevent too much distortion (draw the frustum on a piece
+                //         of paper and you'll see why).
+                Matrix4x4.frustum(5, -5, -5, 5, 10, 1000).toWebGLArray()
             )
         );
 
@@ -393,8 +396,12 @@
     });*/
 
         $("body").keydown(function(event) {
-            event.preventDefault();
+            event.preventDefault(); // JD: Minor tweak---you don't want this all the way
+                                    //     up here because it kills *all* keyboard activity.
+                                    //     Do preventDefault only if you have handled a
+                                    //     keypress.
             if (event.keyCode == 38) {  //Up key
+                // JD: ***** This will need to be adjusted (see below).
                 cameraZ -= 0.1;
                 drawScene();
 
@@ -416,9 +423,17 @@
             }
 
             alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
-            cxPointer = viewRadius * Math.sin( alphaRads );
-            czPointer = viewRadius * Math.cos( alphaRads );    
 
+            // JD: Change #3, your cx- and czPointer calculations were originally
+            //     based on the origin; they should take into account the new
+            //     camera location.
+            cxPointer = viewRadius * Math.sin( alphaRads ) + cameraX;
+            // JD: Change #3a, we need to negate the cosine because negative z values
+            //     are farther away.
+            czPointer = -viewRadius * Math.cos( alphaRads ) + cameraZ;
+            // JD: Future change #4: Now that this works, your forward/back logic
+            //     (see *****) will now need to change to take into account the
+            //     direction that the viewer is facing.
             
             //console.log("alpha"+alpha,"viewRadius"+viewRadius,"cxPointer"+cxPointer, "czPointer"+czPointer);
         });
