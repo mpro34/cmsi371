@@ -80,12 +80,32 @@
             },
             subshapes: [
                 {
+                    color: { r: 0.0, g: 1.0, b: 1.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: 0.5, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 5.0, y: 9.0, z: 0.5 },
+                        rotate: { x: 0.0, y: 0.5, z: 0.0 }
+                    }
+                },
+                {
+                    color: { r: 0.0, g: 1.0, b: 0.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: 1.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 5.0, y: 9.0, z: 0.5 },
+                        rotate: { x: 0.0, y: 0.0, z: 0.5 }
+                    }
+                }
+                {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
                     vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: { x: 0.0, y: 0.0, z: -2.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 2.5, y: 4.0, z: 0.5 },
+                        trans: { x: 0.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 5.0, y: 9.0, z: 0.5 },
                         rotate: { x: 0.0, y: 0.5, z: 0.0 }
                     }
                 },
@@ -94,18 +114,18 @@
                     vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: { x: 0.5, y: 0.0, z: -2.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 2.0, y: 4.0, z: 0.5 },
+                        trans: { x: 0.5, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 5.0, y: 9.0, z: 0.5 },
                         rotate: { x: 0.0, y: 0.5, z: 0.0 }
                     }
                 },
                 {
                     color: { r: 0.0, g: 1.0, b: 0.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: { x: -1.0, y: 0.0, z: -1.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 1.0, y: 1.0, z: 1.0 },
+                        trans: { x: 1.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 5.0, y: 9.0, z: 0.5 },
                         rotate: { x: 0.0, y: 0.0, z: 0.5 }
                     }
                 }
