@@ -69,102 +69,56 @@
 
     // Build the objects to display.
     objectsToDraw = [
-        {
-            color: { r: 1.0, g: 0.0, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-            mode: gl.TRIANGLES, 
-            transforms: {
-                trans: { x: -3.0, y: 0.0, z: 1.0 },         //put instance transforms into three separate arrays
-                scale: { x: 1.0, y: 1.0, z: 1.0 },
-                rotate: { x: 0.0, y: 0.0, z: 0.5 }
+            {
+                color: { r: 0.0, g: 1.0, b: 1.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 0.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                    scale: { x: 36.0, y: 8.0, z: 0.5 },
+                    rotate: { x: 0.0, y: 0.5, z: 0.0 }
+                }
             },
-            subshapes: [
-                {
-                    color: { r: 0.0, g: 1.0, b: 1.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                    mode: gl.TRIANGLES,
-                    transforms: {
-                        trans: { x: 0.5, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 5.0, y: 9.0, z: 0.5 },
-                        rotate: { x: 0.0, y: 0.5, z: 0.0 }
-                    }
-                },
-                {
-                    color: { r: 0.0, g: 1.0, b: 0.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                    mode: gl.TRIANGLES,
-                    transforms: {
-                        trans: { x: 1.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 5.0, y: 9.0, z: 0.5 },
-                        rotate: { x: 0.0, y: 0.0, z: 0.5 }
-                    }
+            {
+                color: { r: 0.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: -15.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                    scale: { x: 0.5, y: 8.0, z: 13.0 },
+                    rotate: { x: 0.0, y: 0.5, z: 0.0 }
                 }
-                {
-                    color: { r: 0.0, g: 0.0, b: 1.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                    mode: gl.TRIANGLES,
-                    transforms: {
-                        trans: { x: 0.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 5.0, y: 9.0, z: 0.5 },
-                        rotate: { x: 0.0, y: 0.5, z: 0.0 }
-                    }
-                },
-                {
-                    color: { r: 0.0, g: 1.0, b: 1.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                    mode: gl.TRIANGLES,
-                    transforms: {
-                        trans: { x: 0.5, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 5.0, y: 9.0, z: 0.5 },
-                        rotate: { x: 0.0, y: 0.5, z: 0.0 }
-                    }
-                },
-                {
-                    color: { r: 0.0, g: 1.0, b: 0.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                    mode: gl.TRIANGLES,
-                    transforms: {
-                        trans: { x: 1.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 5.0, y: 9.0, z: 0.5 },
-                        rotate: { x: 0.0, y: 0.0, z: 0.5 }
-                    }
-                }
-            ]
-        }/*,
-    
-        {
-            color: { r: 1.0, g: 0.0, b: 0.5 },
-            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            mode: gl.TRIANGLES, 
-            transforms: {
-                trans: { x: 2.5, y: 0.0, z: -3.0 },         //put instance transforms into three separate arrays
-                scale: { x: 1.0, y: 1.0, z: 1.0 },
-                rotate: { x: 0.0, y: 0.0, z: 0.0 }
             },
-            subshapes: [
-                {
-                    color: { r: 0.0, g: 0.0, b: 1.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
-                    mode: gl.TRIANGLES,
-                    transforms: {
-                        trans: { x: 3.0, y: 0.5, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 0.5, y: 0.5, z: 0.5 },
-                        rotate: { x: 0.0, y: 0.0, z: 0.0 }
-                    }
-                },
-                {
-                    color: { r: 0.0, g: 1.0, b: 0.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
-                    mode: gl.TRIANGLES,
-                    transforms: {
-                        trans: { x: 2.0, y: 0.5, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 0.5, y: 0.5, z: 0.5 },
-                        rotate: { x: 0.0, y: 0.0, z: 0.0 }
-                    }
+            {
+                color: { r: 0.0, g: 0.0, b: 1.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 15.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                    scale: { x: 0.5, y: 8.0, z: 18.0 },
+                    rotate: { x: 0.0, y: 0.5, z: 0.0 }
                 }
-            ]
-        }*/
-        
+            }/*,
+            {
+                color: { r: 1.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 0.5, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                    scale: { x: 5.0, y: 9.0, z: 0.5 },
+                    rotate: { x: 0.0, y: 0.5, z: 0.0 }
+                }
+            },
+            {
+                color: { r: 0.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 1.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                    scale: { x: 5.0, y: 9.0, z: 0.5 },
+                    rotate: { x: 0.0, y: 0.0, z: 0.5 }
+                }
+            } */    
     ];
 
     // Pass the vertices and colors to WebGL.
@@ -297,22 +251,22 @@
 
         } else {
 
-            //Default instance transform with original position, scale, and no rotation
+            //Default to identity matrix.
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getTranslationMatrix(0.0, 0.0, 0.0).toWebGLArray()
+                    new Matrix4x4().toWebGLArray()
                 )
             ),
 
             gl.uniformMatrix4fv(scaleMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getScaleMatrix(1.0, 1.0, 1.0).toWebGLArray()
+                    new Matrix4x4().toWebGLArray()
                 )
             ),
 
             gl.uniformMatrix4fv(rotationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getRotationMatrix(currentRotation, 0.0, 0.0, 0.0).toWebGLArray()
+                    currentRotation, 0.0, 1.0, 0.0
                 )
             );
         }
@@ -342,12 +296,13 @@
                 Matrix4x4.getRotationMatrix(currentRotation, 0.0, 1.0, 0.0).toWebGLArray()
             )
         );*/
-
-//Left and Right arrow keys rotate the camera, not physically move it.
+/*
+   Left and Right arrow keys rotate the camera, not physically move it.
+*/
         gl.uniformMatrix4fv(cameraMatrix,
             gl.FALSE, new Float32Array(
                 Matrix4x4.lookAt(
-                    new Vector(cameraX, 0.0, cameraZ),             //Location of camera
+                    new Vector(0.0, 0.0, cameraZ),             //Location of camera
                     new Vector(cxPointer, 0.0, czPointer),         //Where camera is pointed
                     new Vector(0.0, 1.0, 0.0)                      //Tilt of camera
                 ).toWebGLArray()
@@ -399,7 +354,7 @@
     drawScene();
 
     // Set up the rotation toggle: clicking on the canvas does it.
-/*    $(canvas).click(function () {
+    $(canvas).click(function () {
         console.log("here")
         if (currentInterval) {
             clearInterval(currentInterval);
@@ -413,7 +368,7 @@
                 }
             }, 30);
         }
-    });*/
+    });
 
         $("body").keydown(function(event) {
             event.preventDefault(); // JD: Minor tweak---you don't want this all the way
@@ -443,6 +398,7 @@
             }
 
             alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
+
 
             // JD: Change #3, your cx- and czPointer calculations were originally
             //     based on the origin; they should take into account the new

@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="3DScene.css" />
     </head>
     <body>
-        <h1>Space Scene</h1>
+        <h1>Whiting's World</h1>
 
         <p>Move with the Arrow Keys!</p>
 
@@ -48,7 +48,7 @@
             uniform mat4 cameraMatrix;
 
             void main(void) {                  
-                gl_Position = projectionMatrix * cameraMatrix * rotationMatrix * scaleMatrix * translationMatrix * vec4(vertexPosition, 1.0);
+                gl_Position = projectionMatrix * cameraMatrix * rotationMatrix * scaleMatrix * translationMatrix * vec4(vertexPosition.xy, 2.0 * vertexPosition.z, 1.0);
                 finalVertexColor = vec4(vertexColor, 1.0);
             }
         </script>
