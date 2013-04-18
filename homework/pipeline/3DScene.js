@@ -21,7 +21,6 @@
         // Important state variables.
         currentRotation = 0.0,
         currentInterval,
-        currentSCALER = 0.5,
         cameraZ = 1.0,
         cameraX = 0.0,
         cxPointer = 0.0,
@@ -323,14 +322,14 @@
                 Matrix4x4.getRotationMatrix(currentRotation, 0.0, 1.0, 0.0).toWebGLArray()
             )
         );*/
-//How to change the rotation origin to be focused on the location of the camera.
-//i.e. <- and -> arrow keys rotate the camera, not physically move it.
+
+//Left and Right arrow keys rotate the camera, not physically move it.
         gl.uniformMatrix4fv(cameraMatrix,
             gl.FALSE, new Float32Array(
                 Matrix4x4.lookAt(
-                    new Vector(cameraX, 0.0, cameraZ),         //Location of camera
-                    new Vector(cxPointer, 0.0, czPointer),             //Where camera is pointed
-                    new Vector(0.0, 1.0, 0.0)                  //Tilt of camera
+                    new Vector(cameraX, 0.0, cameraZ),             //Location of camera
+                    new Vector(cxPointer, 0.0, czPointer),         //Where camera is pointed
+                    new Vector(0.0, 1.0, 0.0)                      //Tilt of camera
                 ).toWebGLArray()
             )
         );
@@ -341,7 +340,6 @@
                 Matrix4x4.frustum(5, -5, -5, 5, 1, 70).toWebGLArray()
             )
         );
-
 
 
         // Display the objects.
@@ -394,16 +392,6 @@
         }
     });*/
 
-    // JD: This is a good start, but needs refinement in order
-    //     to feel more intuitive.  i.e.:
-    //
-    //     - You're only moving the camera location, but it forever
-    //       is looking at the origin.  I don't think you want or
-    //       intend this.
-    //
-    //     - Already mentioned the bad names, but they are worth
-    //       mentioning again!
-
         $("body").keydown(function(event) {
             event.preventDefault();
             if (event.keyCode == 38) {  //Up key
@@ -423,16 +411,16 @@
                 drawScene();
             }
 
-            if (Math.abs(alpha) >= 360.0) {
+            if (Math.abs( alpha ) >= 360.0) {
                 alpha = 0.0;
             }
 
             alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
-            cxPointer = viewRadius * Math.sin(alphaRads);
-            czPointer = viewRadius * Math.cos(alphaRads);    
+            cxPointer = viewRadius * Math.sin( alphaRads );
+            czPointer = viewRadius * Math.cos( alphaRads );    
 
             
-            console.log("alpha"+alpha,"viewRadius"+viewRadius,"cxPointer"+cxPointer, "czPointer"+czPointer);
+            //console.log("alpha"+alpha,"viewRadius"+viewRadius,"cxPointer"+cxPointer, "czPointer"+czPointer);
         });
 
 
