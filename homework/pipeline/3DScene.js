@@ -28,6 +28,7 @@
         alpha = 0.0,
         alphaRads = 0.0,
         viewRadius = Math.abs(cameraZ),
+        keyEvent = false,
         rotationMatrix,
         cameraMatrix,
         projectionMatrix,
@@ -371,30 +372,35 @@
     });
 
         $("body").keydown(function(event) {
-            event.preventDefault(); // JD: Minor tweak---you don't want this all the way
-                                    //     up here because it kills *all* keyboard activity.
-                                    //     Do preventDefault only if you have handled a
-                                    //     keypress.
+
             if (event.keyCode == 38) {  //Up key
                 // JD: ***** This will need to be adjusted (see below).
+               // cameraX -= cxPointer+0.1;
                 cameraZ -= 0.1;
                 drawScene();
 
             } else if (event.keyCode == 40) {  //Down key
+              //  cameraX += cxPointer+0.1;
                 cameraZ += 0.1;
                 drawScene();
 
-            } else if (event.keyCode == 39) {  //Right key
+            } else if (event.keyCode == 37) {  //Left key
                 alpha -= 3.0;
                 drawScene();
 
-            } else if (event.keyCode == 37) {  //Left key
+            } else if (event.keyCode == 39) {  //Right key
                 alpha += 3.0;
                 drawScene();
             }
 
             if (Math.abs( alpha ) >= 360.0) {
                 alpha = 0.0;
+            }
+
+            if (keyEvent == true) {
+                keyEvent = false;
+                drawScene();
+                event.preventDefault();
             }
 
             alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
@@ -404,14 +410,12 @@
             //     based on the origin; they should take into account the new
             //     camera location.
             cxPointer = viewRadius * Math.sin( alphaRads ) + cameraX;
-            // JD: Change #3a, we need to negate the cosine because negative z values
-            //     are farther away.
             czPointer = -viewRadius * Math.cos( alphaRads ) + cameraZ;
             // JD: Future change #4: Now that this works, your forward/back logic
             //     (see *****) will now need to change to take into account the
             //     direction that the viewer is facing.
+            console.log("cameraX: "+cameraX,"cameraZ: "+cameraZ);
             
-            //console.log("alpha"+alpha,"viewRadius"+viewRadius,"cxPointer"+cxPointer, "czPointer"+czPointer);
         });
 
 
