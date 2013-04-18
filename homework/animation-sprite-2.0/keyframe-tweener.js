@@ -96,6 +96,7 @@ var KeyframeTweener = {
             width = settings.width,
             height = settings.height,
             sprites = settings.sprites;
+			//background = settings.poke_background;
 
         setInterval(function () {
             // Some reusable loop variables.
@@ -120,53 +121,15 @@ var KeyframeTweener = {
                 duration;
 
              //Draw custom background.
+		//	 background();
              // JD: Doh!!!  This totally breaks separation of concerns.  This should
              //     be defined *outside* KeyframeTweener then *passed in* as a parameter.
              //     Because now, your reusable library is NOT a reusable library anymore...
              //
              //     (not to mention that these definitions pollute the top level namespace
              //      because you already ended your var statement)
-            table = function () {
-                var img = new Image();                           
-                img.src = "../animation-sprite-2.0/images/poke_table.png";
-                renderingContext.drawImage(img,275,170);
-            };
+			
 
-            drawText = function () {
-                renderingContext.fillStyle = "Black";
-                renderingContext.font = "22pt Helvetica";
-                renderingContext.textAlign = "center";
-                renderingContext.textBaseline = "middle";
-                renderingContext.fillText("I Choose You! Random Pokemon Spawns...", canvas.width / 2 , canvas.height / 2);
-            };
-
-            //Wooden Floor    
-            renderingContext.fillStyle = "black";
-            renderingContext.fillRect(0, 0, 900, 600);
-            for (var i=0; i<55; i+=2) {
-                renderingContext.fillStyle = "#C2A385";
-                renderingContext.fillRect(100, 10*i, 800, 10);
-                renderingContext.fillStyle = "#746250";
-                renderingContext.fillRect(100, 10*i, 800, 4);
-                renderingContext.fillStyle = "#8A5C2E";
-                renderingContext.fillRect(100, 10*(i+1), 800, 10);
-                renderingContext.fillStyle = "#C4AE96";
-                renderingContext.fillRect(100, 10*(i+1), 800, 4);
-            }
-                
-            //Carpet
-            renderingContext.fillStyle = "#5D4E40";        //dark brown
-            renderingContext.fillRect(187, 137, 626, 323);
-            renderingContext.fillStyle = "#E6E600";        //light yellow
-            renderingContext.fillRect(190, 140, 620, 320);
-            renderingContext.fillStyle = "#CCCC00";        //dark yellow
-            renderingContext.fillRect(195, 145, 610, 310);
-            renderingContext.fillStyle = "#007ACC";        //blue
-            renderingContext.fillRect(200, 150, 600, 300);
-
-            table();
-            drawText();
-            
 
 
             // For every sprite, go to the current pair of keyframes.
@@ -183,7 +146,7 @@ var KeyframeTweener = {
 
                         // Save the rendering context state.
                         renderingContext.save();
-
+                       
                         // Set up our start and distance values, using defaults
                         // if necessary.
                         ease = startKeyframe.ease || KeyframeTweener.linear;

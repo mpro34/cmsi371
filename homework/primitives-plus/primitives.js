@@ -257,10 +257,10 @@ var Primitives = {
             if (count <= dash) { 
                 this.setPixel(context, x, y, color[0], color[1], color[2]);  
                 count++;
-            } // JD: Keep your else if on the same line as the prior closing }.
-            else if (count > dash) {
+            } else if (count > dash) {
                 count = 0;
             }
+			
             if (x === x2) {
                 return;
             }
@@ -291,8 +291,10 @@ var Primitives = {
     
         var xi = 0,
             yi = 0,
-            ydist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(y,2))),
-            xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2))),
+			i,
+			j;
+       //     ydist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(y,2))),
+       //     xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2))),
             // JD: Glitch #1---Your color delta is based on the radius.
             //
             //     Style notes: why is r in parentheses?  Plus, with an array,
@@ -307,23 +309,38 @@ var Primitives = {
                 ];
             */
             //     Finally, "VDelta" should not begin with a capital letter.
-            VDelta = [(c2[0] - c1[0]) / (r),
-                      (c2[1] - c1[1]) / (r),
-                      (c2[2] - c1[2]) / (r)];
-
-        //Top and Bottom pieces  
-        while (xi < xdist) {   
-            this.setPixel(context, xc + y - xi, yc - x, c1[0], c1[1], c1[2]); 
-            this.setPixel(context, xc + y - xi, yc + x, c1[0], c1[1], c1[2]);
-            xi++ // JD: Missing semicolon!
+            vDelta = [
+			    (c2[0] - c1[0]),
+                (c2[1] - c1[1]),
+                (c2[2] - c1[2]) 
+		    ];
+        //xc, yc are the distances to the center of the circle
+		//x, y are the radii
+        //Top to Bottom pieces  
+        for  (i = 0.0; i < 20.0; i += 1) {
+//		    for (j = 0; j < 30; j++) {
+            //    this.setPixel(context, xc + x - i, yc + y - i, c1[0], c1[1], c1[2]);
+                this.setPixel(context, xc + x - i, yc - y + i, c1[0], c1[1], c1[2]);
+            //    this.setPixel(context, xc + y - i, yc + x - i, c1[0], c1[1], c1[2]);
+            //    this.setPixel(context, xc + y - i, yc - x + i, c1[0], c1[1], c1[2]);
+            //    this.setPixel(context, xc - x + i, yc + y - i, c1[0], c1[1], c1[2]);
+            //    this.setPixel(context, xc - x + i, yc - y + i, c1[0], c1[1], c1[2]);
+            //    this.setPixel(context, xc - y + i, yc + x - i, c1[0], c1[1], c1[2]);
+                this.setPixel(context, xc - y + i, yc - x + i, c1[0], c1[1], c1[2]); 
+		//	}
+			console.log("HERE");
+            c1[0] += c2[0];
+            c1[1] += c2[1];
+            c1[2] += c2[2];
         }
 
-        //Draw one horizontal line (middle halves)    
+
+     /*   //Draw one horizontal line (middle halves)    
         while (yi < ydist) {
             this.setPixel(context, xc + x - yi, yc - y, c1[0], c1[1], c1[2]);
             this.setPixel(context, xc + x - yi, yc + y, c1[0], c1[1], c1[2]);
-            yi++ // JD: Missing semicolon!
-        } 
+            yi++;
+        } */
 
         // JD: Glitch #2---You are changing the gradient colors *in place*.
         //     This means that future calls to plotCirclePoints will send
@@ -341,9 +358,7 @@ var Primitives = {
         //     calculation based on the radius, you should still have seen
         //     a single red-to-green (or vice versa) change, one for each
         //     half of the circle.
-        c1[0] += VDelta[0];
-        c1[1] += VDelta[1];
-        c1[2] += VDelta[2];
+
     },
 
     // First, the most naive possible implementation: circle by trigonometry.
@@ -356,7 +371,7 @@ var Primitives = {
 
             // We compute the first octant, from zero to pi/4.
             x = r,
-            y = 0;
+            y = 0.0;
 
         while (x >= y) {
             this.plotCirclePoints(context, xc, yc, x, y, r, c1, c2);
@@ -369,7 +384,7 @@ var Primitives = {
     circleDDA: function (context, xc, yc, r, c1, c2) {
         var epsilon = 1 / r,
             x = r,
-            y = 0;
+            y = 0.0;
 
         while (x >= y) {
             this.plotCirclePoints(context, xc, yc, x, y, r, c1, c2);

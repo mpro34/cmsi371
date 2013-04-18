@@ -24,6 +24,11 @@
         currentSCALER = 0.5,
         cameraZ = 1.0,
         cameraX = 0.0,
+        cxPointer = 0.0,
+        czPointer = -1.0,
+        alpha = 0.0,
+        alphaRads = 0.0,
+        viewRadius = Math.abs(cameraZ),
         rotationMatrix,
         cameraMatrix,
         projectionMatrix,
@@ -70,8 +75,51 @@
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES, 
             transforms: {
-                trans: { x: 0.0, y: 0.5, z: 0.0 },         //put instance transforms into three separate arrays
-                scale: { x: 0.5, y: 0.5, z: 0.5 },
+                trans: { x: -3.0, y: 0.0, z: 1.0 },         //put instance transforms into three separate arrays
+                scale: { x: 1.0, y: 1.0, z: 1.0 },
+                rotate: { x: 0.0, y: 0.0, z: 0.5 }
+            },
+            subshapes: [
+                {
+                    color: { r: 0.0, g: 0.0, b: 1.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: 0.0, y: 0.0, z: -2.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 2.5, y: 4.0, z: 0.5 },
+                        rotate: { x: 0.0, y: 0.5, z: 0.0 }
+                    }
+                },
+                {
+                    color: { r: 0.0, g: 1.0, b: 1.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: 0.5, y: 0.0, z: -2.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 2.0, y: 4.0, z: 0.5 },
+                        rotate: { x: 0.0, y: 0.5, z: 0.0 }
+                    }
+                },
+                {
+                    color: { r: 0.0, g: 1.0, b: 0.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: -1.0, y: 0.0, z: -1.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 1.0, y: 1.0, z: 1.0 },
+                        rotate: { x: 0.0, y: 0.0, z: 0.5 }
+                    }
+                }
+            ]
+        }/*,
+    
+        {
+            color: { r: 1.0, g: 0.0, b: 0.5 },
+            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+            mode: gl.TRIANGLES, 
+            transforms: {
+                trans: { x: 2.5, y: 0.0, z: -3.0 },         //put instance transforms into three separate arrays
+                scale: { x: 1.0, y: 1.0, z: 1.0 },
                 rotate: { x: 0.0, y: 0.0, z: 0.0 }
             },
             subshapes: [
@@ -80,42 +128,25 @@
                     vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: { x: -0.5, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 1.0, y: 1.0, z: 1.0 },
+                        trans: { x: 3.0, y: 0.5, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 0.5, y: 0.5, z: 0.5 },
                         rotate: { x: 0.0, y: 0.0, z: 0.0 }
                     }
                 },
                 {
                     color: { r: 0.0, g: 1.0, b: 0.0 },
-                    vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-                    mode: gl.LINES,
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    mode: gl.TRIANGLES,
                     transforms: {
-                        trans: { x: 0.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                        scale: { x: 1.0, y: 1.0, z: 1.0 },
+                        trans: { x: 2.0, y: 0.5, z: 0.0 },         //put instance transforms into three separate arrays
+                        scale: { x: 0.5, y: 0.5, z: 0.5 },
                         rotate: { x: 0.0, y: 0.0, z: 0.0 }
                     }
                 }
             ]
-        }
-    ];
-        /*},
-
-        {
-            color: { r: 1.0, g: 1.0, b: 0.0 },
-            vertices: [].concat(
-                [ 0.25, 0.5, 0.5 ],
-                [ -0.25, 0.0, 0.5 ],
-                [ 0.5, 0.0, 0.5 ]              
-            ),
-            mode: gl.TRIANGLES,
-            transforms: {
-                trans: [0.0, 0.0, 0.0],         //put instance transforms into three separate arrays
-                scale: [1.5, 1.5, 1.5],
-                rotate: [0.0, 0.0, 0.0, 0.0]
-            }
-        }
+        }*/
         
-    ];*/
+    ];
 
     // Pass the vertices and colors to WebGL.
     var passSubVerts = function (composites) {
@@ -215,7 +246,7 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
-        //Set up instance transforms: translation, scale, rotate **!!NOT assigning the right transforms to the right objects...
+        //Set up instance transforms.
         if (object.transforms) {
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
@@ -246,6 +277,7 @@
             );
 
         } else {
+
             //Default instance transform with original position, scale, and no rotation
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
@@ -286,20 +318,27 @@
         //     complete instance transformation.  You should be able
         //     to apply all three transforms on each individual object.
 
-/*            gl.uniformMatrix4fv(rotationMatrix, 
-                gl.FALSE, new Float32Array(
-                    Matrix4x4.getRotationMatrix(currentRotation, 0.0, 0.0, 0.0).toWebGLArray()   
-                )
-            );*/
-
-
+  /*      gl.uniformMatrix4fv(rotationMatrix,
+            gl.FALSE, new Float32Array(
+                Matrix4x4.getRotationMatrix(currentRotation, 0.0, 1.0, 0.0).toWebGLArray()
+            )
+        );*/
+//How to change the rotation origin to be focused on the location of the camera.
+//i.e. <- and -> arrow keys rotate the camera, not physically move it.
         gl.uniformMatrix4fv(cameraMatrix,
             gl.FALSE, new Float32Array(
                 Matrix4x4.lookAt(
                     new Vector(cameraX, 0.0, cameraZ),         //Location of camera
-                    new Vector(cameraX, 0.0, 0.0),                       //Where camera is pointed
-                    new Vector(0.0, 1.0, 0.0)                      //Tilt of camera
+                    new Vector(cxPointer, 0.0, czPointer),             //Where camera is pointed
+                    new Vector(0.0, 1.0, 0.0)                  //Tilt of camera
                 ).toWebGLArray()
+            )
+        );
+
+        //Set up frustum projection matrix (t, b, l, r, n, f)                                
+        gl.uniformMatrix4fv(projectionMatrix,
+            gl.FALSE, new Float32Array(
+                Matrix4x4.frustum(5, -5, -5, 5, 1, 70).toWebGLArray()
             )
         );
 
@@ -334,13 +373,6 @@
         gl.flush();
     };
 
-    //Set up frustum projection matrix (t, b, l, r, n, f)                                
-    gl.uniformMatrix4fv(projectionMatrix,
-        gl.FALSE, new Float32Array(
-            Matrix4x4.frustum(3, -3, -3, 3, 1, 20).toWebGLArray()
-        )
-    );
-
 
     // Draw the initial scene.
     drawScene();
@@ -372,27 +404,39 @@
     //     - Already mentioned the bad names, but they are worth
     //       mentioning again!
 
-
-        $("body").keypress(function(event) {
-            if (event.keyCode == 119) {  //W key
-                cameraZ += 0.1;
-                drawScene();
-
-            } else if (event.keyCode == 115) {  //S key
+        $("body").keydown(function(event) {
+            event.preventDefault();
+            if (event.keyCode == 38) {  //Up key
                 cameraZ -= 0.1;
                 drawScene();
 
-            } else if (event.keyCode == 100) {  //D key
-                cameraX += 0.1;
+            } else if (event.keyCode == 40) {  //Down key
+                cameraZ += 0.1;
                 drawScene();
 
-            } else if (event.keyCode == 97) {  //A key
-                cameraX -= 0.1;
+            } else if (event.keyCode == 39) {  //Right key
+                alpha -= 3.0;
                 drawScene();
 
+            } else if (event.keyCode == 37) {  //Left key
+                alpha += 3.0;
+                drawScene();
             }
-            console.log("z: "+cameraZ+" X: "+cameraX);
+
+            if (Math.abs(alpha) >= 360.0) {
+                alpha = 0.0;
+            }
+
+            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
+            cxPointer = viewRadius * Math.sin(alphaRads);
+            czPointer = viewRadius * Math.cos(alphaRads);    
+
+            
+            console.log("alpha"+alpha,"viewRadius"+viewRadius,"cxPointer"+cxPointer, "czPointer"+czPointer);
         });
 
 
 }(document.getElementById("space-scene")));
+/*Changed:
+    Changed WASD to arrow keys for easier user readability
+*/

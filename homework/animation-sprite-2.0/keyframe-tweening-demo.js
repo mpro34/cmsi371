@@ -14,74 +14,117 @@
         //     to the web browser's cache.  Still, better not to risk that
         //     and restructure your code so that all of these images are
         //     loaded once only for sure.
+
+	    /*poke_background = function() {
+            table = function () {
+                var img = new Image();                           
+                img.src = "../animation-sprite-2.0/images/poke_table.png";
+                renderingContext.drawImage(img,275,170);
+            };
+
+            drawText = function () {
+                renderingContext.fillStyle = "Black";
+                renderingContext.font = "22pt Helvetica";
+                renderingContext.textAlign = "center";
+                renderingContext.textBaseline = "middle";
+                renderingContext.fillText("I Choose You! Random Pokemon Spawns...", canvas.width / 2 , canvas.height / 2);
+            };
+
+            //Wooden Floor    
+            renderingContext.fillStyle = "black";
+            renderingContext.fillRect(0, 0, 900, 600);
+            for (var i=0; i<55; i+=2) {
+                renderingContext.fillStyle = "#C2A385";
+                renderingContext.fillRect(100, 10*i, 800, 10);
+                renderingContext.fillStyle = "#746250";
+                renderingContext.fillRect(100, 10*i, 800, 4);
+                renderingContext.fillStyle = "#8A5C2E";
+                renderingContext.fillRect(100, 10*(i+1), 800, 10);
+                renderingContext.fillStyle = "#C4AE96";
+                renderingContext.fillRect(100, 10*(i+1), 800, 4);
+            }
+                
+            //Carpet
+            renderingContext.fillStyle = "#5D4E40";        //dark brown
+            renderingContext.fillRect(187, 137, 626, 323);
+            renderingContext.fillStyle = "#E6E600";        //light yellow
+            renderingContext.fillRect(190, 140, 620, 320);
+            renderingContext.fillStyle = "#CCCC00";        //dark yellow
+            renderingContext.fillRect(195, 145, 610, 310);
+            renderingContext.fillStyle = "#007ACC";        //blue
+            renderingContext.fillRect(200, 150, 600, 300);
+
+            table();
+            drawText();
+        },*/
         squirtle = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/squirtle.png";
             renderingContext.drawImage(img,0,0,50,50);
-        },
+        };
         squirt_move = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/squirt_move.png";
             renderingContext.drawImage(img,0,0,50,50);
-        },
+        };
         venisaur = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/venisaur.png";
             renderingContext.drawImage(img,0,0,50,50);
-        },
+        };
         veni_move = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/veni_move.png";
             renderingContext.drawImage(img,0,0,50,50);
-        },
+        };
         pikachu = function (renderingContext) {         
             img.src = "../animation-sprite-2.0/images/pikachu.png";
             renderingContext.drawImage(img,0,0,50,50);
-        },
+        };
         pika_move = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/pika_move.png";
             renderingContext.drawImage(img,0,0,50,50);
-        },
+        };
         charmander = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/charmander.png";
             renderingContext.drawImage(img,0,0,50,50);
-        },
+        };
         char_move = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/char_move.png";
             renderingContext.drawImage(img,0,0,50,50);
-        },
+        };
 
         ash_standard = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/ash_standard.png";
             renderingContext.drawImage(img,0,0);
-        },
+        };
 
         ash_throw = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/ash_throw.png";
             renderingContext.drawImage(img,0,0);
-        },
+        };
 
         ash_right = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/ash_right.png";
             renderingContext.drawImage(img,0,0);
-        },
+        };
 
         ash_left = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/ash_left.png";
             renderingContext.drawImage(img,0,0);
-        },
+        };
         red_poke = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/red_ball.png";
             renderingContext.drawImage(img,0,0);
-        },
+        };
         blue_poke = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/blue_ball.png";
             renderingContext.drawImage(img,0,0);
-        },
+        };
         green_poke = function (renderingContext) {            
             img.src = "../animation-sprite-2.0/images/green_ball.png";
             renderingContext.drawImage(img,0,0);
-        },
+        };
         yellow_poke = function (renderingContext) {           
             img.src = "../animation-sprite-2.0/images/yellow_ball.png";
             renderingContext.drawImage(img,0,0);
-        },
+        };
 
 
         rand_ball = function () {
@@ -392,6 +435,7 @@
         width: canvas.width,
         height: canvas.height,
         sprites: sprites
+		//background: poke_background
         // JD: Custom background should be a setting here.
     });
 }());
