@@ -91,38 +91,6 @@ var Shapes = {
         };
     },
 
-    wall: function () {
-        var X = 0.5,
-            Z = 0.25;
-
-        return {
-            vertices: [
-                [ -0.5, 0.0, -1.0 ], //0
-                [ 0.0, 0.0, -1.0 ],  //1
-                [ 0.0, 1.0, -1.0 ], //2
-                [ -0.5, 1.0, -1.0 ],  //3
-
-                [ -0.5, 0.0, -2.0 ], //4
-                [ 0.0, 0.0, -2.0 ],  //5
-                [ 0.0, 1.0, -2.0 ], //6
-                [ -0.5, 1.0, -2.0 ],  //7
-
-            ],
-
-            indices: [
-                [ 0, 1, 2 ],   //Front Face
-                [ 0, 3, 2 ],  
-                [ 0, 3, 4 ],  //Right Face
-                [ 7, 0, 3 ],
-
-                [ 7, 6, 4 ],  //Left Face
-                [ 4, 5, 7 ],
-                [ 6, 2, 5 ],  //Back Face
-                [ 5, 1, 6 ]
-            ]
-        };
-    },
-
     //Pyramid shape with 4 vertices, 6 edges, and 4 faces
     tetrahedron: function () {
         var X = 0.5,

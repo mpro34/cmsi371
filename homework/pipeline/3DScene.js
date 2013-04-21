@@ -70,24 +70,15 @@
 
     // Build the objects to display.
     objectsToDraw = [
+    //Bottom U Structure (WALLS 1,2,3)
             {
-                color: { r: 0.0, g: 1.0, b: 1.0 },
+                color: { r: 0.0, g: 0.0, b: 1.0 },
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
-                    trans: { x: 0.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
+                    trans: { x: 0.0, y: 0.0, z: 0.0 },        
                     scale: { x: 36.0, y: 8.0, z: 0.5 },
-                    rotate: { x: 0.0, y: 0.5, z: 0.0 }
-                }
-            },
-            {
-                color: { r: 0.0, g: 1.0, b: 0.0 },
-                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                mode: gl.TRIANGLES,
-                transforms: {
-                    trans: { x: -15.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                    scale: { x: 0.5, y: 8.0, z: 13.0 },
-                    rotate: { x: 0.0, y: 0.5, z: 0.0 }
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
             {
@@ -95,19 +86,63 @@
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
-                    trans: { x: 15.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                    scale: { x: 0.5, y: 8.0, z: 18.0 },
-                    rotate: { x: 0.0, y: 0.5, z: 0.0 }
+                    trans: { x: -18.0, y: 0.0, z: -0.5 },        
+                    scale: { x: 0.5, y: 8.0, z: 13.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
-            }/*,
+            },
             {
-                color: { r: 1.0, g: 1.0, b: 0.0 },
+                color: { r: 0.0, g: 0.0, b: 1.0 },
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
-                    trans: { x: 0.5, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                    scale: { x: 5.0, y: 9.0, z: 0.5 },
-                    rotate: { x: 0.0, y: 0.5, z: 0.0 }
+                    trans: { x: 18.0, y: 0.0, z: -0.5 },         
+                    scale: { x: 0.5, y: 8.0, z: 18.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+
+            //Inner U Structure (WALLS 4,5,6)
+            {
+                color: { r: 1.0, g: 0.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: -0.5, y: 0.0, z: -1.0 },        
+                    scale: { x: 0.5, y: 8.0, z: 10.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+            {
+                color: { r: 1.0, g: 0.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 6.0, y: 0.0, z: -1.0 },         
+                    scale: { x: 1.0, y: 8.0, z: 10.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+            {
+                color: { r: 1.0, g: 0.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 0.23, y: 0.0, z: -20.0 },         
+                    scale: { x: 12.0, y: 8.0, z: 0.5 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+
+            //Top S Structure (WALLS 7,8,9,10)
+            {
+                color: { r: 0.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: -10.0, y: 0.0, z: -1.5 },       
+                    scale: { x: 0.5, y: 8.0, z: 7.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
             {
@@ -115,11 +150,31 @@
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
-                    trans: { x: 1.0, y: 0.0, z: 0.0 },         //put instance transforms into three separate arrays
-                    scale: { x: 5.0, y: 9.0, z: 0.5 },
-                    rotate: { x: 0.0, y: 0.0, z: 0.5 }
+                    trans: { x: 0.0, y: 0.0, z: -30.0 },        
+                    scale: { x: 36.0, y: 8.0, z: 0.5 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
-            } */    
+            },
+            {
+                color: { r: 0.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: -1.0, y: 0.0, z: -11.0 },       
+                    scale: { x: 7.0, y: 8.0, z: 1.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+            {
+                color: { r: 0.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: -18.0, y: 0.0, z: -1.85 },         
+                    scale: { x: 0.5, y: 8.0, z: 8.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            }    
     ];
 
     // Pass the vertices and colors to WebGL.
@@ -376,12 +431,12 @@
             if (event.keyCode == 38) {  //Up key
                 // JD: ***** This will need to be adjusted (see below).
                // cameraX -= cxPointer+0.1;
-                cameraZ -= 0.1;
+                cameraZ -= 0.5;
                 drawScene();
 
             } else if (event.keyCode == 40) {  //Down key
               //  cameraX += cxPointer+0.1;
-                cameraZ += 0.1;
+                cameraZ += 0.5;
                 drawScene();
 
             } else if (event.keyCode == 37) {  //Left key
