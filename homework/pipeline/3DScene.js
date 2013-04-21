@@ -11,6 +11,7 @@
 
         // This variable stores 3D model information.
         objectsToDraw,
+        sphereObject,
 
         // The shader program to use.
         shaderProgram,
@@ -29,6 +30,7 @@
         alphaRads = 0.0,
         viewRadius = Math.abs(cameraZ),
         keyEvent = false,
+        sphereOffset = 0.0,
         rotationMatrix,
         cameraMatrix,
         projectionMatrix,
@@ -36,6 +38,8 @@
         scaleMatrix,
         vertexPosition,
         vertexColor,
+
+        assignVerts,
 
         // An individual "draw object" function.
         drawObject,
@@ -174,10 +178,23 @@
                     scale: { x: 0.5, y: 8.0, z: 8.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
-            }    
+            }  
     ];
+    sphereObject =
+    //Sphere that is created by pressing the space button.
+        {
+            color: { r: 0.0, g: 1.0, b: 1.0 },
+            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+            mode: gl.TRIANGLES,
+            transforms: {
+                trans: { x: 0.0, y: 0.0, z: 0.0 },         
+                scale: { x: 0.5, y: 0.5, z: 0.5 }
+            }
+        };
 
     // Pass the vertices and colors to WebGL.
+    function assignVerts() {
+        console.log("HERERERERER");
     var passSubVerts = function (composites) {
         if (composites.subshapes) {
             for (j = 0, subLength = composites.subshapes.length; j < subLength; j += 1) {
@@ -225,6 +242,7 @@
         objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
             objectsToDraw[i].colors);
     }
+    } assignVerts();
     
 
     // Initialize the shaders.
@@ -275,8 +293,28 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
+        if (!object.transforms.rotate) {
+            console.log("ERE");
+            gl.uniformMatrix4fv(translationMatrix,
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getTranslationMatrix( (cxPointer * sphereOffset), 
+                                                    0.0, 
+                                                    (czPointer - sphereOffset + 10.0)
+                                                  ).toWebGLArray()
+                )
+            ),
+
+            gl.uniformMatrix4fv(scaleMatrix,
+                gl.FALSE, new Float32Array(
+                    Matrix4x4.getScaleMatrix( object.transforms.scale.x, 
+                                              object.transforms.scale.y, 
+                                              object.transforms.scale.z
+                                            ).toWebGLArray()
+                )
+            )
+        }
         //Set up instance transforms.
-        if (object.transforms) {
+        else if (object.transforms.rotate) {
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getTranslationMatrix( object.transforms.trans.x, 
@@ -411,7 +449,6 @@
 
     // Set up the rotation toggle: clicking on the canvas does it.
     $(canvas).click(function () {
-        console.log("here")
         if (currentInterval) {
             clearInterval(currentInterval);
             currentInterval = null;
@@ -427,25 +464,41 @@
     });
 
         $("body").keydown(function(event) {
-
-            if (event.keyCode == 38) {  //Up key
+//space : 32
+            if (event.keyCode == 38  || event.keyCode == 87) {  //Up key
                 // JD: ***** This will need to be adjusted (see below).
-               // cameraX -= cxPointer+0.1;
-                cameraZ -= 0.5;
-                drawScene();
+               /// cameraX += cxPointer;
+                cameraZ += -0.5;//czPointer;
+                keyEvent = true;
+            } else if (event.keyCode == 40 || event.keyCode == 83) {  //Down key
+              // cameraX -= cxPointer;
+                cameraZ -= -0.5;//czPointer;
+                keyEvent = true;
 
-            } else if (event.keyCode == 40) {  //Down key
-              //  cameraX += cxPointer+0.1;
-                cameraZ += 0.5;
-                drawScene();
-
-            } else if (event.keyCode == 37) {  //Left key
+            } else if (event.keyCode == 37 || event.keyCode == 65) {  //Left key
                 alpha -= 3.0;
-                drawScene();
+                keyEvent = true;
 
-            } else if (event.keyCode == 39) {  //Right key
+            } else if (event.keyCode == 39 || event.keyCode == 68) {  //Right key
                 alpha += 3.0;
-                drawScene();
+                keyEvent = true;
+
+            } else if (event.keyCode == 32) {     //Creates a sphere with the space button 
+
+                animateSphere = setInterval(function () {
+                    console.log(sphereOffset);
+                //    console.log(objectsToDraw[10].transforms.trans.x, objectsToDraw[10].transforms.trans.z);
+                    objectsToDraw[10] = sphereObject;
+                    console.log(objectsToDraw[10].transforms.trans.x, objectsToDraw[10].transforms.trans.z);
+                    assignVerts();
+                    keyEvent = true;
+                    sphereOffset += 0.1;
+                    drawScene();
+                    if (Math.abs(sphereOffset) >= 1000.0) { //Once the sphere gets to a certain range, stop animation
+                        sphereOffset = 0.0;
+                        clearInterval(animateSphere);
+                    }
+                }, 10);
             }
 
             if (Math.abs( alpha ) >= 360.0) {
@@ -464,12 +517,13 @@
             // JD: Change #3, your cx- and czPointer calculations were originally
             //     based on the origin; they should take into account the new
             //     camera location.
-            cxPointer = viewRadius * Math.sin( alphaRads ) + cameraX;
-            czPointer = -viewRadius * Math.cos( alphaRads ) + cameraZ;
+            cxPointer = viewRadius * Math.sin( alphaRads ); //+ cameraX;
+            czPointer = -viewRadius * Math.cos( alphaRads );//+ cameraZ;
             // JD: Future change #4: Now that this works, your forward/back logic
             //     (see *****) will now need to change to take into account the
             //     direction that the viewer is facing.
             console.log("cameraX: "+cameraX,"cameraZ: "+cameraZ);
+            console.log("cxPointer: "+cxPointer,"czPointer: "+czPointer);
             
         });
 
