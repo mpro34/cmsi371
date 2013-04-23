@@ -178,7 +178,8 @@
                     scale: { x: 0.5, y: 8.0, z: 8.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
-            }  
+            }
+ 
     ];
     sphereObject =
     //Sphere that is created by pressing the space button.
@@ -396,8 +397,8 @@
         gl.uniformMatrix4fv(cameraMatrix,
             gl.FALSE, new Float32Array(
                 Matrix4x4.lookAt(
-                    new Vector(0.0, 0.0, cameraZ),             //Location of camera
-                    new Vector(cxPointer, 0.0, czPointer),         //Where camera is pointed
+                    new Vector(cameraX, 3.0, cameraZ),             //Location of camera
+                    new Vector(cxPointer, 3.0, czPointer),         //Where camera is pointed
                     new Vector(0.0, 1.0, 0.0)                      //Tilt of camera
                 ).toWebGLArray()
             )
@@ -467,12 +468,13 @@
 //space : 32
             if (event.keyCode == 38  || event.keyCode == 87) {  //Up key
                 // JD: ***** This will need to be adjusted (see below).
-               /// cameraX += cxPointer;
-                cameraZ += -0.5;//czPointer;
+                cameraX += (cxPointer / 5);
+                cameraZ += (czPointer / 5);
                 keyEvent = true;
+
             } else if (event.keyCode == 40 || event.keyCode == 83) {  //Down key
-              // cameraX -= cxPointer;
-                cameraZ -= -0.5;//czPointer;
+                cameraX -= (cxPointer / 5);
+                cameraZ -= (czPointer / 5);
                 keyEvent = true;
 
             } else if (event.keyCode == 37 || event.keyCode == 65) {  //Left key
@@ -519,11 +521,23 @@
             //     camera location.
             cxPointer = viewRadius * Math.sin( alphaRads ); //+ cameraX;
             czPointer = -viewRadius * Math.cos( alphaRads );//+ cameraZ;
+//Camera Position updates, but the camera's pointer does not
+            if (event.keyCode == 38 || event.keyCode == 87) {           
+                cxPointer += (cxPointer / 5);
+                czPointer -= (czPointer / 5);
+
+            }
+            if (event.keyCode == 40 || event.keyCode == 83) {
+                cxPointer -= (cxPointer / 5);
+                czPointer += (czPointer / 5);
+            }
+
             // JD: Future change #4: Now that this works, your forward/back logic
             //     (see *****) will now need to change to take into account the
             //     direction that the viewer is facing.
             console.log("cameraX: "+cameraX,"cameraZ: "+cameraZ);
             console.log("cxPointer: "+cxPointer,"czPointer: "+czPointer);
+            console.log("JER: "+(cxPointer/czPointer));
             
         });
 
