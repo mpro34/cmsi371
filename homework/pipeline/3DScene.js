@@ -22,11 +22,11 @@
         // Important state variables.
         currentRotation = 0.0,
         currentInterval,
-        cameraZ = 20.0, // JD: Change #1---move camera further back, because ***
+        cameraZ = 20.0, 
         cameraX = 0.0,
         camPosition = new Vector(cameraX, 3.0, cameraZ),
         cxPointer = 0.0,
-        czPointer = 0.0, // JD: Change #1a---adjustment due to new cameraZ.
+        czPointer = 0.0, 
         camPointer = new Vector(cxPointer, 3.0, czPointer),
         alpha = 0.0,
         alphaRads = 0.0,
@@ -183,6 +183,7 @@
             }
  
     ];
+
     sphereObject =
     //Sphere that is created by pressing the space button.
         {
@@ -197,11 +198,11 @@
 
     // Pass the vertices and colors to WebGL.
     function assignVerts() {
-    var passSubVerts = function (composites) {
-        if (composites.subshapes) {
-            for (j = 0, subLength = composites.subshapes.length; j < subLength; j += 1) {
-                composites.subshapes[j].buffer = GLSLUtilities.initVertexBuffer(gl,
-                    composites.subshapes[j].vertices);
+        var passSubVerts = function (composites) {
+            if (composites.subshapes) {
+                for (j = 0, subLength = composites.subshapes.length; j < subLength; j += 1) {
+                    composites.subshapes[j].buffer = GLSLUtilities.initVertexBuffer(gl,
+                        composites.subshapes[j].vertices);
                     
                     // If we have a single color, we expand that into an array of the same color over and over.
                     if (!composites.subshapes[j].colors) {
@@ -221,29 +222,29 @@
                     if (composites.subshapes[j]) {
                         passSubVerts(composites.subshapes[j]);
                     }
-            }
-        }
-    }
-
-    //Iterate through each object in the objectsToDraw array
-    for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-        passSubVerts(objectsToDraw[i]);   //Pass the vertices and colors of all the subshapes to webgl
-        objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
-            objectsToDraw[i].vertices);
-        // If we have a single color, we expand that into an array of the same color over and over.
-        if (!objectsToDraw[i].colors) {
-            objectsToDraw[i].colors = [];
-                for (j = 0, maxj = objectsToDraw[i].vertices.length / 3; j < maxj; j += 1) {
-                    objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
-                        objectsToDraw[i].color.r,
-                        objectsToDraw[i].color.g,
-                        objectsToDraw[i].color.b
-                    );
                 }
+            }
+        }    
+
+        //Iterate through each object in the objectsToDraw array
+        for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+            passSubVerts(objectsToDraw[i]);   //Pass the vertices and colors of all the subshapes to webgl
+            objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
+                objectsToDraw[i].vertices);
+            // If we have a single color, we expand that into an array of the same color over and over.
+            if (!objectsToDraw[i].colors) {
+                objectsToDraw[i].colors = [];
+                    for (j = 0, maxj = objectsToDraw[i].vertices.length / 3; j < maxj; j += 1) {
+                        objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
+                            objectsToDraw[i].color.r,
+                            objectsToDraw[i].color.g,
+                            objectsToDraw[i].color.b
+                        );
+                    }
+            }
+            objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                objectsToDraw[i].colors);
         }
-        objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
-            objectsToDraw[i].colors);
-    }
     } assignVerts();
     
 
@@ -408,9 +409,6 @@
         //Set up frustum projection matrix (t, b, l, r, n, f)                                
         gl.uniformMatrix4fv(projectionMatrix,
             gl.FALSE, new Float32Array(
-                // JD: *** Change #2, we move the near plane further away from the camera
-                //         to prevent too much distortion (draw the frustum on a piece
-                //         of paper and you'll see why).
                 Matrix4x4.frustum(5, -5, -5, 5, 10, 1000).toWebGLArray()
             )
         );
@@ -484,18 +482,12 @@
 
             } else if (event.keyCode == 37 || event.keyCode == 65) {  //Left key
                 alpha -= 3.0;
-                            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
 
-            cxPointer = viewRadius * Math.sin( alphaRads ); 
-            czPointer = -viewRadius * Math.cos( alphaRads );
                 keyEvent = true;
 
             } else if (event.keyCode == 39 || event.keyCode == 68) {  //Right key
                 alpha += 3.0;
-                            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
 
-            cxPointer = viewRadius * Math.sin( alphaRads ); 
-            czPointer = -viewRadius * Math.cos( alphaRads );
                 keyEvent = true;
 
             } /*else if (event.keyCode == 32) {     //Creates a sphere with the space button 
@@ -525,38 +517,20 @@
                 drawScene();
                 event.preventDefault();
             }
-
+            
+            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
+            cxPointer = viewRadius * Math.sin( alphaRads ); 
+            czPointer = -viewRadius * Math.cos( alphaRads );
 
 
             //Reinitialize camera position vector and camera pointer vectors with new values...
             camPosition = new Vector(cameraX, 3.0, cameraZ);
             camPointer = new Vector(cxPointer, 3.0, czPointer);
 
-
-
-/*//Camera Position updates, but the camera's pointer does not
-            if (event.keyCode == 38 || event.keyCode == 87) {           
-                cxPointer += (cxPointer / 5);
-                czPointer -= (czPointer / 5);
-
-            }
-            if (event.keyCode == 40 || event.keyCode == 83) {
-                cxPointer -= (cxPointer / 5);
-                czPointer += (czPointer / 5);
-            }*/
             console.log("Camera XZ: "+cameraX, cameraZ);
             console.log("Pointer XZ: "+cxPointer, czPointer);
-            console.log("ALPHA: "+alpha);
-            var P = new Vector(5.0, 5.0, 5.0);
-            var Q = new Vector(0.0, 0.0, -20.0);
-          //  console.log("TESTER1: "+(Q.divide(5)).x(), (Q.divide(5)).z());
-        //    console.log("TESTER2: "+(P.add(Q.subtract(P))).x(), (P.add(Q.subtract(P))).z());
-           // console.log("JER: "+(cxPointer/czPointer));
             
         });
 
 
 }(document.getElementById("space-scene")));
-/*Changed:
-    Changed WASD to arrow keys for easier user readability
-*/
