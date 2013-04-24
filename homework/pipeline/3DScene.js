@@ -24,11 +24,13 @@
         currentInterval,
         cameraZ = 20.0, // JD: Change #1---move camera further back, because ***
         cameraX = 0.0,
+        camPosition = new Vector(cameraX, 3.0, cameraZ),
         cxPointer = 0.0,
         czPointer = 0.0, // JD: Change #1a---adjustment due to new cameraZ.
+        camPointer = new Vector(cxPointer, 3.0, czPointer),
         alpha = 0.0,
         alphaRads = 0.0,
-        viewRadius = Math.abs(cameraZ),
+        viewRadius = 20.0,
         keyEvent = false,
         sphereOffset = 0.0,
         rotationMatrix,
@@ -195,7 +197,6 @@
 
     // Pass the vertices and colors to WebGL.
     function assignVerts() {
-        console.log("HERERERERER");
     var passSubVerts = function (composites) {
         if (composites.subshapes) {
             for (j = 0, subLength = composites.subshapes.length; j < subLength; j += 1) {
@@ -397,9 +398,9 @@
         gl.uniformMatrix4fv(cameraMatrix,
             gl.FALSE, new Float32Array(
                 Matrix4x4.lookAt(
-                    new Vector(cameraX, 3.0, cameraZ),             //Location of camera
-                    new Vector(cxPointer, 3.0, czPointer),         //Where camera is pointed
-                    new Vector(0.0, 1.0, 0.0)                      //Tilt of camera
+                    camPosition,                //Location of camera
+                    camPointer,                 //Where camera is pointed
+                    new Vector(0.0, 1.0, 0.0)   //Tilt of camera
                 ).toWebGLArray()
             )
         );
@@ -465,27 +466,39 @@
     });
 
         $("body").keydown(function(event) {
-//space : 32
+
             if (event.keyCode == 38  || event.keyCode == 87) {  //Up key
-                // JD: ***** This will need to be adjusted (see below).
-                cameraX += (cxPointer / 5);
-                cameraZ += (czPointer / 5);
+                cameraX += ((camPointer.subtract(camPosition)).unit()).x();
+                cxPointer += ((camPointer.subtract(camPosition)).unit()).x();
+                cameraZ += ((camPointer.subtract(camPosition)).unit()).z();
+                czPointer += ((camPointer.subtract(camPosition)).unit()).z();
                 keyEvent = true;
 
+
             } else if (event.keyCode == 40 || event.keyCode == 83) {  //Down key
-                cameraX -= (cxPointer / 5);
-                cameraZ -= (czPointer / 5);
+                cameraX -= ((camPointer.subtract(camPosition)).unit()).x();
+                cxPointer -= ((camPointer.subtract(camPosition)).unit()).x();
+                cameraZ -= ((camPointer.subtract(camPosition)).unit()).z();
+                czPointer -= ((camPointer.subtract(camPosition)).unit()).z();
                 keyEvent = true;
 
             } else if (event.keyCode == 37 || event.keyCode == 65) {  //Left key
                 alpha -= 3.0;
+                            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
+
+            cxPointer = viewRadius * Math.sin( alphaRads ); 
+            czPointer = -viewRadius * Math.cos( alphaRads );
                 keyEvent = true;
 
             } else if (event.keyCode == 39 || event.keyCode == 68) {  //Right key
                 alpha += 3.0;
+                            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
+
+            cxPointer = viewRadius * Math.sin( alphaRads ); 
+            czPointer = -viewRadius * Math.cos( alphaRads );
                 keyEvent = true;
 
-            } else if (event.keyCode == 32) {     //Creates a sphere with the space button 
+            } /*else if (event.keyCode == 32) {     //Creates a sphere with the space button 
 
                 animateSphere = setInterval(function () {
                     console.log(sphereOffset);
@@ -501,7 +514,7 @@
                         clearInterval(animateSphere);
                     }
                 }, 10);
-            }
+            }*/
 
             if (Math.abs( alpha ) >= 360.0) {
                 alpha = 0.0;
@@ -513,15 +526,15 @@
                 event.preventDefault();
             }
 
-            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
 
 
-            // JD: Change #3, your cx- and czPointer calculations were originally
-            //     based on the origin; they should take into account the new
-            //     camera location.
-            cxPointer = viewRadius * Math.sin( alphaRads ); //+ cameraX;
-            czPointer = -viewRadius * Math.cos( alphaRads );//+ cameraZ;
-//Camera Position updates, but the camera's pointer does not
+            //Reinitialize camera position vector and camera pointer vectors with new values...
+            camPosition = new Vector(cameraX, 3.0, cameraZ);
+            camPointer = new Vector(cxPointer, 3.0, czPointer);
+
+
+
+/*//Camera Position updates, but the camera's pointer does not
             if (event.keyCode == 38 || event.keyCode == 87) {           
                 cxPointer += (cxPointer / 5);
                 czPointer -= (czPointer / 5);
@@ -530,14 +543,15 @@
             if (event.keyCode == 40 || event.keyCode == 83) {
                 cxPointer -= (cxPointer / 5);
                 czPointer += (czPointer / 5);
-            }
-
-            // JD: Future change #4: Now that this works, your forward/back logic
-            //     (see *****) will now need to change to take into account the
-            //     direction that the viewer is facing.
-            console.log("cameraX: "+cameraX,"cameraZ: "+cameraZ);
-            console.log("cxPointer: "+cxPointer,"czPointer: "+czPointer);
-            console.log("JER: "+(cxPointer/czPointer));
+            }*/
+            console.log("Camera XZ: "+cameraX, cameraZ);
+            console.log("Pointer XZ: "+cxPointer, czPointer);
+            console.log("ALPHA: "+alpha);
+            var P = new Vector(5.0, 5.0, 5.0);
+            var Q = new Vector(0.0, 0.0, -20.0);
+          //  console.log("TESTER1: "+(Q.divide(5)).x(), (Q.divide(5)).z());
+        //    console.log("TESTER2: "+(P.add(Q.subtract(P))).x(), (P.add(Q.subtract(P))).z());
+           // console.log("JER: "+(cxPointer/czPointer));
             
         });
 
