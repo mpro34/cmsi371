@@ -32,6 +32,7 @@
         alphaRads = 0.0,
         viewRadius = 20.0,
         keyEvent = false,
+        zombieLocation = new Vector((Math.random()*30.0), 0.0, -(Math.random()*30.0)),  //Start zombie at a random location and slowly move towards user...
         sphereOffset = 0.0,
         rotationMatrix,
         cameraMatrix,
@@ -83,7 +84,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: 0.0 },        
-                    scale: { x: 36.0, y: 8.0, z: 0.5 },
+                    scale: { x: 36.0, y: 15.0, z: 0.5 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -93,7 +94,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -18.0, y: 0.0, z: -0.5 },        
-                    scale: { x: 0.5, y: 8.0, z: 13.0 },
+                    scale: { x: 0.5, y: 15.0, z: 13.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -103,7 +104,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 18.0, y: 0.0, z: -0.5 },         
-                    scale: { x: 0.5, y: 8.0, z: 18.0 },
+                    scale: { x: 0.5, y: 15.0, z: 18.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -115,7 +116,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -0.5, y: 0.0, z: -1.0 },        
-                    scale: { x: 0.5, y: 8.0, z: 10.0 },
+                    scale: { x: 0.5, y: 15.0, z: 10.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -125,7 +126,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 6.0, y: 0.0, z: -1.0 },         
-                    scale: { x: 1.0, y: 8.0, z: 10.0 },
+                    scale: { x: 1.0, y: 15.0, z: 10.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -135,7 +136,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.23, y: 0.0, z: -20.0 },         
-                    scale: { x: 12.0, y: 8.0, z: 0.5 },
+                    scale: { x: 12.0, y: 15.0, z: 0.5 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -147,7 +148,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -10.0, y: 0.0, z: -1.5 },       
-                    scale: { x: 0.5, y: 8.0, z: 7.0 },
+                    scale: { x: 0.5, y: 15.0, z: 7.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -157,7 +158,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: -30.0 },        
-                    scale: { x: 36.0, y: 8.0, z: 0.5 },
+                    scale: { x: 36.0, y: 15.0, z: 0.5 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -167,7 +168,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -1.0, y: 0.0, z: -11.0 },       
-                    scale: { x: 7.0, y: 8.0, z: 1.0 },
+                    scale: { x: 7.0, y: 15.0, z: 1.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
@@ -177,22 +178,33 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -18.0, y: 0.0, z: -1.85 },         
-                    scale: { x: 0.5, y: 8.0, z: 8.0 },
+                    scale: { x: 0.5, y: 15.0, z: 8.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+            //Zombie
+            {
+                color: { r: 1.0, g: 0.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: zombieLocation.x(), y: 1.5, z: zombieLocation.z() },         
+                    scale: { x: 2.0, y: 2.0, z: 2.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             }
- 
     ];
 
     sphereObject =
     //Sphere that is created by pressing the space button.
         {
-            color: { r: 0.0, g: 1.0, b: 1.0 },
+            color: { r: 1.0, g: 0.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 0.0, y: 0.0, z: 0.0 },         
-                scale: { x: 0.5, y: 0.5, z: 0.5 }
+                scale: { x: 0.5, y: 0.5, z: 0.5 },
+                rotate: { x: 1.0, y: 0.0, z: 0.0 }
             }
         };
 
@@ -296,13 +308,13 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
-        if (!object.transforms.rotate) {
+/*        if (!object.transforms.rotate) {
             console.log("ERE");
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
-                    Matrix4x4.getTranslationMatrix( (cxPointer * sphereOffset), 
+                    Matrix4x4.getTranslationMatrix( (cameraX), 
                                                     0.0, 
-                                                    (czPointer - sphereOffset + 10.0)
+                                                    (cameraZ - 5.0)
                                                   ).toWebGLArray()
                 )
             ),
@@ -317,7 +329,7 @@
             )
         }
         //Set up instance transforms.
-        else if (object.transforms.rotate) {
+        else*/ if (object.transforms.rotate) {
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getTranslationMatrix( object.transforms.trans.x, 
@@ -443,7 +455,6 @@
         gl.flush();
     };
 
-
     // Draw the initial scene.
     drawScene();
 
@@ -463,36 +474,36 @@
         }
     });
 
-        $("body").keydown(function(event) {
+    $("body").keydown(function(event) {
 
-            if (event.keyCode == 38  || event.keyCode == 87) {  //Up key
-                cameraX += ((camPointer.subtract(camPosition)).unit()).x();
-                cxPointer += ((camPointer.subtract(camPosition)).unit()).x();
-                cameraZ += ((camPointer.subtract(camPosition)).unit()).z();
-                czPointer += ((camPointer.subtract(camPosition)).unit()).z();
-                keyEvent = true;
+        if (event.keyCode == 38  || event.keyCode == 87) {  //Up key
+            cameraX += ((camPointer.subtract(camPosition)).unit()).x();
+            cxPointer += ((camPointer.subtract(camPosition)).unit()).x();
+            cameraZ += ((camPointer.subtract(camPosition)).unit()).z();
+            czPointer += ((camPointer.subtract(camPosition)).unit()).z();
+            keyEvent = true;
 
 
-            } else if (event.keyCode == 40 || event.keyCode == 83) {  //Down key
-                cameraX -= ((camPointer.subtract(camPosition)).unit()).x();
-                cxPointer -= ((camPointer.subtract(camPosition)).unit()).x();
-                cameraZ -= ((camPointer.subtract(camPosition)).unit()).z();
-                czPointer -= ((camPointer.subtract(camPosition)).unit()).z();
-                keyEvent = true;
+        } else if (event.keyCode == 40 || event.keyCode == 83) {  //Down key
+            cameraX -= ((camPointer.subtract(camPosition)).unit()).x();
+            cxPointer -= ((camPointer.subtract(camPosition)).unit()).x();
+            cameraZ -= ((camPointer.subtract(camPosition)).unit()).z();
+            czPointer -= ((camPointer.subtract(camPosition)).unit()).z();
+            keyEvent = true;
 
-            } else if (event.keyCode == 37 || event.keyCode == 65) {  //Left key
-                alpha -= 3.0;
+        } else if (event.keyCode == 37 || event.keyCode == 65) {  //Left key
+            alpha -= 3.0;
+            keyEvent = true;
 
-                keyEvent = true;
+        } else if (event.keyCode == 39 || event.keyCode == 68) {  //Right key
+            alpha += 3.0;
+            keyEvent = true;
 
-            } else if (event.keyCode == 39 || event.keyCode == 68) {  //Right key
-                alpha += 3.0;
+        } 
 
-                keyEvent = true;
+        /*else if (event.keyCode == 32) {     //Creates a sphere with the space button 
 
-            } /*else if (event.keyCode == 32) {     //Creates a sphere with the space button 
-
-                animateSphere = setInterval(function () {
+       //         animateSphere = setInterval(function () {
                     console.log(sphereOffset);
                 //    console.log(objectsToDraw[10].transforms.trans.x, objectsToDraw[10].transforms.trans.z);
                     objectsToDraw[10] = sphereObject;
@@ -508,29 +519,47 @@
                 }, 10);
             }*/
 
-            if (Math.abs( alpha ) >= 360.0) {
-                alpha = 0.0;
-            }
+        if (Math.abs( alpha ) >= 360.0) {
+            alpha = 0.0;
+        }
 
-            if (keyEvent == true) {
-                keyEvent = false;
-                drawScene();
-                event.preventDefault();
-            }
+        if (keyEvent == true) {
+            keyEvent = false;
+            drawScene();
+            event.preventDefault();
+        }
             
-            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
-            cxPointer = viewRadius * Math.sin( alphaRads ); 
-            czPointer = -viewRadius * Math.cos( alphaRads );
+        alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
+        cxPointer = viewRadius * Math.sin( alphaRads ); 
+        czPointer = -viewRadius * Math.cos( alphaRads );
 
 
-            //Reinitialize camera position vector and camera pointer vectors with new values...
-            camPosition = new Vector(cameraX, 3.0, cameraZ);
-            camPointer = new Vector(cxPointer, 3.0, czPointer);
+        //Reinitialize camera position vector and camera pointer vectors with new values...
+        camPosition = new Vector(cameraX, 3.0, cameraZ);
+        camPointer = new Vector(cxPointer, 3.0, czPointer);
 
-            console.log("Camera XZ: "+cameraX, cameraZ);
-            console.log("Pointer XZ: "+cxPointer, czPointer);
+        console.log("Camera XZ: "+cameraX, cameraZ);
+        console.log("Pointer XZ: "+cxPointer, czPointer);
+
             
-        });
+    });
+
+//Runs as soon as the page is loaded...
+    main = setInterval(function () {
+        objectsToDraw[10].transforms.trans.x += ((camPosition.subtract(zombieLocation)).unit()).x();
+        objectsToDraw[10].transforms.trans.z += ((camPosition.subtract(zombieLocation)).unit()).z();
+
+        console.log("Zombie XZ: "+Math.floor(objectsToDraw[10].transforms.trans.x),Math.floor(objectsToDraw[10].transforms.trans.z));
+
+        if ((Math.floor(objectsToDraw[10].transforms.trans.x) === Math.floor(cameraX-1)) && (Math.floor(objectsToDraw[10].transforms.trans.z) === Math.floor(cameraZ))) {
+            clearInterval(main);
+            console.log("dead");
+        }
+
+        assignVerts();
+        drawScene();
+    }, 200);
+
 
 
 }(document.getElementById("space-scene")));
