@@ -185,6 +185,7 @@
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
+
             //Zombie
             {
                 color: { r: 1.0, g: 0.0, b: 0.0 },
@@ -195,21 +196,50 @@
                     scale: { x: 2.0, y: 2.0, z: 2.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
+            },
+
+            //Outer Boundary Walls
+            {
+                color: { r: 1.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 0.0, y: 0.0, z: -180.0 },         
+                    scale: { x: 220.0, y: 20.0, z: 0.5 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+            {
+                color: { r: 1.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 110.0, y: 0.0, z: -0.25 },         
+                    scale: { x: 0.5, y: 20.0, z: 360.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+            {
+                color: { r: 1.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: -110.0, y: 0.0, z: -0.25 },         
+                    scale: { x: 0.5, y: 20.0, z: 360.0 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
+            },
+            {
+                color: { r: 1.0, g: 1.0, b: 0.0 },
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: 0.0, y: 0.0, z: 180.0 },         
+                    scale: { x: 220.0, y: 20.0, z: 0.5 },
+                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                }
             }
     ];
-
-    sphereObject =
-    //Sphere that is created by pressing the space button.
-        {
-            color: { r: 1.0, g: 0.0, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            mode: gl.TRIANGLES,
-            transforms: {
-                trans: { x: 0.0, y: 0.0, z: 0.0 },         
-                scale: { x: 0.5, y: 0.5, z: 0.5 },
-                rotate: { x: 1.0, y: 0.0, z: 0.0 }
-            }
-        };
 
     // Pass the vertices and colors to WebGL.
     function assignVerts() {
@@ -311,28 +341,8 @@
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
 
-/*        if (!object.transforms.rotate) {
-            console.log("ERE");
-            gl.uniformMatrix4fv(translationMatrix,
-                gl.FALSE, new Float32Array(
-                    Matrix4x4.getTranslationMatrix( (cameraX), 
-                                                    0.0, 
-                                                    (cameraZ - 5.0)
-                                                  ).toWebGLArray()
-                )
-            ),
-
-            gl.uniformMatrix4fv(scaleMatrix,
-                gl.FALSE, new Float32Array(
-                    Matrix4x4.getScaleMatrix( object.transforms.scale.x, 
-                                              object.transforms.scale.y, 
-                                              object.transforms.scale.z
-                                            ).toWebGLArray()
-                )
-            )
-        }
         //Set up instance transforms.
-        else*/ if (object.transforms.rotate) {
+        if (object.transforms.rotate) {
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
                     Matrix4x4.getTranslationMatrix( object.transforms.trans.x, 
@@ -461,23 +471,11 @@
     // Draw the initial scene.
     drawScene();
 
-    // Set up the rotation toggle: clicking on the canvas does it.
-/*    $(canvas).click(function () {
-        if (currentInterval) {
-            clearInterval(currentInterval);
-            currentInterval = null;
-        } else {
-            currentInterval = setInterval(function () {
-                currentRotation += 1.0;
-                drawScene();
-                if (currentRotation >= 360.0) {
-                    currentRotation -= 360.0;
-                }
-            }, 30);
-        }
-    });*/
-
     $("body").keydown(function(event) {
+/*        if ( (Math.floor(cameraX) > 43 || Math.floor(cameraX) < -43) || (Math.floor(cameraZ) > 79 || Math.floor(cameraZ) < -79) ) {
+            drawScene();
+            event.preventDefault();
+        }*/
 
         if (event.keyCode == 38  || event.keyCode == 87) {  //Up key
             cameraX += ((camPointer.subtract(camPosition)).unit()).x();
