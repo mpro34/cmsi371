@@ -32,7 +32,9 @@
         alphaRads = 0.0,
         viewRadius = 20.0,
         keyEvent = false,
-        zombieLocation = new Vector((Math.random()*30.0), 0.0, -(Math.random()*30.0)),  //Start zombie at a random location and slowly move towards user...
+        zombieLocation = new Vector((Math.random()*60.0)-30, 0.0, (Math.random()*60.0)-30),  //Start zombie at a random location and slowly move towards user...
+        zombieX = 0.0,
+        zombieZ = 0.0,
         sphereOffset = 0.0,
         rotationMatrix,
         cameraMatrix,
@@ -459,7 +461,7 @@
     drawScene();
 
     // Set up the rotation toggle: clicking on the canvas does it.
-    $(canvas).click(function () {
+/*    $(canvas).click(function () {
         if (currentInterval) {
             clearInterval(currentInterval);
             currentInterval = null;
@@ -472,7 +474,7 @@
                 }
             }, 30);
         }
-    });
+    });*/
 
     $("body").keydown(function(event) {
 
@@ -538,28 +540,31 @@
         camPosition = new Vector(cameraX, 3.0, cameraZ);
         camPointer = new Vector(cxPointer, 3.0, czPointer);
 
-        console.log("Camera XZ: "+cameraX, cameraZ);
+        console.log("Camera XZ: "+Math.floor(cameraX), Math.floor(cameraZ));
         console.log("Pointer XZ: "+cxPointer, czPointer);
 
             
     });
 
 //Runs as soon as the page is loaded...
-    main = setInterval(function () {
-        objectsToDraw[10].transforms.trans.x += ((camPosition.subtract(zombieLocation)).unit()).x();
-        objectsToDraw[10].transforms.trans.z += ((camPosition.subtract(zombieLocation)).unit()).z();
+    $(canvas).click(function () {
+        main = setInterval(function () {
+            if ((Math.floor(objectsToDraw[10].transforms.trans.x)) != Math.floor(cameraX)) {
+                objectsToDraw[10].transforms.trans.x += ((camPosition.subtract(zombieLocation)).unit()).x();
 
-        console.log("Zombie XZ: "+Math.floor(objectsToDraw[10].transforms.trans.x),Math.floor(objectsToDraw[10].transforms.trans.z));
+            } else if ((Math.floor(objectsToDraw[10].transforms.trans.z)) != Math.floor(cameraZ-5)) {
+                objectsToDraw[10].transforms.trans.z += ((camPosition.subtract(zombieLocation)).unit()).z();
 
-        if ((Math.floor(objectsToDraw[10].transforms.trans.x) === Math.floor(cameraX-1)) && (Math.floor(objectsToDraw[10].transforms.trans.z) === Math.floor(cameraZ))) {
-            clearInterval(main);
-            console.log("dead");
-        }
+            } else {
+                clearInterval(main);        //If zombie arrives at the location of the camera, he/she gets eaten.
+                console.log("dead");
+            }
+            console.log("Zombie XZ: "+Math.floor(objectsToDraw[10].transforms.trans.x),Math.floor(objectsToDraw[10].transforms.trans.z));
 
-        assignVerts();
-        drawScene();
-    }, 200);
-
+            assignVerts();
+            drawScene();
+        }, 500);
+    });
 
 
 }(document.getElementById("space-scene")));
