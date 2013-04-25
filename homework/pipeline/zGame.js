@@ -31,7 +31,8 @@
         alpha = 0.0,
         alphaRads = 0.0,
         viewRadius = 20.0,
-        keyEvent = false,
+        udEvent = false,
+        lrEvent = false,
         zombieLocation = new Vector((Math.random()*60.0)-30, 0.0, (Math.random()*60.0)-30),  //Start zombie at a random location and slowly move towards user...
         zombieX = 0.0,
         zombieZ = 0.0,
@@ -483,7 +484,7 @@
             cxPointer += ((camPointer.subtract(camPosition)).unit()).x();
             cameraZ += ((camPointer.subtract(camPosition)).unit()).z();
             czPointer += ((camPointer.subtract(camPosition)).unit()).z();
-            keyEvent = true;
+            udEvent = true;
 
 
         } else if (event.keyCode == 40 || event.keyCode == 83) {  //Down key
@@ -491,51 +492,36 @@
             cxPointer -= ((camPointer.subtract(camPosition)).unit()).x();
             cameraZ -= ((camPointer.subtract(camPosition)).unit()).z();
             czPointer -= ((camPointer.subtract(camPosition)).unit()).z();
-            keyEvent = true;
+            udEvent = true;
 
         } else if (event.keyCode == 37 || event.keyCode == 65) {  //Left key
             alpha -= 3.0;
-            keyEvent = true;
+            lrEvent = true;
 
         } else if (event.keyCode == 39 || event.keyCode == 68) {  //Right key
             alpha += 3.0;
-            keyEvent = true;
-
+            lrEvent = true;
         } 
-
-        /*else if (event.keyCode == 32) {     //Creates a sphere with the space button 
-
-       //         animateSphere = setInterval(function () {
-                    console.log(sphereOffset);
-                //    console.log(objectsToDraw[10].transforms.trans.x, objectsToDraw[10].transforms.trans.z);
-                    objectsToDraw[10] = sphereObject;
-                    console.log(objectsToDraw[10].transforms.trans.x, objectsToDraw[10].transforms.trans.z);
-                    assignVerts();
-                    keyEvent = true;
-                    sphereOffset += 0.1;
-                    drawScene();
-                    if (Math.abs(sphereOffset) >= 1000.0) { //Once the sphere gets to a certain range, stop animation
-                        sphereOffset = 0.0;
-                        clearInterval(animateSphere);
-                    }
-                }, 10);
-            }*/
 
         if (Math.abs( alpha ) >= 360.0) {
             alpha = 0.0;
         }
 
-        if (keyEvent == true) {
-            keyEvent = false;
+        if (udEvent == true) {
+            udEvent = false;
+            drawScene();
+            event.preventDefault();
+        }
+
+        if (lrEvent == true) {
+            lrEvent = false;
+            alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
+            cxPointer = cameraX + viewRadius * Math.sin( alphaRads ); 
+            czPointer = cameraZ - viewRadius * Math.cos( alphaRads );
             drawScene();
             event.preventDefault();
         }
             
-        alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
-        cxPointer = viewRadius * Math.sin( alphaRads ); 
-        czPointer = -viewRadius * Math.cos( alphaRads );
-
-
         //Reinitialize camera position vector and camera pointer vectors with new values...
         camPosition = new Vector(cameraX, 3.0, cameraZ);
         camPointer = new Vector(cxPointer, 3.0, czPointer);
