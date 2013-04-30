@@ -44,7 +44,6 @@
         translationMatrix,
         scaleMatrix,
         vertexPosition,
-        vertexColor,
 
         //Specular and Diffuse Light variables
         vertexDiffuseColor,
@@ -54,9 +53,6 @@
         lightPosition,
         lightDiffuse,
         lightSpecular,
-
-
-
 
         // An individual "draw object" function.
         drawObject,
