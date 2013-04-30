@@ -90,12 +90,12 @@
     //Bottom U Structure (WALLS 1,2,3)
             {
                 color: { r: 0.0, g: 0.0, b: 1.0 },
-
+                //Lighting Variables
                 specularColor: { r: 1.0, g: 1.0, b: 1.0 },
                 shininess: 16, 
+                normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
 
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: 0.0 },        
@@ -318,6 +318,7 @@
                 objectsToDraw[i].colors);
             //Same trick as above.
             if (!objectsToDraw[i].specularColors) {
+                console.log(objectsToDraw[i].specularColors);
                 objectsToDraw[i].specularColors = [];
                     for (j = 0, maxj = objectsToDraw[i].vertices.length / 3; j < maxj; j += 1) {
                         objectsToDraw[i].specularColors = objectsToDraw[i].specularColors.concat(
@@ -371,8 +372,7 @@
     gl.enableVertexAttribArray(vertexSpecularColor);
     normalVector = gl.getAttribLocation(shaderProgram, "normalVector");
     gl.enableVertexAttribArray(normalVector);
-   // vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
-   // gl.enableVertexAttribArray(vertexColor);
+
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
     projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix"); 
     translationMatrix = gl.getUniformLocation(shaderProgram, "translationMatrix");
