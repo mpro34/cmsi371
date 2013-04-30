@@ -95,10 +95,11 @@
             {
                 color: { r: 0.0, g: 0.0, b: 1.0 },
 
-                specualrColor: { r: 1.0, g: 1.0, b: 1.0 },
+                specularColor: { r: 1.0, g: 1.0, b: 1.0 },
                 shininess: 16, 
 
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: 0.0 },        
@@ -278,6 +279,21 @@
                     }
                     composites.subshapes[j].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
                         composites.subshapes[j].colors);
+
+                  //The same color algorithm for specular colors.
+                    if (!composites.subshapes[j].specularColors) {
+                        composites.subshapes[j].specularColors = [];
+                        
+                        for (k = 0, maxk = composites.subshapes[j].vertices.length / 3; k < maxk; k += 1) {
+                                composites.subshapes[j].specularColors = composites.subshapes[j].specularColors.concat(
+                                    composites.subshapes[j].specularColor.r,
+                                    composites.subshapes[j].specularColor.g,
+                                    composites.subshapes[j].specularColor.b
+                                );
+                        }
+                    }
+                    composites.subshapes[j].specularBuffer = GLSLUtilities.initVertexBuffer(gl,
+                        composites.subshapes[j].specularColors);
                     //Check for more subshapes...
                     if (composites.subshapes[j]) {
                         passSubVerts(composites.subshapes[j]);
@@ -304,6 +320,19 @@
             }
             objectsToDraw[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].colors);
+            //Same trick as above.
+            if (!objectsToDraw[i].specularColors) {
+                objectsToDraw[i].specularColors = [];
+                    for (j = 0, maxj = objectsToDraw[i].vertices.length / 3; j < maxj; j += 1) {
+                        objectsToDraw[i].specularColors = objectsToDraw[i].specularColors.concat(
+                            objectsToDraw[i].specularColor.r,
+                            objectsToDraw[i].specularColor.g,
+                            objectsToDraw[i].specularColor.b
+                        );
+                    }
+            }
+            objectsToDraw[i].specularBuffer = GLSLUtilities.initVertexBuffer(gl,
+                objectsToDraw[i].specularColors);
         }
     } assignVerts();
     
@@ -340,21 +369,38 @@
     // Hold on to the important variables within the shaders.
     vertexPosition = gl.getAttribLocation(shaderProgram, "vertexPosition");
     gl.enableVertexAttribArray(vertexPosition);
-    vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
-    gl.enableVertexAttribArray(vertexColor);
+    vertexDiffuseColor = gl.getAttribLocation(shaderProgram, "vertexDiffuseColor");
+    gl.enableVertexAttribArray(vertexDiffuseColor);
+    vertexSpecularColor = gl.getAttribLocation(shaderProgram, "vertexSpecularColor");
+    gl.enableVertexAttribArray(vertexSpecularColor);
+    normalVector = gl.getAttribLocation(shaderProgram, "normalVector");
+    gl.enableVertexAttribArray(normalVector);
+   // vertexColor = gl.getAttribLocation(shaderProgram, "vertexColor");
+   // gl.enableVertexAttribArray(vertexColor);
     rotationMatrix = gl.getUniformLocation(shaderProgram, "rotationMatrix");
     projectionMatrix = gl.getUniformLocation(shaderProgram, "projectionMatrix"); 
     translationMatrix = gl.getUniformLocation(shaderProgram, "translationMatrix");
     scaleMatrix = gl.getUniformLocation(shaderProgram, "scaleMatrix");  
     cameraMatrix = gl.getUniformLocation(shaderProgram, "cameraMatrix");
 
+
+    lightPosition = gl.getUniformLocation(shaderProgram, "lightPosition");
+    lightDiffuse = gl.getUniformLocation(shaderProgram, "lightDiffuse");
+    lightSpecular = gl.getUniformLocation(shaderProgram, "lightSpecular");
+    shininess = gl.getUniformLocation(shaderProgram, "shininess");
     /*
      * Displays an individual object.
      */
     drawObject = function (object) {
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
-        gl.vertexAttribPointer(vertexColor, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(vertexDiffuseColor, 3, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, object.specularBuffer);
+        gl.vertexAttribPointer(vertexSpecularColor, 3, gl.FLOAT, false, 0, 0);
+
+        // Set the shininess.
+        gl.uniform1f(shininess, object.shininess);
 
         //Set up instance transforms.
         if (object.transforms.rotate) {
@@ -407,6 +453,10 @@
                 )
             );
         }
+
+        // Set the varying normal vectors.
+        gl.bindBuffer(gl.ARRAY_BUFFER, object.normalBuffer);
+        gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
 
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
@@ -482,6 +532,11 @@
         // All done.
         gl.flush();
     };
+
+    // Set up our one light source and its colors.
+    gl.uniform4fv(lightPosition, [500.0, 1000.0, 100.0, 1.0]);   //Position of light
+    gl.uniform3fv(lightDiffuse, [1.0, 1.0, 1.0]);    //Color of Light
+    gl.uniform3fv(lightSpecular, [1.0, 1.0, 1.0]);   //Color of spot light
 
     // Draw the initial scene.
     drawScene();
