@@ -208,6 +208,35 @@ var Shapes = {
         }
 
         return result;
+    },
+
+    /*
+     * Another utility function for computing normals, this time just converting
+     * every vertex into its unit vector version.  This works mainly for objects
+     * that are centered around the origin. Gets rid of edges!
+     */
+    toVertexNormalArray: function (indexedVertices) {
+        var result = [],
+            i,
+            j,
+            maxi,
+            maxj,
+            p,
+            normal;
+
+        // For each face...
+        for (i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+            // For each vertex in that face...
+            for (j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                p = indexedVertices.vertices[indexedVertices.indices[i][j]];
+                normal = new Vector(p[0], p[1], p[2]).unit();
+                result = result.concat(
+                    [ normal.x(), normal.y(), normal.z() ]
+                );
+            }
+        }
+
+        return result;
     }
 
 };

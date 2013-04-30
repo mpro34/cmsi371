@@ -22,6 +22,7 @@
         // Important state variables.
         currentRotation = 0.0,
         currentInterval,
+        assignVerts,
         cameraZ = 20.0, 
         cameraX = 0.0,
         camPosition = new Vector(cameraX, 3.0, cameraZ),
@@ -45,7 +46,17 @@
         vertexPosition,
         vertexColor,
 
-        assignVerts,
+        //Specular and Diffuse Light variables
+        vertexDiffuseColor,
+        vertexSpecularColor,
+        shininess,
+        normalVector,
+        lightPosition,
+        lightDiffuse,
+        lightSpecular,
+
+
+
 
         // An individual "draw object" function.
         drawObject,
@@ -83,6 +94,10 @@
     //Bottom U Structure (WALLS 1,2,3)
             {
                 color: { r: 0.0, g: 0.0, b: 1.0 },
+
+                specualrColor: { r: 1.0, g: 1.0, b: 1.0 },
+                shininess: 16, 
+
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
