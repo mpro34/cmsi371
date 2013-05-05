@@ -23,6 +23,10 @@
         currentRotation = 0.0,
         currentInterval,
         assignVerts,
+        // JD: Suggestion---start clustering these variables into related
+        //     groups, e.g., camera, zombie, etc.  It will make your code
+        //     more readable and possibly reveal values that you don't
+        //     need, that are temporary, etc.
         cameraZ = 20.0, 
         cameraX = 0.0,
         camPosition = new Vector(cameraX, 3.0, cameraZ),
@@ -35,6 +39,9 @@
         udEvent = false,
         lrEvent = false,
         zombieLocation = new Vector((Math.random()*60.0)-30, 0.0, (Math.random()*60.0)-30),  //Start zombie at a random location and slowly move towards user...
+        // JD: ^^^^This line is tooooooo looooong...and to top it off you
+        //     stuck a comment at the end instead of a line above or
+        //     below it!
         zombieX = 0.0,
         zombieZ = 0.0,
         sphereOffset = 0.0,
@@ -86,6 +93,9 @@
     gl.viewport(0, 0, canvas.width, canvas.height);
 
     // Build the objects to display.
+    // JD: Your subshapes code is not used by your scene!  Use it somewhere
+    //     so that you know if it works...say, make the zombie a composite,
+    //     or group your walls into different rooms.  Or anything else.
     objectsToDraw = [
     //Bottom U Structure (WALLS 1,2,3)
             {
@@ -254,6 +264,9 @@
     ];
 
     // Pass the vertices and colors to WebGL.
+    // JD: Note, we prefer assignVerts = function () .....
+    //     (you did declare the variable up top so no need to precede this
+    //     with var)
     function assignVerts() {
         var passSubVerts = function (composites) {
             if (composites.subshapes) {
@@ -296,9 +309,11 @@
                     }
                 }
             }
-        }    
+        } // JD: Semicolon!
 
         //Iterate through each object in the objectsToDraw array
+        // JD: Note how a lot of this code looks very similar to the one in
+        //     passSubVerts.  This is avoidable.
         for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
             passSubVerts(objectsToDraw[i]);   //Pass the vertices and colors of all the subshapes to webgl
             objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
@@ -306,6 +321,7 @@
             // If we have a single color, we expand that into an array of the same color over and over.
             if (!objectsToDraw[i].colors) {
                 objectsToDraw[i].colors = [];
+                // JD: What's with the extra indent????
                     for (j = 0, maxj = objectsToDraw[i].vertices.length / 3; j < maxj; j += 1) {
                         objectsToDraw[i].colors = objectsToDraw[i].colors.concat(
                             objectsToDraw[i].color.r,
@@ -402,6 +418,8 @@
         if (object.transforms.rotate) {
             gl.uniformMatrix4fv(translationMatrix,
                 gl.FALSE, new Float32Array(
+                    // JD: No need to indent all the way to the parenthesis---
+                    //     one or two levels will be fine.
                     Matrix4x4.getTranslationMatrix( object.transforms.trans.x, 
                                                     object.transforms.trans.y, 
                                                     object.transforms.trans.z
@@ -501,7 +519,8 @@
 
 
         // Display the objects.
-
+        // JD: The local functions are noted; but down here there is too
+        //     much repetition again.
         var subfound,
             subLength,
             i,
@@ -538,11 +557,13 @@
     drawScene();
 
     $("body").keydown(function(event) {
+        // JD: If this is dead code, please delete it when ready.
 /*        if ( (Math.floor(cameraX) > 43 || Math.floor(cameraX) < -43) || (Math.floor(cameraZ) > 79 || Math.floor(cameraZ) < -79) ) {
             drawScene();
             event.preventDefault();
         }*/
 
+        // JD: Full equality === is preferred.
         if (event.keyCode == 38  || event.keyCode == 87) {  //Up key
             cameraX += ((camPointer.subtract(camPosition)).unit()).x();
             cxPointer += ((camPointer.subtract(camPosition)).unit()).x();
@@ -571,6 +592,8 @@
             alpha = 0.0;
         }
 
+        // JD: udEvent and lrEvent are already boolean---no need to
+        //     compare to true!
         if (udEvent == true) {
             udEvent = false;
             drawScene();
@@ -600,6 +623,19 @@
     $(canvas).click(function () {
         main = setInterval(function () {
             if ((Math.floor(objectsToDraw[10].transforms.trans.x)) != Math.floor(cameraX)) {
+                // JD: Instead of hardcoding indexes, actually declare important
+                //     objects as a variable (e.g., "zombie") then use that
+                //     variable in the objects to draw array:
+                //
+                // var zombie = { ..... },
+                //     ...,
+                //     objectsToDraw = [
+                //         ....,
+                //         zombie,
+                //         ...,
+                //     ] .....
+                //
+                //     This will do wonders for readability!
                 objectsToDraw[10].transforms.trans.x += ((camPosition.subtract(zombieLocation)).unit()).x();
 
             } else if ((Math.floor(objectsToDraw[10].transforms.trans.z)) != Math.floor(cameraZ-5)) {
@@ -616,6 +652,7 @@
             }
             console.log("Zombie XZ: "+Math.floor(objectsToDraw[10].transforms.trans.x),Math.floor(objectsToDraw[10].transforms.trans.z));
 
+            // JD: Is this reprocessing necessary?
             assignVerts();
             drawScene();
         }, 100);
