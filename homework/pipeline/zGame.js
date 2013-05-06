@@ -93,16 +93,17 @@
                 //Lighting Variables
                 specularColor: { r: 1.0, g: 1.0, b: 1.0 },
                 shininess: 16, 
+                
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                 normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
 
-                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: 0.0 },        
                     scale: { x: 36.0, y: 15.0, z: 0.5 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
-            },
+            }/*,
             {
                 color: { r: 0.0, g: 0.0, b: 1.0 },
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
@@ -250,7 +251,7 @@
                     scale: { x: 220.0, y: 20.0, z: 0.5 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
-            }
+            }*/
     ];
 
     // Pass the vertices and colors to WebGL.
