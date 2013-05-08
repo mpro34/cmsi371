@@ -95,7 +95,7 @@
     // JD: Take note of this.  It is the root of some of your normal
     //     vector errors.  Essentially, your current sphere names some
     //     vertex indices that don't exist.
-    Shapes.checkMeshValidity(Shapes.sphere());
+    Shapes.checkMeshValidity(Shapes.hexahedron());
 
     // Build the objects to display.
     // JD: Your subshapes code is not used by your scene!  Use it somewhere
@@ -111,7 +111,7 @@
             //     glaring here.
             {
                 color: { r: 0.0, g: 0.0, b: 1.0 },
-                //Lighting Variables
+            //    Lighting Variables
                 specularColor: { r: 1.0, g: 1.0, b: 1.0 },
                 shininess: 16, 
                 
@@ -352,7 +352,7 @@
                 objectsToDraw[i].colors);
             //Same trick as above.
             if (!objectsToDraw[i].specularColors) {
-                console.log(objectsToDraw[i].specularColors);
+                console.log(objectsToDraw[i].specularColor);
                 objectsToDraw[i].specularColors = [];
                     for (j = 0, maxj = objectsToDraw[i].vertices.length / 3; j < maxj; j += 1) {
                         objectsToDraw[i].specularColors = objectsToDraw[i].specularColors.concat(
@@ -364,6 +364,9 @@
             }
             objectsToDraw[i].specularBuffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].specularColors);
+                    // One more buffer: normals.
+            objectsToDraw[i].normalBuffer = GLSLUtilities.initVertexBuffer(gl,
+                objectsToDraw[i].normals);
         }
     } assignVerts();
     
