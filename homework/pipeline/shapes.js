@@ -237,6 +237,43 @@ var Shapes = {
         }
 
         return result;
+    },
+
+    /*
+     * For debugging purposes, a mesh integrity checker.  This function iterates
+     * through an indexedVertices object and makes sure that all of its faces
+     * refer to valid vertices.
+     */
+    checkMeshValidity: function (indexedVertices) {
+        var i, maxi, j, maxj,
+            vertexIndex, vertex,
+            valid = true;
+
+        // For each face...
+        for (i = 0, maxi = indexedVertices.indices.length; i < maxi; i += 1) {
+            // For each vertex in the face...
+            for (j = 0, maxj = indexedVertices.indices[i].length; j < maxj; j += 1) {
+                // Grab the referenced vertex.
+                vertexIndex = indexedVertices.indices[i][j];
+                vertex = indexedVertices.vertices[vertexIndex];
+
+                // Is it valid?
+                if (!vertex) {
+                    valid = false;
+                    console.log("!!!!!!!! Bad face vertex found!");
+                    console.log("Face index: " + i);
+                    console.log("Index within the face: " + j);
+                    console.log("vertex index: " + vertexIndex);
+                    console.log("vertex value: " + vertex);
+                }
+            }
+        }
+
+        // If a vertex did not "pass," we log the mesh for closer examination.
+        if (!valid) {
+            console.log("-------> Here's the whole mesh so you can study it:");
+            console.log(indexedVertices);
+        }
     }
 
 };

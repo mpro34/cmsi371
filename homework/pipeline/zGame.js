@@ -92,12 +92,23 @@
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.viewport(0, 0, canvas.width, canvas.height);
 
+    // JD: Take note of this.  It is the root of some of your normal
+    //     vector errors.  Essentially, your current sphere names some
+    //     vertex indices that don't exist.
+    Shapes.checkMeshValidity(Shapes.sphere());
+
     // Build the objects to display.
     // JD: Your subshapes code is not used by your scene!  Use it somewhere
     //     so that you know if it works...say, make the zombie a composite,
     //     or group your walls into different rooms.  Or anything else.
     objectsToDraw = [
     //Bottom U Structure (WALLS 1,2,3)
+            // JD: OK, your objects are now showing quite a bit of repetition.
+            //     That in itself is not bad, and is in fact understandable---
+            //     you're building a maze after all.  But in that case, you
+            //     need to consolidate things into functions, or shared variables,
+            //     or anything that reduces the amount of copied code that is
+            //     glaring here.
             {
                 color: { r: 0.0, g: 0.0, b: 1.0 },
                 //Lighting Variables
@@ -113,7 +124,13 @@
                     scale: { x: 36.0, y: 15.0, z: 0.5 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
+
             }/*,
+            },
+            // JD: Not all of your objects have a specularColor assignment.
+            //     You'll need to find a way to accommodate that.
+            //
+            //     Same with your normal vectors.
             {
                 color: { r: 0.0, g: 0.0, b: 1.0 },
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
@@ -470,6 +487,7 @@
         }
 
         // Set the varying normal vectors.
+        // JD: object.normalBuffer?  But you never define it!
         gl.bindBuffer(gl.ARRAY_BUFFER, object.normalBuffer);
         gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
 
