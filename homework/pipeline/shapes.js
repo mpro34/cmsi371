@@ -115,8 +115,8 @@ var Shapes = {
 
 
     sphere: function () {
-        var latitudeBands = 30,
-            longitudeBands = 30,
+        var latitudeBands = 40,
+            longitudeBands = 40,
             i,
             vertexPositionData = [],
             indicePositionData = [];
@@ -142,16 +142,17 @@ var Shapes = {
                 vertexPositionData.push([x, y, z]);
             }
         }
+        console.log("vertices: "+vertexPositionData.length)
         /*
          Connect vertices with generated indices that create traingles around the sphere
         */
-        for (i = 0; i < vertexPositionData.length; i += 1) {
+        for (i = 0; i < vertexPositionData.length-(latitudeBands+2); i += 1) {
             indicePositionData.push( 
                                     [i, i + 1, i + latitudeBands + 1],
                                     [i + 1, i + latitudeBands + 1, i + latitudeBands + 2]
                                    );    
         }
-
+console.log("indices: "+indicePositionData.length)
         return {
             vertices: vertexPositionData,
             indices: indicePositionData
