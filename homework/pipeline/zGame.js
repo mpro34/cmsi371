@@ -21,7 +21,7 @@
         abort = false,
 
         // Important state variables.
-        currentRotation = 90.0,
+        currentRotation = 45.0,
         currentInterval,
         assignVerts,
         passSubVerts,
@@ -105,53 +105,77 @@
     Shapes.checkMeshValidity(Shapes.sphere());
 
 //Create the zombie...
-    var zombie = {
-        
-            color: { r: 1.0, g: 0.0, b: 0.0 },
-            specularColor: { r: 0.0, g: 1.0, b: 0.0 },
-            shininess: 16,  
+    createZombie = function(zombieX, zombieZ) {
+        var zombie = {
+        //Zombie Body
+            color: { r: 0.0, g: 0.5, b: 0.0 },
+            specularColor: { r: 1.0, g: 0.0, b: 0.0 },
+            shininess: 25,  
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             normals: Shapes.toVertexNormalArray(Shapes.sphere()),
             mode: gl.TRIANGLES,
             transforms: {
-                trans: { x: zombieLocation.x(), y: 1.5, z: zombieLocation.z() },         
+                trans: { x: zombieX, y: 1.5, z: zombieZ },         
                 scale: { x: 2.0, y: 2.0, z: 2.0 }
             },
             subshapes: [
-            //Zombie Hair
+            //Zombie Head
                 {
-                    color: { r: 0.0, g: 0.0, b: 1.0 },           
-                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    color: { r: 1.0, g: 0.0, b: 0.0 }, 
+                    specularColor: { r: 1.0, g: 0.0, b: 0.0 },
+                    shininess: 25,            
+                    vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+                    normals: Shapes.toVertexNormalArray(Shapes.sphere()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: { x: zombieLocation.x(), y: 2.2, z: zombieLocation.z() },        
-                        scale: { x: 2.0, y: 2.0, z: 2.0 }
+                        trans: { x: zombieX, y: 5.8, z: zombieZ+5.0 },        
+                        scale: { x: 1.0, y: 1.0, z: 1.0 }
                     }
                 },
             //Zombie Legs
                 {
-                    color: { r: 0.0, g: 0.0, b: 1.0 },           
+                    color: { r: 0.0, g: 0.0, b: 0.0 },           
                     vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: { x: zombieLocation.x()+2, y: 2.2, z: zombieLocation.z() },        
+                        trans: { x: zombieX-0.5, y: 0.3, z: zombieZ },        
                         scale: { x: 2.0, y: 2.0, z: 2.0 },
-                        rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                        rotate: { angle: 0, x: 0.0, y: 1.0, z: 0.0 }
                     } 
                 },
                 {
-                    color: { r: 0.0, g: 0.0, b: 1.0 },           
+                    color: { r: 0.0, g: 0.0, b: 0.0 },           
                     vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
                     mode: gl.TRIANGLES,
                     transforms: {
-                        trans: { x: zombieLocation.x()-2, y: 2.2, z: zombieLocation.z() },        
+                        trans: { x: zombieX+0.5, y: 0.3, z: zombieZ },        
                         scale: { x: 2.0, y: 2.0, z: 2.0 },
-                        rotate: { x: 0.0, y: 2.0, z: 0.0 }
+                        rotate: { angle: 0, x: 0.0, y: 1.0, z: 0.0 }
+                    } 
+                },            
+            //Zombie Arms
+                {
+                    color: { r: 0.1, g: 0.0, b: 0.0 },           
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: zombieX-0.5, y: 6.0, z: zombieZ+13.0 },        
+                        scale: { x: 5.0, y: 0.5, z: 0.5 }
+                    } 
+                },
+                {
+                    color: { r: 0.1, g: 0.0, b: 0.0 },           
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: zombieX+0.5, y: 6.0, z: zombieZ+13.0 },        
+                        scale: { x: 5.0, y: 0.5, z: 0.5 }
                     } 
                 }
-            ]
-        
-    }
+            ]    
+        }
+        return zombie;
+    };
 
     // Build the objects to display.
     // JD: Your subshapes code is not used by your scene!  Use it somewhere
@@ -165,17 +189,16 @@
             //     need to consolidate things into functions, or shared variables,
             //     or anything that reduces the amount of copied code that is
             //     glaring here.
-        zombie
-            /*,
+        createZombie(zombieLocation.x(), zombieLocation.z()),
+            
 
-          /*  {
+            {
                 color: { r: 0.0, g: 0.0, b: 1.0 },           
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: 0.0 },        
-                    scale: { x: 36.0, y: 15.0, z: 0.5 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 36.0, y: 15.0, z: 0.5 }
                 },
 
                 subshapes: [
@@ -185,8 +208,7 @@
                         mode: gl.TRIANGLES,
                         transforms: {
                             trans: { x: 18.0, y: 0.0, z: -0.5 },         
-                            scale: { x: 0.5, y: 15.0, z: 18.0 },
-                            rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                            scale: { x: 0.5, y: 15.0, z: 18.0 }
                         }
                     },
                     {
@@ -195,8 +217,7 @@
                         mode: gl.TRIANGLES,
                         transforms: {
                             trans: { x: -18.0, y: 0.0, z: -0.5 },        
-                            scale: { x: 0.5, y: 15.0, z: 13.0 },
-                            rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                            scale: { x: 0.5, y: 15.0, z: 13.0 }
                         }
                     },                
                     {
@@ -205,8 +226,7 @@
                         mode: gl.TRIANGLES,
                         transforms: {
                             trans: { x: -0.5, y: 0.0, z: -1.0 },        
-                            scale: { x: 0.5, y: 15.0, z: 10.0 },
-                            rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                            scale: { x: 0.5, y: 15.0, z: 10.0 }
                         }
                     }
                 ]
@@ -222,8 +242,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -0.5, y: 0.0, z: -1.0 },        
-                    scale: { x: 0.5, y: 15.0, z: 10.0 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 0.5, y: 15.0, z: 10.0 }
                 }
             },
             {
@@ -232,8 +251,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 6.0, y: 0.0, z: -1.0 },         
-                    scale: { x: 1.0, y: 15.0, z: 10.0 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 1.0, y: 15.0, z: 10.0 }
                 }
             },
             {
@@ -242,8 +260,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.23, y: 0.0, z: -20.0 },         
-                    scale: { x: 12.0, y: 15.0, z: 0.5 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 12.0, y: 15.0, z: 0.5 }
                 }
             },
 
@@ -254,8 +271,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -10.0, y: 0.0, z: -1.5 },       
-                    scale: { x: 0.5, y: 15.0, z: 7.0 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 0.5, y: 15.0, z: 7.0 }
                 }
             },
             {
@@ -264,8 +280,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: -30.0 },        
-                    scale: { x: 36.0, y: 15.0, z: 0.5 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 36.0, y: 15.0, z: 0.5 }
                 }
             },
             {
@@ -274,8 +289,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -1.0, y: 0.0, z: -11.0 },       
-                    scale: { x: 7.0, y: 15.0, z: 1.0 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 7.0, y: 15.0, z: 1.0 }
                 }
             },
             {
@@ -284,8 +298,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -18.0, y: 0.0, z: -1.85 },         
-                    scale: { x: 0.5, y: 15.0, z: 8.0 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 0.5, y: 15.0, z: 8.0 }
                 }
             },
             
@@ -297,8 +310,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: -180.0 },         
-                    scale: { x: 220.0, y: 20.0, z: 0.5 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 220.0, y: 20.0, z: 0.5 }
                 }
             },
             {
@@ -307,8 +319,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 110.0, y: 0.0, z: -0.25 },         
-                    scale: { x: 0.5, y: 20.0, z: 360.0 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 0.5, y: 20.0, z: 360.0 }
                 }
             },
             {
@@ -317,8 +328,7 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -110.0, y: 0.0, z: -0.25 },         
-                    scale: { x: 0.5, y: 20.0, z: 360.0 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 0.5, y: 20.0, z: 360.0 }
                 }
             },
             {
@@ -327,10 +337,9 @@
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: 180.0 },         
-                    scale: { x: 220.0, y: 20.0, z: 0.5 },
-                    rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    scale: { x: 220.0, y: 20.0, z: 0.5 }
                 }
-            }*/
+            }
     ];
 
     // Pass the vertices and colors to WebGL.
@@ -341,7 +350,7 @@
                     composites[i].vertices);
                 //Create the default normal array in case of no lighting variables for current object.
                 for (k = 0; maxk = composites[i].vertices.length, k < maxk; k += 1) {
-                    normalArray.push(0);
+                    normalArray.push(0.5);
                 }
             // If we have a single color, we expand that into an array of the same color over and over.
                 if (!composites[i].colors) {
@@ -470,7 +479,8 @@
 
             gl.uniformMatrix4fv(rotationMatrix,
                 gl.FALSE, new Float32Array(object.transforms.rotate ?
-                    Matrix4x4.getRotationMatrix( currentRotation, 
+                    Matrix4x4.getRotationMatrix(
+                        object.transforms.rotate.angle, 
                         object.transforms.rotate.x, 
                         object.transforms.rotate.y,
                         object.transforms.rotate.z ).toWebGLArray() :
@@ -496,20 +506,6 @@
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // Set up the rotation matrix.
-        // JD: The way you have it, rotation and scale are global;
-        //     only translation is done per object.  That is not a
-        //     complete instance transformation.  You should be able
-        //     to apply all three transforms on each individual object.
-
-  /*      gl.uniformMatrix4fv(rotationMatrix,
-            gl.FALSE, new Float32Array(
-                Matrix4x4.getRotationMatrix(currentRotation, 0.0, 1.0, 0.0).toWebGLArray()
-            )
-        );*/
-/*
-   Left and Right arrow keys rotate the camera, not physically move it.
-*/
         gl.uniformMatrix4fv(cameraMatrix,
             gl.FALSE, new Float32Array(
                 Matrix4x4.lookAt(
@@ -558,7 +554,6 @@
             event.preventDefault();
         }*/
 
-        // JD: Full equality === is preferred.
         if (event.keyCode === 38  || event.keyCode === 87) {  //Up key
             cameraX += ((camPointer.subtract(camPosition)).unit()).x();
             cxPointer += ((camPointer.subtract(camPosition)).unit()).x();
@@ -612,13 +607,13 @@
             
     });
 
-//Runs as soon as the page is loaded...
+//Runs when the user clicks the screen...
     $(canvas).click(function () {
         main = setInterval(function () {
-            if ((Math.floor(objectsToDraw[0].transforms.trans.x)) != Math.floor(cameraX)) {
+            if ((Math.floor(zombieLocation.x())) != Math.floor(cameraX)) {
                 objectsToDraw[0].transforms.trans.x += ((camPosition.subtract(zombieLocation)).unit()).x();
 
-            } else if ((Math.floor(objectsToDraw[0].transforms.trans.z)) != Math.floor(cameraZ-5)) {
+            } else if ((Math.floor(zombieLocation.z())) != Math.floor(cameraZ-5)) {
                 objectsToDraw[0].transforms.trans.z += ((camPosition.subtract(zombieLocation)).unit()).z();
 
             } else {
@@ -630,11 +625,10 @@
                     return;
                 }
             }
-            console.log("Zombie XZ: "+Math.floor(objectsToDraw[10].transforms.trans.x),Math.floor(objectsToDraw[10].transforms.trans.z));
+            zombieLocation = new Vector (objectsToDraw[0].transforms.trans.x, 0.0, objectsToDraw[0].transforms.trans.z);
+            console.log("Zombie XZ: "+Math.floor(zombieLocation.x()),Math.floor(zombieLocation.z()));
 
-            // JD: Is this reprocessing necessary?
-         //   assignVerts();
-         //   drawScene();
+            drawScene();
         }, 100);
     });
 
