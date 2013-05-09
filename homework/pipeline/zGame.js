@@ -27,6 +27,7 @@
         passSubVerts,
         subArray = [],
         drawArray = [],
+        normalArray = [],
 
         //Camera Variables
         cameraZ = 20.0, 
@@ -43,7 +44,7 @@
 
         //Zombie Variable
         //Start zombie at a random location and slowly move towards user...
-        zombieLocation = new Vector(0.0, 0.0, 10.0),  
+        zombieLocation = new Vector(0.0, 0.0, 5.0),  
         //(Math.random()*60.0)-30
         zombieX = 0.0,
         zombieZ = 0.0,
@@ -102,11 +103,15 @@
     //     vector errors.  Essentially, your current sphere names some
     //     vertex indices that don't exist.
     Shapes.checkMeshValidity(Shapes.sphere());
+
 //Create the zombie...
     var zombie = {
         
             color: { r: 1.0, g: 0.0, b: 0.0 },
+            specularColor: { r: 1.0, g: 1.0, b: 1.0 },
+            shininess: 16,  
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+            normals: Shapes.toVertexNormalArray(Shapes.sphere()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: zombieLocation.x(), y: 1.5, z: zombieLocation.z() },         
@@ -128,10 +133,10 @@
             //     need to consolidate things into functions, or shared variables,
             //     or anything that reduces the amount of copied code that is
             //     glaring here.
+        zombie
+            /*,
 
-            zombie,
-
-            {
+          /*  {
                 color: { r: 0.0, g: 0.0, b: 1.0 },
                 specularColor: { r: 1.0, g: 1.0, b: 1.0 },
                 shininess: 16,               
@@ -304,7 +309,7 @@
                     scale: { x: 220.0, y: 20.0, z: 0.5 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
-            }
+            }*/
     ];
 
     // Pass the vertices and colors to WebGL.
@@ -313,6 +318,10 @@
             for (i = 0, maxi = composites.length; i < maxi; i += 1) {
                 composites[i].buffer = GLSLUtilities.initVertexBuffer(gl,
                     composites[i].vertices);
+                //Create the default normal array in case of no lighting variables for current object.
+                for (k = 0; maxk = composites[i].vertices.length, k < maxk; k += 1) {
+                    normalArray.push(0);
+                }
             // If we have a single color, we expand that into an array of the same color over and over.
                 if (!composites[i].colors) {
                     composites[i].colors = [];
@@ -329,29 +338,24 @@
                 
             //Same trick as above.
                 if (!composites[i].specularColors) {
-                    composites[i].specularColors = []; 
-                    if (composites[i].specularColor) {       
-                        for (j = 0, maxj = composites[i].vertices.length / 3; j < maxj; j += 1) {
-                            composites[i].specularColors = composites[i].specularColors.concat(
-                            composites[i].specularColor.r,
-                            composites[i].specularColor.g,
-                            composites[i].specularColor.b
-                            );
-                        }
+                    composites[i].specularColors = [];      
+                    for (j = 0, maxj = composites[i].vertices.length / 3; j < maxj; j += 1) {
+                        composites[i].specularColors = composites[i].specularColors.concat(
+                            (composites[i].specularColor ? composites[i].specularColor.r : 1.0),
+                            (composites[i].specularColor ? composites[i].specularColor.g : 1.0),
+                            (composites[i].specularColor ? composites[i].specularColor.b : 1.0)
+                        );
+                    }
                     composites[i].specularBuffer = GLSLUtilities.initVertexBuffer(gl,
                         composites[i].specularColors);
                     composites[i].normalBuffer = GLSLUtilities.initVertexBuffer(gl,
-                        composites[i].normals); 
-                    }
+                        (composites[i].normals ? composites[i].normals : normalArray)); 
                 }
-
-
 
             //Save subshapes to be processed after all of the standard objects.
                 if (composites[i].subshapes) {
                     subArray = subArray.concat(composites[i].subshapes);
                 }
-
             }           
         }; 
         passSubVerts(objectsToDraw);
@@ -415,17 +419,12 @@
     // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexDiffuseColor, 3, gl.FLOAT, false, 0, 0);
+        gl.bindBuffer(gl.ARRAY_BUFFER, object.specularBuffer);
+        gl.vertexAttribPointer(vertexSpecularColor, 3, gl.FLOAT, false, 0, 0);
+        // Set the shininess.
+        gl.uniform1f(shininess, object.shininess);
 
-    //Assume if the object has a specularColor it also has the rest of the lighting variables.
-        if (object.specularColor) { 
-            gl.bindBuffer(gl.ARRAY_BUFFER, object.specularBuffer);
-            gl.vertexAttribPointer(vertexSpecularColor, 3, gl.FLOAT, false, 0, 0);
-            // Set the shininess.
-            gl.uniform1f(shininess, object.shininess);
-            // Set the varying normal vectors.
-            gl.bindBuffer(gl.ARRAY_BUFFER, object.normalBuffer);
-            gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
-        }
+        
 
         //Set up instance transforms.
         if (object.transforms.rotate) {
@@ -480,6 +479,9 @@
                 )
             );
         }
+        // Set the varying normal vectors.
+        gl.bindBuffer(gl.ARRAY_BUFFER, object.normalBuffer);
+        gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
 
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
