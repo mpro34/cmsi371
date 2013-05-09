@@ -1,7 +1,11 @@
 /*
  * For maximum modularity, we place everything within a single function that
  * takes the canvas that it will need.
+
+ *ASSIGNED a standard specular color for those objects not containing any lighting info.
+ *NEED TO CHANGE for all the other lighting variables.
  */
+
 (function (canvas) {
 
     // Because many of these variables are best initialized then immediately
@@ -23,6 +27,9 @@
         currentRotation = 0.0,
         currentInterval,
         assignVerts,
+        passSubVerts,
+        subArray = [],
+        drawArray = [],
         // JD: Suggestion---start clustering these variables into related
         //     groups, e.g., camera, zombie, etc.  It will make your code
         //     more readable and possibly reveal values that you don't
@@ -123,34 +130,75 @@
                     trans: { x: 0.0, y: 0.0, z: 0.0 },        
                     scale: { x: 36.0, y: 15.0, z: 0.5 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                },
+                subshapes: [
+                {
+                    color: { r: 1.0, g: 0.0, b: 0.0 },
+                    //    Lighting Variables
+                    specularColor: { r: 0.0, g: 0.0, b: 1.0 },
+                    shininess: 10, 
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: 18.0, y: 0.0, z: -0.5 },         
+                        scale: { x: 0.5, y: 15.0, z: 18.0 },
+                        rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    }
                 }
+                ]
 
-            }/*,
             },
+            
             // JD: Not all of your objects have a specularColor assignment.
             //     You'll need to find a way to accommodate that.
             //
             //     Same with your normal vectors.
             {
-                color: { r: 0.0, g: 0.0, b: 1.0 },
+                color: { r: 0.0, g: 1.0, b: 0.0 },
+            //    Lighting Variables
+                specularColor: { r: 0.0, g: 0.0, b: 1.0 },
+                shininess: 10, 
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: -18.0, y: 0.0, z: -0.5 },        
                     scale: { x: 0.5, y: 15.0, z: 13.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
-                }
-            },
-            {
-                color: { r: 0.0, g: 0.0, b: 1.0 },
+                },
+                subshapes: [
+                {
+                    color: { r: 1.0, g: 0.0, b: 0.0 },
+                    //    Lighting Variables
+                    specularColor: { r: 0.0, g: 0.0, b: 1.0 },
+                    shininess: 10, 
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: 18.0, y: 0.0, z: -0.5 },         
+                        scale: { x: 0.5, y: 15.0, z: 18.0 },
+                        rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    }
+                },
+                {
+                color: { r: 1.0, g: 0.0, b: 0.0 },
+                    specularColor: { r: 0.0, g: 0.0, b: 1.0 },
+                    shininess: 10, 
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                  normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
-                    trans: { x: 18.0, y: 0.0, z: -0.5 },         
-                    scale: { x: 0.5, y: 15.0, z: 18.0 },
+                    trans: { x: -0.5, y: 0.0, z: -1.0 },        
+                    scale: { x: 0.5, y: 15.0, z: 10.0 },
                     rotate: { x: 1.0, y: 0.0, z: 0.0 }
                 }
             },
+
+                ]
+            }
+/*,
 
             //Inner U Structure (WALLS 4,5,6)
             {
@@ -285,9 +333,55 @@
     // JD: Note, we prefer assignVerts = function () .....
     //     (you did declare the variable up top so no need to precede this
     //     with var)
-    function assignVerts() {
-        var passSubVerts = function (composites) {
-            if (composites.subshapes) {
+   // assignVerts = function () {
+        passSubVerts = function (composites) {
+            console.log("obj1: "+ composites);
+            for (i = 0, maxi = composites.length; i < maxi; i += 1) {
+                composites[i].buffer = GLSLUtilities.initVertexBuffer(gl,
+                    composites[i].vertices);
+            // If we have a single color, we expand that into an array of the same color over and over.
+                if (!composites[i].colors) {
+                    composites[i].colors = [];
+                    for (j = 0, maxj = composites[i].vertices.length / 3; j < maxj; j += 1) {
+                        composites[i].colors = composites[i].colors.concat(
+                            composites[i].color.r,
+                            composites[i].color.g,
+                            composites[i].color.b
+                        );
+                    }
+                }  
+                composites[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                    composites[i].colors);
+                
+            //Same trick as above.
+                if (!composites[i].specularColors) {
+                    composites[i].specularColors = [];        
+                    for (j = 0, maxj = composites[i].vertices.length / 3; j < maxj; j += 1) {
+                        composites[i].specularColors = composites[i].specularColors.concat(
+                        composites[i].specularColor.r,
+                        composites[i].specularColor.g,
+                        composites[i].specularColor.b
+                        );
+                    }
+                }
+                composites[i].specularBuffer = GLSLUtilities.initVertexBuffer(gl,
+                    composites[i].specularColors);
+                composites[i].normalBuffer = GLSLUtilities.initVertexBuffer(gl,
+                    composites[i].normals); 
+
+            //Save subshapes to be processed after all of the standard objects.
+                if (composites[i].subshapes) {
+                    subArray = subArray.concat(composites[i].subshapes);
+                }
+
+            }
+            console.log("subARRAY: "+ subArray.length);
+            
+        }; 
+        passSubVerts(objectsToDraw);
+        passSubVerts(subArray);
+
+               /* console.log("sub: " + composites.subshapes);
                 for (j = 0, subLength = composites.subshapes.length; j < subLength; j += 1) {
                     composites.subshapes[j].buffer = GLSLUtilities.initVertexBuffer(gl,
                         composites.subshapes[j].vertices);
@@ -310,29 +404,85 @@
                   //The same color algorithm for specular colors.
                     if (!composites.subshapes[j].specularColors) {
                         composites.subshapes[j].specularColors = [];
-                        
-                        for (k = 0, maxk = composites.subshapes[j].vertices.length / 3; k < maxk; k += 1) {
+                        if (composites.subshapes[j].specularColor) {
+                            for (k = 0, maxk = composites.subshapes[j].vertices.length / 3; k < maxk; k += 1) {
                                 composites.subshapes[j].specularColors = composites.subshapes[j].specularColors.concat(
                                     composites.subshapes[j].specularColor.r,
                                     composites.subshapes[j].specularColor.g,
                                     composites.subshapes[j].specularColor.b
                                 );
+                            }
+                        }
+                        else {
+                            composites.subshapes[j].specularColors = composites.subshapes[j].specularColors.concat(
+                                0.0, 0.0, 0.0
+                            );
                         }
                     }
                     composites.subshapes[j].specularBuffer = GLSLUtilities.initVertexBuffer(gl,
                         composites.subshapes[j].specularColors);
+                    composites.subshapes[j].normalBuffer = GLSLUtilities.initVertexBuffer(gl,
+                        composites.subshapes[j].normals);
+
                     //Check for more subshapes...
                     if (composites.subshapes[j]) {
                         passSubVerts(composites.subshapes[j]);
                     }
                 }
             }
-        } // JD: Semicolon!
+
+            else {
+                console.log("obj: "+ composites);
+                for (i = 0, maxi = composites.length; i < maxi; i += 1) {
+                    passSubVerts(composites[i]);   //Pass the vertices and colors of all the subshapes to webgl
+                    composites[i].buffer = GLSLUtilities.initVertexBuffer(gl,
+                        composites[i].vertices);
+            // If we have a single color, we expand that into an array of the same color over and over.
+                    if (!composites[i].colors) {
+                        composites[i].colors = [];
+                // JD: What's with the extra indent????
+                        for (j = 0, maxj = composites[i].vertices.length / 3; j < maxj; j += 1) {
+                            composites[i].colors = composites[i].colors.concat(
+                                composites[i].color.r,
+                                composites[i].color.g,
+                                composites[i].color.b
+                            );
+                        }
+                    }  
+                }
+                composites[i].colorBuffer = GLSLUtilities.initVertexBuffer(gl,
+                    composites[i].colors);
+            //Same trick as above.
+                if (!composites[i].specularColors) {
+                    composites[i].specularColors = [];
+               if (composites[i].specularColor) {          
+                    for (j = 0, maxj = composites[i].vertices.length / 3; j < maxj; j += 1) {
+                        composites[i].specularColors = composites[i].specularColors.concat(
+                        composites[i].specularColor.r,
+                        composites[i].specularColor.g,
+                        composites[i].specularColor.b
+                        );
+                    }
+                } 
+                else {
+                    composites[i].specularColors = composites[i].specularColors.concat(
+                                0.0, 0.0, 0.0
+                            );
+                }
+                }
+                composites[i].specularBuffer = GLSLUtilities.initVertexBuffer(gl,
+                    composites[i].specularColors);
+                    // One more buffer: normals.
+                composites[i].normalBuffer = GLSLUtilities.initVertexBuffer(gl,
+                    composites[i].normals); 
+            }
+        };*/
+  //  };
 
         //Iterate through each object in the objectsToDraw array
         // JD: Note how a lot of this code looks very similar to the one in
         //     passSubVerts.  This is avoidable.
-        for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
+/*        for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
             passSubVerts(objectsToDraw[i]);   //Pass the vertices and colors of all the subshapes to webgl
             objectsToDraw[i].buffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].vertices);
@@ -352,24 +502,31 @@
                 objectsToDraw[i].colors);
             //Same trick as above.
             if (!objectsToDraw[i].specularColors) {
-                console.log(objectsToDraw[i].specularColor);
-                objectsToDraw[i].specularColors = [];
+                 objectsToDraw[i].specularColors = [];
+            /*    if (objectsToDraw[i].specularColor) {
+                console.log(objectsToDraw[i].specularColor);            
                     for (j = 0, maxj = objectsToDraw[i].vertices.length / 3; j < maxj; j += 1) {
                         objectsToDraw[i].specularColors = objectsToDraw[i].specularColors.concat(
-                            objectsToDraw[i].specularColor.r,
-                            objectsToDraw[i].specularColor.g,
-                            objectsToDraw[i].specularColor.b
+                        objectsToDraw[i].specularColor.r,
+                        objectsToDraw[i].specularColor.g,
+                        objectsToDraw[i].specularColor.b
                         );
                     }
+                  } 
+                  else {
+                    objectsToDraw[i].specularColors = objectsToDraw[i].specularColors.concat(
+                                0.0, 0.0, 0.0
+                            );
+                }
             }
             objectsToDraw[i].specularBuffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].specularColors);
                     // One more buffer: normals.
             objectsToDraw[i].normalBuffer = GLSLUtilities.initVertexBuffer(gl,
                 objectsToDraw[i].normals);
-        }
-    } assignVerts();
-    
+        }*/
+
+
 
     // Initialize the shaders.
     shaderProgram = GLSLUtilities.initSimpleShaderProgram(
@@ -425,6 +582,8 @@
      * Displays an individual object.
      */
     drawObject = function (object) {
+
+    
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.colorBuffer);
         gl.vertexAttribPointer(vertexDiffuseColor, 3, gl.FLOAT, false, 0, 0);
@@ -490,7 +649,6 @@
         }
 
         // Set the varying normal vectors.
-        // JD: object.normalBuffer?  But you never define it!
         gl.bindBuffer(gl.ARRAY_BUFFER, object.normalBuffer);
         gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
 
@@ -541,31 +699,17 @@
 
 
         // Display the objects.
-        // JD: The local functions are noted; but down here there is too
-        //     much repetition again.
-        var subfound,
-            subLength,
-            i,
-            j;
-
-        var drawSubshapes = function (composites) {
-            if (composites.subshapes) {
-                for (j = 0, subLength = composites.subshapes.length; j < subLength; j += 1) { 
-                    drawObject(composites.subshapes[j]);    //Draw each subshape
-                    if (composites.subshapes[j].subshapes) {
-                        drawSubshapes(composites.subshapes[j]);     
-                    }
+        drawSubshapes = function (composites) {          
+            for (i = 0, maxi = composites.length; i < maxi; i += 1) {
+                drawObject(composites[i])
+                if (composites[i].subshapes) {
+                    drawArray = drawArray.concat(composites[i].subshapes);
                 }
-            }  
-        };
-
-        //Recursively draw objects, check for subshapes, and respectively draw each subshape.
-        for (i = 0, maxi = objectsToDraw.length; i < maxi; i += 1) {
-            drawSubshapes(objectsToDraw[i]);     //Pass object to drawsubshapes function to draw each subshape
-            drawObject(objectsToDraw[i]);         //Draw parent object
-        }
-
-
+            } 
+        }; 
+        drawSubshapes(objectsToDraw);
+        drawSubshapes(subArray);
+     
         // All done.
         gl.flush();
     };
@@ -675,8 +819,8 @@
             console.log("Zombie XZ: "+Math.floor(objectsToDraw[10].transforms.trans.x),Math.floor(objectsToDraw[10].transforms.trans.z));
 
             // JD: Is this reprocessing necessary?
-            assignVerts();
-            drawScene();
+         //   assignVerts();
+         //   drawScene();
         }, 100);
     });
 
