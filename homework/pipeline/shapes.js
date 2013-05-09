@@ -115,8 +115,8 @@ var Shapes = {
 
 
     sphere: function () {
-        var latitudeBands = 40,
-            longitudeBands = 40,
+        var latitudeBands = 30,
+            longitudeBands = 30,
             i,
             vertexPositionData = [],
             indicePositionData = [];

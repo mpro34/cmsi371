@@ -21,7 +21,7 @@
         abort = false,
 
         // Important state variables.
-        currentRotation = 0.0,
+        currentRotation = 90.0,
         currentInterval,
         assignVerts,
         passSubVerts,
@@ -108,16 +108,48 @@
     var zombie = {
         
             color: { r: 1.0, g: 0.0, b: 0.0 },
-            specularColor: { r: 1.0, g: 1.0, b: 1.0 },
+            specularColor: { r: 0.0, g: 1.0, b: 0.0 },
             shininess: 16,  
             vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
             normals: Shapes.toVertexNormalArray(Shapes.sphere()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: zombieLocation.x(), y: 1.5, z: zombieLocation.z() },         
-                scale: { x: 2.0, y: 2.0, z: 2.0 },
-                rotate: { x: 1.0, y: 0.0, z: 0.0 }
-            }
+                scale: { x: 2.0, y: 2.0, z: 2.0 }
+            },
+            subshapes: [
+            //Zombie Hair
+                {
+                    color: { r: 0.0, g: 0.0, b: 1.0 },           
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: zombieLocation.x(), y: 2.2, z: zombieLocation.z() },        
+                        scale: { x: 2.0, y: 2.0, z: 2.0 }
+                    }
+                },
+            //Zombie Legs
+                {
+                    color: { r: 0.0, g: 0.0, b: 1.0 },           
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: zombieLocation.x()+2, y: 2.2, z: zombieLocation.z() },        
+                        scale: { x: 2.0, y: 2.0, z: 2.0 },
+                        rotate: { x: 1.0, y: 0.0, z: 0.0 }
+                    } 
+                },
+                {
+                    color: { r: 0.0, g: 0.0, b: 1.0 },           
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: zombieLocation.x()-2, y: 2.2, z: zombieLocation.z() },        
+                        scale: { x: 2.0, y: 2.0, z: 2.0 },
+                        rotate: { x: 0.0, y: 2.0, z: 0.0 }
+                    } 
+                }
+            ]
         
     }
 
@@ -137,11 +169,8 @@
             /*,
 
           /*  {
-                color: { r: 0.0, g: 0.0, b: 1.0 },
-                specularColor: { r: 1.0, g: 1.0, b: 1.0 },
-                shininess: 16,               
+                color: { r: 0.0, g: 0.0, b: 1.0 },           
                 vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
                 mode: gl.TRIANGLES,
                 transforms: {
                     trans: { x: 0.0, y: 0.0, z: 0.0 },        
@@ -152,10 +181,7 @@
                 subshapes: [
                     {
                         color: { r: 0.0, g: 0.0, b: 1.0 },
-                        specularColor: { r: 0.0, g: 0.0, b: 1.0 },
-                        shininess: 10, 
                         vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                        normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
                         mode: gl.TRIANGLES,
                         transforms: {
                             trans: { x: 18.0, y: 0.0, z: -0.5 },         
@@ -165,10 +191,7 @@
                     },
                     {
                         color: { r: 0.0, g: 0.0, b: 1.0 },
-                        specularColor: { r: 0.0, g: 0.0, b: 1.0 },
-                        shininess: 10, 
                         vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-                        normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
                         mode: gl.TRIANGLES,
                         transforms: {
                             trans: { x: -18.0, y: 0.0, z: -0.5 },        
@@ -178,9 +201,7 @@
                     },                
                     {
                         color: { r: 1.0, g: 0.0, b: 0.0 },
-
                         vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-      
                         mode: gl.TRIANGLES,
                         transforms: {
                             trans: { x: -0.5, y: 0.0, z: -1.0 },        
@@ -427,58 +448,36 @@
         
 
         //Set up instance transforms.
-        if (object.transforms.rotate) {
             gl.uniformMatrix4fv(translationMatrix,
-                gl.FALSE, new Float32Array(
-                    // JD: No need to indent all the way to the parenthesis---
-                    //     one or two levels will be fine.
-                    Matrix4x4.getTranslationMatrix( object.transforms.trans.x, 
-                                                    object.transforms.trans.y, 
-                                                    object.transforms.trans.z
-                                                  ).toWebGLArray()
+                gl.FALSE, new Float32Array(object.transforms.trans ?
+                    Matrix4x4.getTranslationMatrix( 
+                        object.transforms.trans.x, 
+                        object.transforms.trans.y, 
+                        object.transforms.trans.z ).toWebGLArray() : 
+                    new Matrix4x4().toWebGLArray()
                 )
             ),
 
             gl.uniformMatrix4fv(scaleMatrix,
-                gl.FALSE, new Float32Array(
-                    Matrix4x4.getScaleMatrix( object.transforms.scale.x, 
-                                              object.transforms.scale.y, 
-                                              object.transforms.scale.z
-                                            ).toWebGLArray()
+                gl.FALSE, new Float32Array(object.transforms.scale ?
+                    Matrix4x4.getScaleMatrix(
+                        object.transforms.scale.x, 
+                        object.transforms.scale.y, 
+                        object.transforms.scale.z ).toWebGLArray() : 
+                    new Matrix4x4().toWebGLArray()
                 )
             ),
 
             gl.uniformMatrix4fv(rotationMatrix,
-                gl.FALSE, new Float32Array(
+                gl.FALSE, new Float32Array(object.transforms.rotate ?
                     Matrix4x4.getRotationMatrix( currentRotation, 
-                                                 object.transforms.rotate.x, 
-                                                 object.transforms.rotate.y,
-                                                 object.transforms.rotate.z
-                                               ).toWebGLArray()
+                        object.transforms.rotate.x, 
+                        object.transforms.rotate.y,
+                        object.transforms.rotate.z ).toWebGLArray() :
+                    new Matrix4x4().toWebGLArray()
                 )
             );
 
-        } else {
-
-            //Default to identity matrix.
-            gl.uniformMatrix4fv(translationMatrix,
-                gl.FALSE, new Float32Array(
-                    new Matrix4x4().toWebGLArray()
-                )
-            ),
-
-            gl.uniformMatrix4fv(scaleMatrix,
-                gl.FALSE, new Float32Array(
-                    new Matrix4x4().toWebGLArray()
-                )
-            ),
-
-            gl.uniformMatrix4fv(rotationMatrix,
-                gl.FALSE, new Float32Array(
-                    currentRotation, 0.0, 1.0, 0.0
-                )
-            );
-        }
         // Set the varying normal vectors.
         gl.bindBuffer(gl.ARRAY_BUFFER, object.normalBuffer);
         gl.vertexAttribPointer(normalVector, 3, gl.FLOAT, false, 0, 0);
