@@ -44,9 +44,7 @@
         lrEvent = false,
 
         //Zombie Variables
-        //Start zombie at a random location and slowly move towards user...
         zombieLocation = new Vector(0.0, 0.0, 5.0),  
-        //(Math.random()*60.0)-30
         zombieX = 0.0,
         zombieZ = 0.0,
 
@@ -543,7 +541,6 @@
             czPointer += ((camPointer.subtract(camPosition)).unit()).z();
             udEvent = true;
 
-
         } else if (event.keyCode === 40 || event.keyCode === 83) {  //Down key
             cameraX -= ((camPointer.subtract(camPosition)).unit()).x();
             cxPointer -= ((camPointer.subtract(camPosition)).unit()).x();
@@ -620,6 +617,4 @@
             drawScene();
         }, 100);
     });
-
-
 }(document.getElementById("space-scene")));
