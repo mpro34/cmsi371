@@ -551,7 +551,7 @@
             } 
         }; 
         drawSubshapes(objectsToDraw);
-        drawSubshapes(subArray);
+        drawSubshapes(drawArray);
      
         // All done.
         gl.flush();
