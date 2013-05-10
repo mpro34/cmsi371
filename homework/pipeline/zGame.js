@@ -524,6 +524,24 @@
         );
 
         // Display the objects.
+        // JD: Yes, just as I thought---your subshapes processing code
+        //     is not passing on the transform of a parent such that a
+        //     subshape/child also includes that transform when it is
+        //     drawn itself.  To accomplish this, you need to do a little
+        //     restructuring.  First, it is *drawObject* that should be
+        //     called recursively.  You need this because it is drawObject
+        //     that knows the instance transform.  If the object being
+        //     drawn has subshapes, then you can call drawObject on those
+        //     subshapes, passing in the parent transform.
+        //
+        //     Thus, an object's actual transform should be:
+        //
+        //        parentTransform * instanceTransform
+        //
+        //     If an object has no parent, then parentTransform can be
+        //     the identity matrix or just skipped.
+        //
+        //     Hope that makes sense?
         drawSubshapes = function (composites) {          
             for (i = 0, maxi = composites.length; i < maxi; i += 1) {
                 drawObject(composites[i])
