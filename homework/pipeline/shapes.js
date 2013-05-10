@@ -142,7 +142,6 @@ var Shapes = {
                 vertexPositionData.push([x, y, z]);
             }
         }
-        console.log("vertices: "+vertexPositionData.length)
         /*
          Connect vertices with generated indices that create traingles around the sphere
         */
@@ -152,7 +151,6 @@ var Shapes = {
                                     [i + 1, i + latitudeBands + 1, i + latitudeBands + 2]
                                    );    
         }
-console.log("indices: "+indicePositionData.length)
         return {
             vertices: vertexPositionData,
             indices: indicePositionData
