@@ -291,48 +291,40 @@ var Primitives = {
     
         var xi = 0,
             yi = 0,
+            module = this,
 			i,
-			j;
+			j,
+            cDelta;
        //     ydist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(y,2))),
-       //     xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2))),
-            // JD: Glitch #1---Your color delta is based on the radius.
-            //
-            //     Style notes: why is r in parentheses?  Plus, with an array,
-            //     the members are at another level of structure, so this
-            //     justifies a new indent level.  This represents the
-            //     structure more faithfully:
-            /*
-                VDelta = [
-                    (c2[0] - c1[0]) / r,
-                    (c2[1] - c1[1]) / r,
-                    (c2[2] - c1[2]) / r
-                ];
-            */
-            //     Finally, "VDelta" should not begin with a capital letter.
-            vDelta = [
-			    (c2[0] - c1[0]),
-                (c2[1] - c1[1]),
-                (c2[2] - c1[2]) 
-		    ];
+       //     xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2)))
         //xc, yc are the distances to the center of the circle
 		//x, y are the radii
         //Top to Bottom pieces  
-        for  (i = 0.0; i < 20.0; i += 1) {
-//		    for (j = 0; j < 30; j++) {
-            //    this.setPixel(context, xc + x - i, yc + y - i, c1[0], c1[1], c1[2]);
-                this.setPixel(context, xc + x - i, yc - y + i, c1[0], c1[1], c1[2]);
-            //    this.setPixel(context, xc + y - i, yc + x - i, c1[0], c1[1], c1[2]);
-            //    this.setPixel(context, xc + y - i, yc - x + i, c1[0], c1[1], c1[2]);
-            //    this.setPixel(context, xc - x + i, yc + y - i, c1[0], c1[1], c1[2]);
-            //    this.setPixel(context, xc - x + i, yc - y + i, c1[0], c1[1], c1[2]);
-            //    this.setPixel(context, xc - y + i, yc + x - i, c1[0], c1[1], c1[2]);
-                this.setPixel(context, xc - y + i, yc - x + i, c1[0], c1[1], c1[2]); 
-		//	}
-			console.log("HERE");
-            c1[0] += c2[0];
-            c1[1] += c2[1];
-            c1[2] += c2[2];
+        fillCircle = function(c1) {
+            for  (i = 0; i < 5; i += 1) {
+                    module.setPixel(context, xc + x - i, yc + y - i, c1[0], c1[1], c1[2]);
+                    module.setPixel(context, xc + x - i, yc - y + i, c1[0], c1[1], c1[2]);
+                    module.setPixel(context, xc + y - i, yc + x - i, c1[0], c1[1], c1[2]);
+                    module.setPixel(context, xc + y - i, yc - x + i, c1[0], c1[1], c1[2]);
+                    module.setPixel(context, xc - x + i, yc + y - i, c1[0], c1[1], c1[2]);
+                    module.setPixel(context, xc - x + i, yc - y + i, c1[0], c1[1], c1[2]);
+                    module.setPixel(context, xc - y + i, yc + x - i, c1[0], c1[1], c1[2]);
+                    module.setPixel(context, xc - y + i, yc - x + i, c1[0], c1[1], c1[2]);
+            }
         }
+
+        cDelta = [
+            (c2[0] - c1[0]) / r,
+            (c2[1] - c1[1]) / r,
+            (c2[2] - c1[2]) / r 
+        ];
+        for (j = 0; j < 10; j += 1) {
+            fillCircle(c1); 
+            c1[0] += cDelta[0];
+            c1[1] += cDelta[1];
+            c1[2] += cDelta[2];
+        }
+
 
 
      /*   //Draw one horizontal line (middle halves)    
