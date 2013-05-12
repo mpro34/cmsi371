@@ -299,7 +299,22 @@ var Primitives = {
        //     xdist = Math.floor(2*Math.sqrt(Math.pow(r,2) - Math.pow(x,2)))
         //xc, yc are the distances to the center of the circle
 		//x, y are the radii
-        //Top to Bottom pieces  
+        //Top to Bottom pieces
+
+            // JD: The fundamental disconnect here is that you remain
+            //     restricted to an "octants" view of the circle.  That
+            //     works when outlining the circle, but you need to break
+            //     out of it a little when trying to *fill* the circle.
+            //     True, you will always only be given the coordinates
+            //     for 1/8 of the circle.  But that doesn't always mean
+            //     that you perform *8 actions* for that coordinate.
+            //
+            //     (yes, I know I know, it's the end of the semester and
+            //     I'm still trying to give feedback without outright
+            //     giving away the solution; sorry, old habits die hard)
+            //
+            //     Plus...what is the scope of fillCircle?  I can tell
+            //     you that it isn't right  :-P
         fillCircle = function(c1) {
             for  (i = 0; i < 5; i += 1) {
                     module.setPixel(context, xc + x - i, yc + y - i, c1[0], c1[1], c1[2]);
@@ -318,6 +333,12 @@ var Primitives = {
             (c2[1] - c1[1]) / r,
             (c2[2] - c1[2]) / r 
         ];
+
+        // JD: I see what you're doing here---work from the outermost
+        //     radius going inward.  As I'm sure you could tell by the
+        //     emerging pattern, this isn't quite right.  As mentioned
+        //     in the comment above, the idea is to break away from the
+        //     "octants" perspective of the circle.
         for (j = 0; j < 10; j += 1) {
             fillCircle(c1); 
             c1[0] += cDelta[0];
