@@ -15,6 +15,15 @@
         //     and restructure your code so that all of these images are
         //     loaded once only for sure.
 
+        // JD: Ack, you were *really* close!  This declaration is right,
+        //     with the sole exception of a missing argument.  You needed...
+        //
+        //         poke_background = function (renderingContext) {
+        //
+        //     See keyframe-tweener.js to see how this then gets called.
+        //     Also, see below, at *, to see how this gets passed to
+        //     the tweener.
+        //
 	    /*poke_background = function() {
             table = function () {
                 var img = new Image();                           
@@ -57,6 +66,10 @@
             table();
             drawText();
         },*/
+
+        // JD: Why did you change these to semicolons?  The commas
+        //     were right---you are still in the big var statement here.
+        //     With the semicolons, these become *global* variables.
         squirtle = function (renderingContext) {
             img.src = "../animation-sprite-2.0/images/squirtle.png";
             renderingContext.drawImage(img,0,0,50,50);
@@ -435,6 +448,7 @@
         width: canvas.width,
         height: canvas.height,
         sprites: sprites
+        // JD: * Pretty much right!  poke_background just needed an argument.
 		//background: poke_background
         // JD: Custom background should be a setting here.
     });

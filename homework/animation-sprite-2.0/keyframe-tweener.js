@@ -96,6 +96,8 @@ var KeyframeTweener = {
             width = settings.width,
             height = settings.height,
             sprites = settings.sprites;
+            // JD: Yes, this would have been right (with a comma above,
+            //     of course).  And then, see *** below
 			//background = settings.poke_background;
 
         setInterval(function () {
@@ -121,6 +123,13 @@ var KeyframeTweener = {
                 duration;
 
              //Draw custom background.
+             // JD: *** With the background function set, you now just
+             //     needed...
+             //
+             //         background(renderingContext);
+             //
+             //     Yes, that was it.
+             //
 		//	 background();
              // JD: Doh!!!  This totally breaks separation of concerns.  This should
              //     be defined *outside* KeyframeTweener then *passed in* as a parameter.
