@@ -23,7 +23,8 @@
         // Important state variables.
         currentRotation = 45.0,
         currentInterval,
-        assignVerts,
+        assignVerts, // JD: Good that you cleaned this up, but...also clean up
+                     //     the now-unused variable!
         passSubVerts,
         subArray = [],
         drawArray = [],
@@ -114,6 +115,12 @@
             },
             subshapes: [
             //Zombie Head
+                // JD: So here, you did find *a* solution to being able to
+                //     construct the zombie, but your code is not very
+                //     reusable.  As mentioned previously, what is lacking
+                //     is a full appreciation for the role that the *matrix*
+                //     produced by these properties can play in getting
+                //     "transform inheritance" to work.
                 {
                     color: { r: 1.0, g: 0.0, b: 0.0 }, 
                     specularColor: { r: 1.0, g: 0.0, b: 0.0 },
@@ -173,6 +180,17 @@
  * No need to pass scale or rotate, because that would screw up the original 
  * look of the objects.
  */
+    // JD: ^^^Maybe no need for your particular scene, but it *is* possible
+    //     to also pass on scale and rotate transformations.  At least this
+    //     shows you understand the concept; what's missing is sufficient
+    //     *implementation* understanding to see the mechanism that will
+    //     allow you to pass *all* of the transforms from parent to child.
+    //
+    //     Unfortunately, you don't *use* this function, probably because
+    //     you hit the limitation posed by trying to pass transforms by
+    //     modifying the child's transforms.  If you realized that you can
+    //     pass the *matrices* for these transforms, things would have
+    //     worked out better.
     passTransforms = function (parent, child) {
         if (parent.transforms.trans) {
             child.transforms.trans.x += parent.transforms.trans.x;
@@ -337,6 +355,10 @@
                 composites[i].buffer = GLSLUtilities.initVertexBuffer(gl,
                     composites[i].vertices);
             //Create the default normal array in case of no lighting variables for current object.
+                // JD: Nice catch for avoiding normal vector errors, but at a cost---
+                //     most of your scene is not lit at all!  And to think that the
+                //     fix for this would be a single additional line per object.
+                //     (or less if you wrote a function like createWallSegment)
                 for (k = 0; maxk = composites[i].vertices.length, k < maxk; k += 1) {
                     normalArray.push(0.5);
                 }
@@ -512,7 +534,9 @@
         // Display the objects.
         drawSubshapes = function (composites) {          
             for (i = 0, maxi = composites.length; i < maxi; i += 1) {
-                drawObject(composites[i])
+                drawObject(composites[i]) // JD: Missing semicolon.
+                // JD: You still miss out on arbitrarily deep trees of subshapes
+                //     with this implementation.  What you need is recursion.
                 if (composites[i].subshapes) {
                     drawArray = drawArray.concat(composites[i].subshapes);
                 }
