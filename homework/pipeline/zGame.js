@@ -92,7 +92,7 @@
         return;
     }
 
-    // Set up settings that will not change.  This is not "canned" into a
+    // Set-up settings that will not change.  This is not "canned" into a
     // utility function because these settings really can vary from program
     // to program.
     gl.enable(gl.DEPTH_TEST);
@@ -213,6 +213,7 @@
                 trans: { x: 0.0, y: 0.0, z: 0.0 },        
                 scale: { x: 36.0, y: 15.0, z: 0.5 }
             },
+            //Subshapes allows encapsulation where one shape contains all its sub-shapes.
 
             subshapes: [
                 {
@@ -261,6 +262,15 @@
             transforms: {
                 trans: { x: 6.0, y: 0.0, z: -1.0 },         
                 scale: { x: 1.0, y: 15.0, z: 10.0 }
+            }
+        },
+        {
+            color: { r: 1.0, g: 0.0, b: 0.0 },
+            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+            mode: gl.TRIANGLES,
+            transforms: {
+                trans: { x: 0.23, y: 0.0, z: -20.0 },         
+                scale: { x: 12.0, y: 15.0, z: 0.5 }
             }
         },
         {
@@ -339,12 +349,21 @@
             }
         },
         {
-            color: { r: 1.0, g: 1.0, b: 0.0 },
+            color: { r: 0.5, g: 0.5, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 0.0, y: 0.0, z: 180.0 },         
                 scale: { x: 220.0, y: 20.0, z: 0.5 }
+            }
+        },
+        {
+            color: { r: 0.5, g: 0.5, b: 0.0 },
+            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+            mode: gl.TRIANGLES,
+            transforms: {
+                trans: { x: 0.0, y: 0.0, z: 180.0 },         
+                scale: { x: 220.0, y: 220.0, z: 0.1 }
             }
         }
     ];
@@ -538,12 +557,13 @@
                 // JD: You still miss out on arbitrarily deep trees of subshapes
                 //     with this implementation.  What you need is recursion.
                 if (composites[i].subshapes) {
+                   //drawSubshapes(composites[i].sunshapes);
                     drawArray = drawArray.concat(composites[i].subshapes);
                 }
             } 
         }; 
-        drawSubshapes(objectsToDraw);
-        drawSubshapes(drawArray);
+     //   drawSubshapes(objectsToDraw);
+    //    drawSubshapes(drawArray);
      
         // All done.
         gl.flush();
