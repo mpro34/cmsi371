@@ -33,14 +33,17 @@
 
         //Camera Variables
         cameraZ = 20.0, 
+        cameraY = 3.0,
         cameraX = 0.0,
-        camPosition = new Vector(cameraX, 3.0, cameraZ),
+        camPosition = new Vector(cameraX, cameraY, cameraZ),  /*******************************/
         cxPointer = 0.0,
+        cyPointer = 3.0,
         czPointer = 0.0, 
-        camPointer = new Vector(cxPointer, 3.0, czPointer),
+        camPointer = new Vector(cxPointer, cyPointer, czPointer),
         alpha = 0.0,
         alphaRads = 0.0,
         viewRadius = 20.0,
+        pitAngle = 0.0,
         udEvent = false,
         lrEvent = false,
 
@@ -92,7 +95,7 @@
         return;
     }
 
-    // Set-up settings that will not change.  This is not "canned" into a
+    // Set up settings that will not change.  This is not "canned" into a
     // utility function because these settings really can vary from program
     // to program.
     gl.enable(gl.DEPTH_TEST);
@@ -150,8 +153,19 @@
                     transforms: {
                         trans: { x: zombieX+0.5, y: 0.3, z: zombieZ },        
                         scale: { x: 2.0, y: 2.0, z: 2.0 }
+                    },
+               /*     subshapes: [
+                      {
+                    color: { r: 0.0, g: 0.0, b: 0.0 },           
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: zombieX+0.5, y: 0.3, z: zombieZ },        
+                        scale: { x: 23.0, y: 2.0, z: 2.0 }
                     } 
-                },            
+                      }
+                      ]*/
+                },           
             //Zombie Arms
                 {
                     color: { r: 0.1, g: 0.0, b: 0.0 },           
@@ -203,7 +217,7 @@
     // Build the objects to display.
     objectsToDraw = [
     //Spawn the dead
-        createZombie(zombieLocation.x(), zombieLocation.z()),
+       createZombie(zombieLocation.x(), zombieLocation.z()),
     //Bottom U Structure (WALLS 1,2,3)        
         {
             color: { r: 0.0, g: 0.0, b: 1.0 },           
@@ -213,8 +227,7 @@
                 trans: { x: 0.0, y: 0.0, z: 0.0 },        
                 scale: { x: 36.0, y: 15.0, z: 0.5 }
             },
-            //Subshapes allows encapsulation where one shape contains all its sub-shapes.
-
+        //3 subshapes
             subshapes: [
                 {
                     color: { r: 0.0, g: 0.0, b: 1.0 },
@@ -232,7 +245,19 @@
                     transforms: {
                         trans: { x: -18.0, y: 0.0, z: -0.5 },        
                         scale: { x: 0.5, y: 15.0, z: 13.0 }
+                    },
+                    //A further nested subshape for testing.
+                    subshapes: [
+                    {
+                        color: { r: 1.0, g: 1.0, b: 0.0 },
+                        vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                        mode: gl.TRIANGLES,
+                        transforms: {
+                            trans: { x: 0.0, y: 0.0, z: -180.0 },         
+                            scale: { x: 220.0, y: 100.0, z: 0.5 }
+                        }
                     }
+                    ]
                 },                
                 {
                     color: { r: 1.0, g: 0.0, b: 0.0 },
@@ -252,7 +277,7 @@
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: -0.5, y: 0.0, z: -1.0 },        
-                scale: { x: 0.5, y: 15.0, z: 10.0 }
+                scale: { x: 0.1, y: 15.0, z: 10.0 }  //x=.5
             }
         },
         {
@@ -261,7 +286,7 @@
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 6.0, y: 0.0, z: -1.0 },         
-                scale: { x: 1.0, y: 15.0, z: 10.0 }
+                scale: { x: 0.2, y: 15.0, z: 10.0 }  //x=1
             }
         },
         {
@@ -270,16 +295,7 @@
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 0.23, y: 0.0, z: -20.0 },         
-                scale: { x: 12.0, y: 15.0, z: 0.5 }
-            }
-        },
-        {
-            color: { r: 1.0, g: 0.0, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-            mode: gl.TRIANGLES,
-            transforms: {
-                trans: { x: 0.23, y: 0.0, z: -20.0 },         
-                scale: { x: 12.0, y: 15.0, z: 0.5 }
+                scale: { x: 0.3, y: 15.0, z: 0.5 } //x=12
             }
         },
 
@@ -290,25 +306,46 @@
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: -10.0, y: 0.0, z: -1.5 },       
-                scale: { x: 0.5, y: 15.0, z: 7.0 }
+                scale: { x: 0.4, y: 15.0, z: 7.0 }  //x=.5
+            }/*,
+        //1 subshapes
+            subshapes: [
+                {
+                    color: { r: 0.0, g: 0.0, b: 1.0 },
+                    vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: 18.0, y: 0.0, z: -0.5 },         
+                        scale: { x: 0.5, y: 15.0, z: 18.0 }
+                    }
+                }
+            ]*/
+        },
+         {
+            color: { r: 0.0, g: 1.0, b: 0.0 },
+            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+            mode: gl.TRIANGLES,
+            transforms: {
+                trans: { x: 0.0, y: 0.0, z: 0.0 },        
+                scale: { x: 200.0, y: 0.0, z: 220.0 }  //x=36
             }
         },
-        {
+      /*  {
             color: { r: 0.0, g: 1.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 0.0, y: 0.0, z: -30.0 },        
-                scale: { x: 36.0, y: 15.0, z: 0.5 }
+                scale: { x: 0.5, y: 15.0, z: 0.5 }  //x=36
             }
-        },
+        },*/
         {
             color: { r: 0.0, g: 1.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: -1.0, y: 0.0, z: -11.0 },       
-                scale: { x: 7.0, y: 15.0, z: 1.0 }
+                scale: { x: 0.6, y: 15.0, z: 1.0 }  //x=7
             }
         },
         {
@@ -317,7 +354,7 @@
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: -18.0, y: 0.0, z: -1.85 },         
-                scale: { x: 0.5, y: 15.0, z: 8.0 }
+                scale: { x: 0.7, y: 15.0, z: 8.0 }  //x=0.5
             }
         },
     //Outer Boundary Walls
@@ -327,7 +364,7 @@
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 0.0, y: 0.0, z: -180.0 },         
-                scale: { x: 220.0, y: 20.0, z: 0.5 }
+                scale: { x: 0.8, y: 20.0, z: 0.5 }  //x=220
             }
         },
         {
@@ -336,7 +373,7 @@
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 110.0, y: 0.0, z: -0.25 },         
-                scale: { x: 0.5, y: 20.0, z: 360.0 }
+                scale: { x: 0.9, y: 20.0, z: 360.0 }  //x=0.5
             }
         },
         {
@@ -345,25 +382,16 @@
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: -110.0, y: 0.0, z: -0.25 },         
-                scale: { x: 0.5, y: 20.0, z: 360.0 }
+                scale: { x: 1.0, y: 20.0, z: 360.0 }  //x=0.5
             }
         },
         {
-            color: { r: 0.5, g: 0.5, b: 0.0 },
+            color: { r: 1.0, g: 1.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 0.0, y: 0.0, z: 180.0 },         
                 scale: { x: 220.0, y: 20.0, z: 0.5 }
-            }
-        },
-        {
-            color: { r: 0.5, g: 0.5, b: 0.0 },
-            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
-            mode: gl.TRIANGLES,
-            transforms: {
-                trans: { x: 0.0, y: 0.0, z: 180.0 },         
-                scale: { x: 220.0, y: 220.0, z: 0.1 }
             }
         }
     ];
@@ -550,20 +578,25 @@
             )
         );
 
-        // Display the objects.
-        drawSubshapes = function (composites) {          
-            for (i = 0, maxi = composites.length; i < maxi; i += 1) {
-                drawObject(composites[i]) // JD: Missing semicolon.
-                // JD: You still miss out on arbitrarily deep trees of subshapes
-                //     with this implementation.  What you need is recursion.
+        // Display the objects. Now accounts for an arbitrary tree of subshapes with recursion.
+        drawSubshapes = function (composites) {        
+
+            for (i = 0; i < composites.length; ++i) {
+            //    console.log("i-limit: ",composites.length); 
+           //     console.log("i", i);
+           //     console.log("com_len", composites[i].transforms.scale.x);
+                drawObject(composites[i]);
+
                 if (composites[i].subshapes) {
-                   //drawSubshapes(composites[i].sunshapes);
-                    drawArray = drawArray.concat(composites[i].subshapes);
+                    drawSubshapes(composites[i].subshapes);
+                    //drawArray = drawArray.concat(composites[i].subshapes);
                 }
+         //       console.log("hereIII: ", i)
             } 
         }; 
-     //   drawSubshapes(objectsToDraw);
-    //    drawSubshapes(drawArray);
+        drawSubshapes(objectsToDraw);
+      //  console.log("OtD", objectsToDraw[12]);
+        //drawSubshapes(drawArray);
      
         // All done.
         gl.flush();
@@ -579,17 +612,31 @@
 
     $("body").keydown(function(event) {
         if (event.keyCode === 38  || event.keyCode === 87) {  //Up key
-            cameraX += ((camPointer.subtract(camPosition)).unit()).x();
+            cameraX += ((camPointer.subtract(camPosition)).unit()).x();   /*********************************************/
             cxPointer += ((camPointer.subtract(camPosition)).unit()).x();
             cameraZ += ((camPointer.subtract(camPosition)).unit()).z();
             czPointer += ((camPointer.subtract(camPosition)).unit()).z();
+            //Simulates "jogging" by changing the camera position in the Y-axis - 10 degree increments
+            if (pitAngle > 360) {
+                pitAngle = 0;
+            }
+            cameraY = 3.0 + Math.abs(Math.sin(pitAngle * Math.PI / 180.0));
+            cyPointer = 3.0 + Math.abs(Math.sin(pitAngle * Math.PI / 180.0));
+            pitAngle += 8;    //Magic number for a smooth "jogging" simulation.
             udEvent = true;
 
         } else if (event.keyCode === 40 || event.keyCode === 83) {  //Down key
-            cameraX -= ((camPointer.subtract(camPosition)).unit()).x();
+            cameraX -= ((camPointer.subtract(camPosition)).unit()).x();   /*********************************************/
             cxPointer -= ((camPointer.subtract(camPosition)).unit()).x();
             cameraZ -= ((camPointer.subtract(camPosition)).unit()).z();
             czPointer -= ((camPointer.subtract(camPosition)).unit()).z();
+             //Simulates "jogging" by changing the camera position in the Y-axis - 10 degree increments
+            if (pitAngle > 360) {
+                pitAngle = 0;
+            }
+            cameraY = 3.0 + Math.abs(Math.sin(pitAngle * Math.PI / 180.0));
+            cyPointer = 3.0 + Math.abs(Math.sin(pitAngle * Math.PI / 180.0));
+            pitAngle += 10;
             udEvent = true;
 
         } else if (event.keyCode === 37 || event.keyCode === 65) {  //Left key
@@ -614,15 +661,15 @@
         if (lrEvent) {
             lrEvent = false;
             alphaRads = alpha * Math.PI / 180.0; //Radians value of alpha
-            cxPointer = cameraX + viewRadius * Math.sin( alphaRads ); 
+            cxPointer = cameraX + viewRadius * Math.sin( alphaRads );  /*********************************************/
             czPointer = cameraZ - viewRadius * Math.cos( alphaRads );
             drawScene();
             event.preventDefault();
         }
             
         //Reinitialize camera position vector and camera pointer vectors with new values...
-        camPosition = new Vector(cameraX, 3.0, cameraZ);
-        camPointer = new Vector(cxPointer, 3.0, czPointer);            
+        camPosition = new Vector(cameraX, cameraY, cameraZ);                      /*********************************************/
+        camPointer = new Vector(cxPointer, cyPointer, czPointer);            
     });
 
 //Runs when the user clicks the screen...
