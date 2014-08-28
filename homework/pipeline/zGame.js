@@ -52,6 +52,16 @@
         zombieX = 0.0,
         zombieZ = 0.0,
 
+        transX = 0.0,
+        transY = 0.0,
+        transZ = 10.0,
+        scaleX = 30.0,
+        scaleY = 0.0,
+        scaleZ = 20.0,
+        colR = 0.0,
+        colG = 0.0,
+        colB = 0.0,
+
         //Transform Variables
         rotationMatrix,
         cameraMatrix,
@@ -120,7 +130,10 @@
             transforms: {
                 trans: { x: zombieX, y: 1.5, z: zombieZ },         
                 scale: { x: 2.0, y: 2.0, z: 2.0 }
-            },
+            }
+
+            /*,
+
             subshapes: [
             //Zombie Head
                 // JD: So here, you did find *a* solution to being able to
@@ -169,7 +182,7 @@
                         scale: { x: 23.0, y: 2.0, z: 2.0 }
                     } 
                       }
-                      ]*/
+                      ]
                 },           
             //Zombie Arms
                 {
@@ -190,9 +203,30 @@
                         scale: { x: 5.0, y: 0.5, z: 0.5 }
                     } 
                 }
-            ]    
+            ] */   
         }
         return zombie;
+    };
+//transX, transY, transZ, scaleX, scaleY, scaleZ
+    createWallSegment = function(transX, transY, transZ, scaleX, scaleY, scaleZ, colR, colG, colB) {
+    //Default wall segment properties.
+        var wallSegment = {
+
+            color: { r: colR, g: colG, b: colB },
+            specularColor: { r: 1.0, g: 0.0, b: 0.0 },
+            shininess: 25,  
+            vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+            normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
+            mode: gl.TRIANGLES,
+            transforms: {
+                trans: { x: transX, y: transY, z: transZ },         
+                scale: { x: scaleX, y: scaleY, z: scaleZ }
+            }
+
+        }
+     //   console.log("here", wallSegment[0].scale.x);
+
+        return wallSegment;
     };
 
 /* Pass the current translation transform values from parent to child.
@@ -222,9 +256,28 @@
     // Build the objects to display.
     objectsToDraw = [
     //Spawn the dead
-       createZombie(zombieLocation.x(), zombieLocation.z()),
+    // (transX, transY, transZ / scaleX, scaleY, scaleZ / colR, colG, colB)
+        createWallSegment(100.0, 0.0, -0.3, 1.0, 25.0, 800.0, 0.0, 0.0, 1.0),  //Right Wall
+        createWallSegment(-100.0, 0.0, -0.3, 1.0, 25.0, 800.0, 0.0, 0.0, 1.0),   //Left Wall
+        createWallSegment(0.0, 0.0, 150.0, 400.0, 25.0, 1.0, 0.0, 0.0, 1.0),    //Back Wall
+
+        createWallSegment(0.1, 0.0, -180.0, 450.0, 25.0, 1.0, 0.0, 0.0, 1.0),    //Front Wall
+        createWallSegment(0.3, 0.0, -100.0, 200.0, 25.0, 1.0, 0.0, 0.5, 1.0),    //Front Wall Right half
+        createWallSegment(-0.3, 0.0, -100.0, 200.0, 25.0, 1.0, 0.0, 0.5, 1.0),    //Front Wall Left half
+        createWallSegment(0.0, 0.0, -230.0, 400.0, 25.0, 1.0, 0.0, 0.0, 1.0),    //Front Wall 3
+
+        createWallSegment(0.0, 0.0, -0.3, 400.0, 0.0, 800.0, 0.6, 0.5, 0.5),   //Building Floor
+        createWallSegment(0.0, 25.0, -0.8, 400.0, 0.5, 333.0, 0.0, 1.0, 0.0),   //Building Ceiling
+     //createWallSegment(50.0, 0.0, -0.6, 1.0, 15.0, 175.0, 1.0, 0.0, 0.0),  //Right Wall
+
+
+        createZombie(40.0, -100.0)          
+       
+       //0.0, 0.0, 0.0, 36.0, 15.0, 0.5
+
+      // createWallSegment(0, 0, 0, 36, 15, 0.5)
     //Bottom U Structure (WALLS 1,2,3)        
-        {
+     /*   {
             color: { r: 0.0, g: 0.0, b: 1.0 },          
             specularColor: { r: 1.0, g: 0.0, b: 0.0 },
             shininess: 25,  
@@ -234,7 +287,8 @@
             transforms: {
                 trans: { x: 0.0, y: 0.0, z: 0.0 },        
                 scale: { x: 36.0, y: 15.0, z: 0.5 }
-            },
+            }
+        },
         //3 subshapes
             subshapes: [
                 {
@@ -315,7 +369,7 @@
             transforms: {
                 trans: { x: -10.0, y: 0.0, z: -1.5 },       
                 scale: { x: 0.4, y: 15.0, z: 7.0 }  //x=.5
-            }/*,
+            },
         //1 subshapes
             subshapes: [
                 {
@@ -327,7 +381,7 @@
                         scale: { x: 0.5, y: 15.0, z: 18.0 }
                     }
                 }
-            ]*/
+            ]
         },
          {
             color: { r: 0.0, g: 1.0, b: 0.0 },
@@ -341,7 +395,7 @@
                 scale: { x: 200.0, y: 0.0, z: 220.0 }  //x=36
             }
         },
-      /*  {
+        {
             color: { r: 0.0, g: 1.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES,
@@ -349,7 +403,7 @@
                 trans: { x: 0.0, y: 0.0, z: -30.0 },        
                 scale: { x: 0.5, y: 15.0, z: 0.5 }  //x=36
             }
-        },*/
+        },
         {
             color: { r: 0.0, g: 1.0, b: 0.0 },
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
@@ -404,7 +458,7 @@
                 trans: { x: 0.0, y: 0.0, z: 180.0 },         
                 scale: { x: 220.0, y: 20.0, z: 0.5 }
             }
-        }
+        }*/
     ];
 
     // Pass the vertices and colors to WebGL.
@@ -492,8 +546,8 @@
 /*******************************/
     
      // Texture
-    textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-    gl.enableVertexAttribArray(textureCoordAttribute);
+   // textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+  // gl.enableVertexAttribArray(textureCoordAttribute);
     
     vertexPosition = gl.getAttribLocation(shaderProgram, "vertexPosition");
     gl.enableVertexAttribArray(vertexPosition);
@@ -570,7 +624,7 @@
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
     };
 
-    function initTextures() {
+  /*  function initTextures() {
   cubeTexture = gl.createTexture();
   cubeImage = new Image();
   cubeImage.onload = function() { handleTextureLoaded(cubeImage, cubeTexture); }
@@ -586,7 +640,7 @@ function handleTextureLoaded(image, texture) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
   gl.generateMipmap(gl.TEXTURE_2D);
   gl.bindTexture(gl.TEXTURE_2D, null);
-}
+}*/
 
 
     /*
@@ -751,7 +805,7 @@ function handleTextureLoaded(image, texture) {
         //Updates the x and z translation values of each object and subshape. Does the job, but I know the same 
         //function can be executed a lot smoother and cleaner...     
         main = setInterval(function () {
-            if ((Math.floor(zombieLocation.x())) != Math.floor(cameraX)) {
+     /*       if ((Math.floor(zombieLocation.x())) != Math.floor(cameraX)) {
                 objectsToDraw[0].transforms.trans.x += 
                 ((camPosition.subtract(zombieLocation)).unit()).x() / objectsToDraw[0].transforms.scale.x;
                 for (i = 0; i < objectsToDraw[0].subshapes.length; i += 1) {
@@ -778,7 +832,7 @@ function handleTextureLoaded(image, texture) {
                     return;
                 }
             }
-            zombieLocation = new Vector (zombieX, 0.0, zombieZ);
+            zombieLocation = new Vector (zombieX, 0.0, zombieZ);*/
             drawScene();
         }, 100);
     });
