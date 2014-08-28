@@ -59,6 +59,11 @@
         translationMatrix,
         scaleMatrix,
 
+      /*  cubeImage,
+        cubeTexture,
+        textureCoordAttribute,
+        cubeVerticesTextureCoordBuffer,*/
+
         //Vertex Variable
         vertexPosition,
 
@@ -220,8 +225,11 @@
        createZombie(zombieLocation.x(), zombieLocation.z()),
     //Bottom U Structure (WALLS 1,2,3)        
         {
-            color: { r: 0.0, g: 0.0, b: 1.0 },           
+            color: { r: 0.0, g: 0.0, b: 1.0 },          
+            specularColor: { r: 1.0, g: 0.0, b: 0.0 },
+            shininess: 25,  
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+            normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 0.0, y: 0.0, z: 0.0 },        
@@ -323,7 +331,10 @@
         },
          {
             color: { r: 0.0, g: 1.0, b: 0.0 },
+            specularColor: { r: 1.0, g: 0.0, b: 0.0 },
+            shininess: 25,  
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+            normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES,
             transforms: {
                 trans: { x: 0.0, y: 0.0, z: 0.0 },        
@@ -477,7 +488,13 @@
     // All done --- tell WebGL to use the shader program from now on.
     gl.useProgram(shaderProgram);
 
-    // Hold on to the important variables within the shaders.
+    // Hold on to the important variables within the shaders. 
+/*******************************/
+    
+     // Texture
+    textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(textureCoordAttribute);
+    
     vertexPosition = gl.getAttribLocation(shaderProgram, "vertexPosition");
     gl.enableVertexAttribArray(vertexPosition);
     vertexDiffuseColor = gl.getAttribLocation(shaderProgram, "vertexDiffuseColor");
@@ -553,6 +570,24 @@
         gl.drawArrays(object.mode, 0, object.vertices.length / 3);
     };
 
+    function initTextures() {
+  cubeTexture = gl.createTexture();
+  cubeImage = new Image();
+  cubeImage.onload = function() { handleTextureLoaded(cubeImage, cubeTexture); }
+  cubeImage.src = "cubetexture.jpg";
+}
+
+function handleTextureLoaded(image, texture) {
+  console.log("handleTextureLoaded, image = " + image);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
+        gl.UNSIGNED_BYTE, image);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+  gl.generateMipmap(gl.TEXTURE_2D);
+  gl.bindTexture(gl.TEXTURE_2D, null);
+}
+
 
     /*
      * Displays the scene.
@@ -574,9 +609,48 @@
         //Set up frustum projection matrix (t, b, l, r, n, f)                                
         gl.uniformMatrix4fv(projectionMatrix,
             gl.FALSE, new Float32Array(
-                Matrix4x4.frustum(5, -5, -5, 5, 10, 1000).toWebGLArray()
+                Matrix4x4.frustum(5, -3, -5, 5, 10, 1000).toWebGLArray()
             )
         );
+
+          cubeVerticesTextureCoordBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
+  
+  var textureCoordinates = [
+    // Front
+    0.0,  0.0,
+    1.0,  0.0,
+    1.0,  1.0,
+    0.0,  1.0,
+    // Back
+    0.0,  0.0,
+    1.0,  0.0,
+    1.0,  1.0,
+    0.0,  1.0,
+    // Top
+    0.0,  0.0,
+    1.0,  0.0,
+    1.0,  1.0,
+    0.0,  1.0,
+    // Bottom
+    0.0,  0.0,
+    1.0,  0.0,
+    1.0,  1.0,
+    0.0,  1.0,
+    // Right
+    0.0,  0.0,
+    1.0,  0.0,
+    1.0,  1.0,
+    0.0,  1.0,
+    // Left
+    0.0,  0.0,
+    1.0,  0.0,
+    1.0,  1.0,
+    0.0,  1.0
+  ];
+
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
+                gl.STATIC_DRAW);
 
         // Display the objects. Now accounts for an arbitrary tree of subshapes with recursion.
         drawSubshapes = function (composites) {        
