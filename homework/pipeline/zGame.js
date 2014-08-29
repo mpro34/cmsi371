@@ -81,6 +81,7 @@
         vertexDiffuseColor,
         vertexSpecularColor,
         shininess,
+        zombieCheck,
         normalVector,
         lightPosition,
         lightDiffuse,
@@ -120,17 +121,96 @@
 //Create the zombie...
     createZombie = function(zombieX, zombieZ) {
         var zombie = {
+            
         //Zombie Body
-            color: { r: 0.0, g: 0.5, b: 0.0 },
-            specularColor: { r: 1.0, g: 0.0, b: 0.0 },
-            shininess: 25,  
-            vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
-            normals: Shapes.toVertexNormalArray(Shapes.sphere()),
-            mode: gl.TRIANGLES,
-            transforms: {
-                trans: { x: zombieX, y: 1.5, z: zombieZ },         
-                scale: { x: 2.0, y: 2.0, z: 2.0 }
-            }
+                color: { r: 0.0, g: 0.5, b: 0.0 },
+                specularColor: { r: 1.0, g: 0.0, b: 0.0 },
+                shininess: 25,  
+                vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+                normals: Shapes.toVertexNormalArray(Shapes.sphere()),
+                mode: gl.TRIANGLES,
+                zombieCheck: 1.0,
+                transforms: {
+                    trans: { x: zombieX, y: 1.5, z: zombieZ },         
+                    scale: { x: 2.0, y: 2.0, z: 2.0 }
+                }/*,
+            
+        //Zombie Head
+            
+                color: { r: 1.0, g: 0.0, b: 0.0 }, 
+                specularColor: { r: 1.0, g: 0.0, b: 0.0 },
+                shininess: 25,            
+                vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
+                normals: Shapes.toVertexNormalArray(Shapes.sphere()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: zombieX, y: 5.8, z: zombieZ+5.0 },        
+                    scale: { x: 1.0, y: 1.0, z: 1.0 }
+                },
+            
+        //Zombie Legs
+            
+                color: { r: 0.0, g: 0.0, b: 0.0 },           
+                vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: zombieX-0.5, y: 0.3, z: zombieZ },        
+                    scale: { x: 2.0, y: 2.0, z: 2.0 }
+                },    
+            
+            
+                color: { r: 0.0, g: 0.0, b: 0.0 },           
+                vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: zombieX+0.5, y: 0.3, z: zombieZ },        
+                    scale: { x: 2.0, y: 2.0, z: 2.0 }
+                },
+            
+            
+                color: { r: 0.0, g: 0.0, b: 0.0 },           
+                vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: zombieX+0.5, y: 0.3, z: zombieZ },        
+                    scale: { x: 23.0, y: 2.0, z: 2.0 }
+                }, 
+            
+            
+                color: { r: 0.1, g: 0.0, b: 0.0 },           
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: zombieX-0.5, y: 6.0, z: zombieZ+13.0 },        
+                    scale: { x: 5.0, y: 0.5, z: 0.5 }
+                }, 
+            
+            
+                color: { r: 0.1, g: 0.0, b: 0.0 },           
+                vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
+                mode: gl.TRIANGLES,
+                transforms: {
+                    trans: { x: zombieX+0.5, y: 6.0, z: zombieZ+13.0 },        
+                    scale: { x: 5.0, y: 0.5, z: 0.5 }
+                },*/
+            
+
+        }
+        return zombie;
+    };
+
+               /*     subshapes: [
+                      {
+                    color: { r: 0.0, g: 0.0, b: 0.0 },           
+                    vertices: Shapes.toRawTriangleArray(Shapes.tetrahedron()),
+                    mode: gl.TRIANGLES,
+                    transforms: {
+                        trans: { x: zombieX+0.5, y: 0.3, z: zombieZ },        
+                        scale: { x: 23.0, y: 2.0, z: 2.0 }
+                    } 
+                      }
+                      ]
+                }, 
 
             /*,
 
@@ -204,9 +284,7 @@
                     } 
                 }
             ] */   
-        }
-        return zombie;
-    };
+
 //transX, transY, transZ, scaleX, scaleY, scaleZ
     createWallSegment = function(transX, transY, transZ, scaleX, scaleY, scaleZ, colR, colG, colB) {
     //Default wall segment properties.
@@ -218,6 +296,7 @@
             vertices: Shapes.toRawTriangleArray(Shapes.hexahedron()),
             normals: Shapes.toVertexNormalArray(Shapes.hexahedron()),
             mode: gl.TRIANGLES,
+            zombieCheck: 0.0,
             transforms: {
                 trans: { x: transX, y: transY, z: transZ },         
                 scale: { x: scaleX, y: scaleY, z: scaleZ }
@@ -271,7 +350,10 @@
      //createWallSegment(50.0, 0.0, -0.6, 1.0, 15.0, 175.0, 1.0, 0.0, 0.0),  //Right Wall
 
 
-        createZombie(40.0, -100.0)          
+        createZombie(0.0, 3.0),
+        createZombie(0.0, 17.0),
+        createZombie(-70.0, -10.0),
+        createZombie(0.0, -50.0),         
        
        //0.0, 0.0, 0.0, 36.0, 15.0, 0.5
 
@@ -569,6 +651,8 @@
     lightDiffuse = gl.getUniformLocation(shaderProgram, "lightDiffuse");
     lightSpecular = gl.getUniformLocation(shaderProgram, "lightSpecular");
     shininess = gl.getUniformLocation(shaderProgram, "shininess");
+    zombieCheck = gl.getUniformLocation(shaderProgram, "zombieCheck");
+
 
     /*
      * Displays an individual object.
@@ -581,6 +665,7 @@
         gl.vertexAttribPointer(vertexSpecularColor, 3, gl.FLOAT, false, 0, 0);
         // Set the shininess.
         gl.uniform1f(shininess, object.shininess);
+        gl.uniform1f(zombieCheck, object.zombieCheck);
 
         //Set up instance transforms.
         gl.uniformMatrix4fv(translationMatrix,
@@ -667,7 +752,7 @@ function handleTextureLoaded(image, texture) {
             )
         );
 
-          cubeVerticesTextureCoordBuffer = gl.createBuffer();
+ /*         cubeVerticesTextureCoordBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
   
   var textureCoordinates = [
@@ -704,7 +789,7 @@ function handleTextureLoaded(image, texture) {
   ];
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates),
-                gl.STATIC_DRAW);
+                gl.STATIC_DRAW);*/
 
         // Display the objects. Now accounts for an arbitrary tree of subshapes with recursion.
         drawSubshapes = function (composites) {        
@@ -801,39 +886,46 @@ function handleTextureLoaded(image, texture) {
     });
 
 //Runs when the user clicks the screen...
+//onload
     $(canvas).click(function () {
         //Updates the x and z translation values of each object and subshape. Does the job, but I know the same 
         //function can be executed a lot smoother and cleaner...     
         main = setInterval(function () {
-     /*       if ((Math.floor(zombieLocation.x())) != Math.floor(cameraX)) {
-                objectsToDraw[0].transforms.trans.x += 
-                ((camPosition.subtract(zombieLocation)).unit()).x() / objectsToDraw[0].transforms.scale.x;
-                for (i = 0; i < objectsToDraw[0].subshapes.length; i += 1) {
-                    objectsToDraw[0].subshapes[i].transforms.trans.x += 
-                        ((camPosition.subtract( zombieLocation )).unit()).x() / 
-                            objectsToDraw[0].subshapes[i].transforms.scale.x;
-                }
+            for (i = 0; i < objectsToDraw.length; ++i) {
+          //      if ((Math.floor(zombieLocation.x())) != Math.floor(cameraX)) {
+                if (objectsToDraw[i].zombieCheck == 1.0) {
 
-            } else if ((Math.floor(zombieLocation.z())) != Math.floor(cameraZ-5)) {
-                objectsToDraw[0].transforms.trans.z += 
-                ((camPosition.subtract(zombieLocation)).unit()).z() / objectsToDraw[0].transforms.scale.z;
-                for (i = 0; i < objectsToDraw[0].subshapes.length; i += 1) {
-                    objectsToDraw[0].subshapes[i].transforms.trans.z +=
-                        ((camPosition.subtract( zombieLocation )).unit()).z() /
-                            objectsToDraw[0].subshapes[i].transforms.scale.z;
-                }
+                    if ((Math.floor(zombieLocation.x())) > Math.floor(cameraX+14.0) || (Math.floor(zombieLocation.x())) < Math.floor(cameraX-14.0)) {
+                        objectsToDraw[i].transforms.trans.x += 
+                        ((camPosition.subtract(zombieLocation)).unit()).x() / objectsToDraw[i].transforms.scale.x;
+                        for (j = 0; j < objectsToDraw[i].length; j += 1) {   //Took out "subshapes"
+                            objectsToDraw[j].transforms.trans.x +=         //Took out "subshapes[i]"
+                                ((camPosition.subtract( zombieLocation )).unit()).x() / 
+                                    objectsToDraw[j].transforms.scale.x;
+                        }
 
-            } else {
-                clearInterval(main);        //If zombie arrives at the location of the camera, he/she gets eaten.
-                var r = confirm("You are Dead...Try Again?");
-                if (r) {
-                    location.reload();
-                } else {
-                    return;
+                    } else if ((Math.floor(zombieLocation.z())) > Math.floor(cameraZ+14.0) || (Math.floor(zombieLocation.z())) < Math.floor(cameraZ-14.0)) {
+                        objectsToDraw[i].transforms.trans.z += 
+                        ((camPosition.subtract(zombieLocation)).unit()).z() / objectsToDraw[i].transforms.scale.z;
+                        for (j = 0; j < objectsToDraw[i].length; j += 1) {   //Took out "subshapes"
+                            objectsToDraw[j].transforms.trans.z +=           //Took out "subshapes[i]"
+                                ((camPosition.subtract( zombieLocation )).unit()).z() /
+                                    objectsToDraw[j].transforms.scale.z;
+                        }
+
+                    } else {
+                        clearInterval(main);        //If zombie arrives at the location of the camera, he/she gets eaten.
+                        var r = confirm("You are Dead...Try Again?");
+                        if (r) {
+                            location.reload();
+                        } else {
+                            return;
+                        }
+                    }
                 }
             }
-            zombieLocation = new Vector (zombieX, 0.0, zombieZ);*/
-            drawScene();
+            zombieLocation = new Vector (zombieX, 0.0, zombieZ);
+            drawScene();         
         }, 100);
     });
 }(document.getElementById("space-scene")));
