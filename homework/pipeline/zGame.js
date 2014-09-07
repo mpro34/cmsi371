@@ -129,7 +129,7 @@
                 vertices: Shapes.toRawTriangleArray(Shapes.sphere()),
                 normals: Shapes.toVertexNormalArray(Shapes.sphere()),
                 mode: gl.TRIANGLES,
-                zombieCheck: 1.0,
+                zombieCheck: 1.0,  //Check for a zombie shape.
                 transforms: {
                     trans: { x: zombieX, y: 1.5, z: zombieZ },         
                     scale: { x: 2.0, y: 2.0, z: 2.0 }
@@ -350,9 +350,9 @@
      //createWallSegment(50.0, 0.0, -0.6, 1.0, 15.0, 175.0, 1.0, 0.0, 0.0),  //Right Wall
 
 
-        createZombie(0.0, 3.0),
-        createZombie(0.0, 17.0),
-        createZombie(-70.0, -10.0),
+        createZombie(10.0, -5.0),
+        createZombie(-10.0, 17.0),
+        createZombie(-70.0, -15.0),
         createZombie(0.0, -50.0),         
        
        //0.0, 0.0, 0.0, 36.0, 15.0, 0.5
@@ -894,26 +894,34 @@ function handleTextureLoaded(image, texture) {
             for (i = 0; i < objectsToDraw.length; ++i) {
           //      if ((Math.floor(zombieLocation.x())) != Math.floor(cameraX)) {
                 if (objectsToDraw[i].zombieCheck == 1.0) {
-
-                    if ((Math.floor(zombieLocation.x())) > Math.floor(cameraX+14.0) || (Math.floor(zombieLocation.x())) < Math.floor(cameraX-14.0)) {
-                        objectsToDraw[i].transforms.trans.x += 
-                        ((camPosition.subtract(zombieLocation)).unit()).x() / objectsToDraw[i].transforms.scale.x;
-                        for (j = 0; j < objectsToDraw[i].length; j += 1) {   //Took out "subshapes"
+               //     if ((Math.floor(zombieX)) > Math.floor(cameraX+14.0) || (Math.floor(zombieX)) < Math.floor(cameraX-14.0)) {
+                        objectsToDraw[i].transforms.trans.x += Math.random() < 0.5 ? -1 : 1;
+                  //      ((camPosition.subtract(zombieLocation)).unit()).x() / objectsToDraw[i].transforms.scale.x;
+  /*                      for (j = 0; j < objectsToDraw[i].length; j += 1) {   //Took out "subshapes"
                             objectsToDraw[j].transforms.trans.x +=         //Took out "subshapes[i]"
                                 ((camPosition.subtract( zombieLocation )).unit()).x() / 
                                     objectsToDraw[j].transforms.scale.x;
-                        }
+                        }*/
 
-                    } else if ((Math.floor(zombieLocation.z())) > Math.floor(cameraZ+14.0) || (Math.floor(zombieLocation.z())) < Math.floor(cameraZ-14.0)) {
-                        objectsToDraw[i].transforms.trans.z += 
-                        ((camPosition.subtract(zombieLocation)).unit()).z() / objectsToDraw[i].transforms.scale.z;
-                        for (j = 0; j < objectsToDraw[i].length; j += 1) {   //Took out "subshapes"
+                  //  } else if ((Math.floor(zombieZ)) > Math.floor(cameraZ+14.0) || (Math.floor(zombieZ)) < Math.floor(cameraZ-14.0)) {
+  //                      if (tooHigh || objectsToDraw[i].transforms.trans.z > 200) {
+  //                         objectsToDraw[i].transforms.trans.z -= 
+ //                           ((camPosition.subtract(zombieLocation)).unit()).z() / objectsToDraw[i].transforms.scale.z;
+  //                          tooHigh = true;
+  //                      }
+   //                     if (tooLow || objectsToDraw[i].transforms.trans.z < -200) {
+                            objectsToDraw[i].transforms.trans.z += Math.random() < 0.5 ? -1 : 1;
+                   //         ((camPosition.subtract(zombieLocation)).unit()).z() / objectsToDraw[i].transforms.scale.z;;
+    
+                        
+                        /*for (j = 0; j < objectsToDraw[i].length; j += 1) {   //Took out "subshapes"
                             objectsToDraw[j].transforms.trans.z +=           //Took out "subshapes[i]"
                                 ((camPosition.subtract( zombieLocation )).unit()).z() /
                                     objectsToDraw[j].transforms.scale.z;
-                        }
+                        }*/
 
-                    } else {
+                 //  }
+                     if (zombieZ == 500) {
                         clearInterval(main);        //If zombie arrives at the location of the camera, he/she gets eaten.
                         var r = confirm("You are Dead...Try Again?");
                         if (r) {
@@ -926,6 +934,6 @@ function handleTextureLoaded(image, texture) {
             }
             zombieLocation = new Vector (zombieX, 0.0, zombieZ);
             drawScene();         
-        }, 100);
+        }, 1000);
     });
 }(document.getElementById("space-scene")));
